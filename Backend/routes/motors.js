@@ -10,6 +10,39 @@
 const express = require('express');
 const router = express.Router();
 const storage = require('../services/storage');
+const excelService = require('../services/excelService');
+
+// GET /api/motors/excel-specs - Read operating conditions from Excel workbook
+router.get('/excel-specs', (req, res) => {
+  try {
+    const wbData = excelService.loadOperatingConditionsWorkbook();
+    res.json({
+      status: 'SUCCESS',
+      data: wbData,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 'ERROR', message: err.message });
+  }
+});
+
+// GET /api/motors/excel-specs/:tag - Get specs for specific motor tag
+router.get('/excel-specs/:tag', (req, res) => {
+  try {
+    const specs = excelService.getOperatingSpecsByTag(req.params.tag);
+    if (!specs) {
+      return res.status(404).json({
+        status: 'ERROR',
+        message: `No operating specs found in Excel workbook for tag '${req.params.tag}'.`,
+      });
+    }
+    res.json({
+      status: 'SUCCESS',
+      data: specs,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 'ERROR', message: err.message });
+  }
+});
 
 // GET /api/motors
 router.get('/', (req, res) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../api';
+import AiGraphExplanation from './AiGraphExplanation';
 
 export default function ModelPerformanceTab() {
   const [performanceData, setPerformanceData] = useState(null);
@@ -165,6 +166,16 @@ export default function ModelPerformanceTab() {
           <p style={{ marginTop: '0.75rem', fontSize: '0.78rem', color: 'var(--text-dim)' }}>
             Strict Group Isolation: Zero sample overlap from any motor specimen between training and test sets.
           </p>
+
+          <AiGraphExplanation
+            graphType="confusion_matrix"
+            chartStatistics={{
+              balanced_accuracy: summary_metrics.balanced_accuracy,
+              macro_f1: summary_metrics.macro_f1,
+              test_samples: sample_counts.test_samples,
+            }}
+            predictedClass="MULTI_CLASS_MODEL"
+          />
         </div>
 
         {/* Per-Class Classification Report */}

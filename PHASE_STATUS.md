@@ -19,6 +19,7 @@
 | **Phase 5** | Evidence-Linked Maintenance Work Orders & Express Gateway | **COMPLETE** | `Backend/services/workOrderService.js`, `Backend/services/storage.js`, `Backend/routes/workOrders.js`, `Backend/tests/workOrders.test.js`, 16/16 Node Tests Passed |
 | **Phase 6** | Polished Industrial React Dashboard | **COMPLETE** | `Frontend/src/` (Vite + React 19 + HTML5 Canvas), 0 lint errors/warnings, Production Build Verified |
 | **Phase 7** | Final Reliability Review, Validation & Hackathon Demo Prep | **COMPLETE** | `docs/RUN_INSTRUCTIONS.md`, `docs/DEMO_SCRIPT.md`, `docs/JUDGE_QA.md`, 74/74 Backend/ML Tests Passed, 0 Warnings |
+| **Phase 8** | Premium UI, Upload-Only Diagnosis, Excel Metadata & HF AI | **COMPLETE** | Collapsible Sidebar + Mobile Drawer, 4 Downloadable CSVs, Excel auto-specs (`motor_operating_conditions.xlsx`), Hugging Face AI (`/api/ai/*`), Maintenance black-screen fix, 21/21 Backend Tests Passed |
 
 ---
 
@@ -90,3 +91,9 @@
 | **Industrial React Dashboard** | **Implemented & Tested** | Responsive dark obsidian theme, 60fps HTML5 Canvas waveforms & FFT spectra, fleet registry, model performance matrix, variable-condition challenge. Built with Vite and React 19 (0 errors, 0 warnings). |
 | **Evidence-to-Action Visual Trail** | **Implemented & Tested** | 5-step interactive pipeline linking recording $\rightarrow$ features $\rightarrow$ prediction $\rightarrow$ uncertainty audit $\rightarrow$ work order. |
 | **Markdown Report Export** | **Implemented & Tested** | Downloadable traceable reports via `GET /api/work-orders/:id/export`. |
+| **Excel Workbook Motor Initialization** | **Implemented & Tested** | Verified parameters from `motor_operating_conditions.xlsx` for 4 target assets with live sheet/row provenance. |
+| **4 Downloadable Sample CSV Files** | **Implemented & Tested** | `healthy_motor_sample.csv`, `bearing_fault_sample.csv`, `broken_rotor_bar_sample.csv`, `misalignment_sample.csv` downloadable via `/api/diagnostics/sample-download/:filename`. |
+| **Upload-Only Diagnosis Workflow** | **Implemented & Tested** | Legacy benchmark selector removed. 100% upload-driven with drag-drop, sample count validation, and format detection. |
+| **Hugging Face AI Server Integration** | **Implemented & Tested** | Grounded graph explanations & maintenance recommendations via `/api/ai/*` with deterministic physics-grounded fallback. |
+| **Maintenance Center Bug Fix** | **Implemented & Tested** | Resolved unhandled object child rendering in verification steps/tasks and wrapped in React `ErrorBoundary`. |
+

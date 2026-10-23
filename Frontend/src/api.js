@@ -97,4 +97,41 @@ export const api = {
   },
 
   getExportUrl: (id) => `${BASE_URL}/work-orders/${id}/export`,
+
+  // Excel Operating Conditions Specs
+  getExcelMotorSpecs: async () => {
+    return handleResponse(await fetch(`${BASE_URL}/motors/excel-specs`));
+  },
+
+  getExcelMotorSpecsByTag: async (tag) => {
+    return handleResponse(await fetch(`${BASE_URL}/motors/excel-specs/${encodeURIComponent(tag)}`));
+  },
+
+  // Sample CSV Files Download
+  getSampleFilesList: async () => {
+    return handleResponse(await fetch(`${BASE_URL}/diagnostics/samples-list`));
+  },
+
+  getSampleDownloadUrl: (filename) => `${BASE_URL}/diagnostics/sample-download/${encodeURIComponent(filename)}`,
+
+  // Hugging Face AI Endpoints
+  explainGraph: async (payload) => {
+    return handleResponse(
+      await fetch(`${BASE_URL}/ai/explain-graph`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+    );
+  },
+
+  recommendMaintenance: async (payload) => {
+    return handleResponse(
+      await fetch(`${BASE_URL}/ai/recommend-maintenance`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+    );
+  },
 };

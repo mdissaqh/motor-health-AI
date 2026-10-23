@@ -230,6 +230,73 @@ router.get('/runs/:id', (req, res) => {
   }
 });
 
+// GET /api/diagnostics/samples-list - List the 4 downloadable sample CSV files
+router.get('/samples-list', (req, res) => {
+  res.json({
+    status: 'SUCCESS',
+    data: [
+      {
+        filename: 'healthy_motor_sample.csv',
+        label: 'Healthy Motor (Baseline Condition)',
+        condition: 'HEALTHY',
+        description: 'Verified 1.0s current recording (5,000 samples @ 5,000 Hz). Nominal 50 Hz carrier, balanced 3-phase waveforms, zero fault sidebands.',
+        provenance: 'Derived from 4TU NLN-EMP benchmark healthy runs under full load (1500 RPM, 50 Hz).'
+      },
+      {
+        filename: 'bearing_fault_sample.csv',
+        label: 'Bearing Fault (Outer Race Defect)',
+        condition: 'BEARING_FAULT',
+        description: 'Verified 1.0s current recording (5,000 samples @ 5,000 Hz). Outer raceway ball-pass impact modulations (BPFO ~155.4 Hz), elevated kurtosis and crest factor.',
+        provenance: 'Derived from Paderborn bearing test rig current channels (KA01 outer raceway damage).'
+      },
+      {
+        filename: 'broken_rotor_bar_sample.csv',
+        label: 'Broken Rotor Bar (Cage Degradation)',
+        condition: 'BROKEN_ROTOR_BAR',
+        description: 'Verified 1.0s current recording (5,000 samples @ 5,000 Hz). Prominent (1 ± 2s)fs twin sidebands at 48.0 Hz and 52.0 Hz with 39.8 dB carrier delta.',
+        provenance: 'Derived from 4TU NLN-EMP benchmark broken rotor bar runs (slip s=0.02, 50 Hz).'
+      },
+      {
+        filename: 'misalignment_sample.csv',
+        label: 'Shaft Misalignment (Mechanical Offset)',
+        condition: 'MISALIGNMENT',
+        description: 'Verified 1.0s current recording (5,000 samples @ 5,000 Hz). Elevated 2*fs (100 Hz) second harmonic and stator current trajectory unbalance.',
+        provenance: 'Derived from coupled test rig current signature with angular and parallel offset.'
+      }
+    ]
+  });
+});
+
+// GET /api/diagnostics/sample-download/:filename - Download real CSV file
+router.get('/sample-download/:filename', (req, res) => {
+  const allowed = [
+    'healthy_motor_sample.csv',
+    'bearing_fault_sample.csv',
+    'broken_rotor_bar_sample.csv',
+    'misalignment_sample.csv'
+  ];
+
+  const filename = req.params.filename;
+  if (!allowed.includes(filename)) {
+    return res.status(404).json({
+      status: 'ERROR',
+      message: `Invalid or unsupported sample filename '${filename}'. Allowed: ${allowed.join(', ')}`,
+    });
+  }
+
+  const filePath = path.join(__dirname, '..', 'data', 'samples', filename);
+  if (!require('fs').existsSync(filePath)) {
+    return res.status(404).json({
+      status: 'ERROR',
+      message: `Sample file '${filename}' not found on server.`,
+    });
+  }
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.sendFile(filePath);
+});
+
 // GET /api/diagnostics/fixtures
 router.get('/fixtures', (req, res) => {
   res.json({

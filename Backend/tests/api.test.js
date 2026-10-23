@@ -171,4 +171,90 @@ describe('Express Gateway HTTP REST API Integration', () => {
     assert.ok(markdownText.includes('Confirmatory physical inspections must be executed'));
   });
 
+  test('GET /api/motors/excel-specs returns parsed Excel workbook specifications', async () => {
+    const res = await fetch(`${baseUrl}/api/motors/excel-specs`);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.equal(body.data.available, true);
+    assert.equal(body.data.source_file, 'motor_operating_conditions.xlsx');
+    assert.ok(Array.isArray(body.data.records));
+    assert.equal(body.data.records.length, 4);
+
+    const pump = body.data.records.find((r) => r.asset_tag === 'PUMP-CW-01');
+    assert.ok(pump);
+    assert.equal(pump.rated_speed_rpm, 1475);
+    assert.equal(pump.poles, 4);
+    assert.equal(pump.sampling_rate_hz, 5000);
+  });
+
+  test('GET /api/diagnostics/samples-list returns 4 benchmark sample files', async () => {
+    const res = await fetch(`${baseUrl}/api/diagnostics/samples-list`);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.equal(body.data.length, 4);
+    const filenames = body.data.map(d => d.filename);
+    assert.ok(filenames.includes('healthy_motor_sample.csv'));
+    assert.ok(filenames.includes('bearing_fault_sample.csv'));
+    assert.ok(filenames.includes('broken_rotor_bar_sample.csv'));
+    assert.ok(filenames.includes('misalignment_sample.csv'));
+  });
+
+  test('GET /api/diagnostics/sample-download/:filename downloads actual CSV file', async () => {
+    const res = await fetch(`${baseUrl}/api/diagnostics/sample-download/healthy_motor_sample.csv`);
+    assert.equal(res.status, 200);
+    assert.ok(res.headers.get('content-type').includes('text/csv'));
+    const text = await res.text();
+    assert.ok(text.includes('time_s,current_a'));
+    const lines = text.trim().split('\n');
+    assert.ok(lines.length >= 5000);
+  });
+
+  test('POST /api/ai/explain-graph returns grounded AI explanation', async () => {
+    const res = await fetch(`${baseUrl}/api/ai/explain-graph`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        graph_type: 'spectrum',
+        chart_statistics: { fundamental_frequency_hz: 50.0, brb_min_delta_db: 39.8 },
+        operating_conditions: { operating_rpm: 1470, sampling_rate_hz: 5000 },
+        predicted_class: 'BROKEN_ROTOR_BAR',
+      }),
+    });
+
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.ok(body.data.provider);
+    assert.ok(body.data.explanation.title);
+    assert.ok(body.data.explanation.what_it_displays);
+    assert.ok(body.data.explanation.visible_pattern);
+    assert.ok(body.data.explanation.limitations);
+  });
+
+  test('POST /api/ai/recommend-maintenance returns evidence-linked advisory tasks', async () => {
+    const res = await fetch(`${baseUrl}/api/ai/recommend-maintenance`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        diagnostic_run: {
+          motor_tag: 'PUMP-CW-01',
+          predicted_class: 'BROKEN_ROTOR_BAR',
+          model_confidence: 0.99,
+          severity: { severity_level: 'Severe — Multiple broken rotor bars' },
+        },
+        motor: { tag: 'PUMP-CW-01', name: 'Cooling Water Circulation Pump Motor' },
+      }),
+    });
+
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.ok(body.data.recommendations.suspected_condition);
+    assert.ok(Array.isArray(body.data.recommendations.recommended_inspection_tasks));
+    assert.ok(body.data.recommendations.recommended_inspection_tasks.length >= 3);
+    assert.ok(body.data.recommendations.verification_steps.length >= 2);
+  });
+
 });

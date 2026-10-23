@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import SignalCanvas from './SignalCanvas';
 import EvidenceToActionFlow from './EvidenceToActionFlow';
+import AiGraphExplanation from './AiGraphExplanation';
+import ErrorBoundary from './ErrorBoundary';
 
 export default function DiagnosticLabTab({
   selectedRun,
@@ -189,24 +191,48 @@ export default function DiagnosticLabTab({
         </div>
 
         {plottingData ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             {(activeSignalView === 'both' || activeSignalView === 'waveform') && (
-              <SignalCanvas
-                mode="time"
-                data={plottingData}
-                height={220}
-                title="Stator Current Waveform i(t) [Amperes vs Time]"
-                units="A"
-              />
+              <div>
+                <SignalCanvas
+                  mode="time"
+                  data={plottingData}
+                  height={220}
+                  title="Stator Current Waveform i(t) [Amperes vs Time]"
+                  units="A"
+                />
+                <AiGraphExplanation
+                  graphType="waveform"
+                  chartStatistics={{
+                    rms_current_a: keyFeatures.rms_current?.value,
+                    crest_factor: keyFeatures.crest_factor?.value,
+                    peak_amplitude_a: keyFeatures.peak_to_peak?.value ? keyFeatures.peak_to_peak.value / 2 : undefined,
+                  }}
+                  operatingConditions={selectedRun.operating_conditions}
+                  predictedClass={predictedClass}
+                />
+              </div>
             )}
             {(activeSignalView === 'both' || activeSignalView === 'spectrum') && (
-              <SignalCanvas
-                mode="spectrum"
-                data={plottingData}
-                height={260}
-                title="MCSA Power Spectrum (0 to 160 Hz) — Sideband Markers (1±2s)fs & 2fs Harmonics"
-                units="dB"
-              />
+              <div>
+                <SignalCanvas
+                  mode="spectrum"
+                  data={plottingData}
+                  height={260}
+                  title="MCSA Power Spectrum (0 to 160 Hz) — Sideband Markers (1±2s)fs & 2fs Harmonics"
+                  units="dB"
+                />
+                <AiGraphExplanation
+                  graphType="spectrum"
+                  chartStatistics={{
+                    fundamental_frequency_hz: keyFeatures.fundamental_frequency?.value || 50.0,
+                    brb_min_delta_db: keyFeatures.brb_min_delta_db?.value,
+                    carrier_power_db: 20.0,
+                  }}
+                  operatingConditions={selectedRun.operating_conditions}
+                  predictedClass={predictedClass}
+                />
+              </div>
             )}
           </div>
         ) : (
@@ -262,6 +288,15 @@ export default function DiagnosticLabTab({
           <p style={{ marginTop: '1.25rem', fontSize: '0.78rem', color: 'var(--text-dim)', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.75rem' }}>
             Note: Raw class scores represent uncalibrated tree vote fractions. Production inference applies temperature scaling (T=0.53) to align posterior probabilities with empirical precision.
           </p>
+
+          <AiGraphExplanation
+            graphType="probabilities"
+            chartStatistics={{
+              confidence_pct: parseFloat(confidence) || 95.0,
+            }}
+            operatingConditions={selectedRun.operating_conditions}
+            predictedClass={predictedClass}
+          />
         </div>
 
         {/* Defensible Severity & Action Recommendation */}
