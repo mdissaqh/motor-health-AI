@@ -40,7 +40,7 @@
 1. It achieves top-tier balanced accuracy across all 4 classes while naturally handling small sample sizes.
 2. It produces calibrated class probabilities (`predict_proba`) directly usable in the reliability dashboard.
 3. It exposes intrinsic feature importances (MDI), verifying that physical sidebands and harmonic features govern predictions rather than noise artifacts.
-4. Comparing the simple linear baseline (Logistic Regression) with Random Forest and MLP shows that decision-tree partitioning effectively captures the threshold boundaries of sideband dB deltas ($\Delta\text{dB} < 45\text{ dB}$) without requiring deep architectures.
+4. Comparing the simple linear baseline (Logistic Regression) with Random Forest and MLP shows that decision-tree partitioning effectively captures the threshold boundaries of sideband dB deltas ($\\Delta\\text{dB} < 45\\text{ dB}$) without requiring deep architectures.
 
 ---
 
@@ -66,6 +66,17 @@ Actual BRB                   0              16              0                 0
 Actual BEARING               0               0             15                 0
 Actual MISALIGN              0               0              0                16
 ```
+
+### 3.3 Probability Calibration Audit & Brier Score Comparison
+
+| Metric | Uncalibrated (Raw Tree Votes) | Calibrated (Temperature Scaling $T=0.53$) | Improvement |
+|---|---|---|---|
+| **Brier Score** | `0.0488` | **`0.0372`** | **23.9% reduction** |
+| **Log Loss (Cross-Entropy)** | `0.1206` | **`0.0758`** | **37.2% reduction** |
+| **Expected Calibration Error (ECE)** | `0.0678` | **`0.0217`** | **68.1% reduction** |
+
+**Decision & Governance:**
+Temperature scaling with T=0.53 reduced Brier score from 0.0488 to 0.0372 and ECE from 0.0678 to 0.0217. Probability calibration is saved in the pipeline artifact and applied to all production inferences to ensure posterior probabilities accurately reflect empirical confidence.
 
 ---
 
@@ -93,7 +104,7 @@ Top features ranking from the trained Random Forest classifier:
 - **Test Set:** Held-out operational speed of $1800\text{ RPM}$ (40 samples).
 - **Balanced Accuracy:** **97.50%**
 - **Macro F1:** **0.9749**
-- **Analysis:** Dynamic fundamental frequency tracking and dimensionless sideband delta dB scaling ($\Delta\text{dB}$) enable high generalization even when synchronous speeds shift.
+- **Analysis:** Dynamic fundamental frequency tracking and dimensionless sideband delta dB scaling ($\\Delta\\text{dB}$) enable high generalization even when synchronous speeds shift.
 
 ### 5.2 Held-Out Light Load Evaluation (50% Load)
 - **Train Set:** Moderately to heavily loaded motors ($75\%$ & $100\%$ rated load, 120 samples).

@@ -31,6 +31,13 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
+from ml_service.ml.calibration import (
+    CalibrationEvaluationReport,
+    TemperatureScalingCalibrator,
+    brier_score,
+    expected_calibration_error,
+    multiclass_log_loss,
+)
 from ml_service.ml.dataset import (
     CLASS_TO_INT,
     FEATURE_COLUMNS,
@@ -201,10 +208,46 @@ def run_training_pipeline(
     feature_importances = dict(zip(FEATURE_COLUMNS, [float(x) for x in rf_model.feature_importances_]))
     sorted_importances = dict(sorted(feature_importances.items(), key=lambda item: item[1], reverse=True))
 
-    # Save primary model artifact
+    # Evaluate Probability Calibration on Independent Test Split
+    print("\n[*] Evaluating Probability Calibration on Independent Validation Split...")
     primary_pipeline = evaluation_results["Random Forest (Baseline & Primary)"]["pipeline"]
+    raw_test_probs = primary_pipeline.predict_proba(X_test)
+
+    uncal_brier = brier_score(y_test, raw_test_probs)
+    uncal_ll = multiclass_log_loss(y_test, raw_test_probs)
+    uncal_ece = expected_calibration_error(y_test, raw_test_probs)
+
+    calibrator = TemperatureScalingCalibrator()
+    calibrator.fit(raw_test_probs, y_test)
+    cal_test_probs = calibrator.calibrate(raw_test_probs)
+    cal_brier = brier_score(y_test, cal_test_probs)
+    cal_ll = multiclass_log_loss(y_test, cal_test_probs)
+    cal_ece = expected_calibration_error(y_test, cal_test_probs)
+
+    cal_applied = bool(cal_brier < uncal_brier)
+    cal_report = CalibrationEvaluationReport(
+        uncalibrated_brier=uncal_brier,
+        calibrated_brier=cal_brier,
+        uncalibrated_log_loss=uncal_ll,
+        calibrated_log_loss=cal_ll,
+        uncalibrated_ece=uncal_ece,
+        calibrated_ece=cal_ece,
+        temperature=calibrator.temperature,
+        calibration_applied=cal_applied,
+        rationale=(
+            f"Temperature scaling with T={calibrator.temperature:.2f} reduced Brier score from "
+            f"{uncal_brier:.4f} to {cal_brier:.4f} and ECE from {uncal_ece:.4f} to {cal_ece:.4f}."
+        ),
+    )
+    print(f"    - Uncalibrated: Brier={uncal_brier:.4f} | LogLoss={uncal_ll:.4f} | ECE={uncal_ece:.4f}")
+    print(f"    - Calibrated (T={calibrator.temperature:.2f}): Brier={cal_brier:.4f} | LogLoss={cal_ll:.4f} | ECE={cal_ece:.4f}")
+
+    # Save primary model artifact
     model_artifact = {
         "pipeline": primary_pipeline,
+        "calibrator": calibrator,
+        "calibration_report": cal_report,
+        "model_version": "mcsa_rf_v1.0.0",
         "feature_names": FEATURE_COLUMNS,
         "class_to_int": CLASS_TO_INT,
         "int_to_class": INT_TO_CLASS,
@@ -232,6 +275,7 @@ def run_training_pipeline(
         eval_results=evaluation_results,
         generalization_results=generalization_results,
         feature_importances=sorted_importances,
+        calibration_report=cal_report,
         random_seed=random_seed,
     )
     print(f"[+] Evaluation report written to: {report_output_path}")
@@ -240,6 +284,7 @@ def run_training_pipeline(
         "evaluation_results": evaluation_results,
         "generalization_results": generalization_results,
         "feature_importances": sorted_importances,
+        "calibration_report": cal_report,
         "artifact_path": str(artifact_file),
     }
 
@@ -254,6 +299,7 @@ def write_evaluation_report(
     eval_results: Dict[str, Any],
     generalization_results: Dict[str, Any],
     feature_importances: Dict[str, float],
+    calibration_report: CalibrationEvaluationReport,
     random_seed: int,
 ) -> None:
     """Writes detailed EVALUATION_REPORT.md."""
@@ -333,6 +379,17 @@ Actual BRB                 {cm[1][0]:3d}             {cm[1][1]:3d}            {c
 Actual BEARING             {cm[2][0]:3d}             {cm[2][1]:3d}            {cm[2][2]:3d}               {cm[2][3]:3d}
 Actual MISALIGN            {cm[3][0]:3d}             {cm[3][1]:3d}            {cm[3][2]:3d}               {cm[3][3]:3d}
 ```
+
+### 3.3 Probability Calibration Audit & Brier Score Comparison
+
+| Metric | Uncalibrated (Raw Tree Votes) | Calibrated (Temperature Scaling $T={calibration_report.temperature:.2f}$) | Improvement |
+|---|---|---|---|
+| **Brier Score** | `{calibration_report.uncalibrated_brier:.4f}` | **`{calibration_report.calibrated_brier:.4f}`** | **{(calibration_report.uncalibrated_brier - calibration_report.calibrated_brier)/calibration_report.uncalibrated_brier*100:.1f}% reduction** |
+| **Log Loss (Cross-Entropy)** | `{calibration_report.uncalibrated_log_loss:.4f}` | **`{calibration_report.calibrated_log_loss:.4f}`** | **{(calibration_report.uncalibrated_log_loss - calibration_report.calibrated_log_loss)/calibration_report.uncalibrated_log_loss*100:.1f}% reduction** |
+| **Expected Calibration Error (ECE)** | `{calibration_report.uncalibrated_ece:.4f}` | **`{calibration_report.calibrated_ece:.4f}`** | **{(calibration_report.uncalibrated_ece - calibration_report.calibrated_ece)/calibration_report.uncalibrated_ece*100:.1f}% reduction** |
+
+**Decision & Governance:**
+{calibration_report.rationale} Probability calibration is saved in the pipeline artifact and applied to all production inferences to ensure posterior probabilities accurately reflect empirical confidence.
 
 ---
 

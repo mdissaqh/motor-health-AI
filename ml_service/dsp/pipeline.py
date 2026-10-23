@@ -27,6 +27,11 @@ from ml_service.data.canonical import (
 )
 
 
+class SignalValidationError(ValueError):
+    """Raised when current signal validation fails."""
+    pass
+
+
 @dataclass
 class SpectralPeak:
     """Represents a validated peak in the current spectrum."""

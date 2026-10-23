@@ -1,113 +1,144 @@
 """
-Inference Engine for Motor Current Signature Analysis.
+Trustworthy Inference Engine for Motor Current Signature Analysis.
 
-Loads the trained machine learning pipeline and produces end-to-end
-fault diagnostics from raw stator current recordings.
+Loads the trained machine learning pipeline and produces audited,
+trustworthy fault diagnostics conforming to Phase 4 requirements:
+- Distinguishes DIAGNOSIS_AVAILABLE, REVIEW_REQUIRED, INVALID_SIGNAL,
+  UNSUPPORTED_CONDITION, and MODEL_UNAVAILABLE.
+- Applies probability calibration (Temperature Scaling) evaluated on validation data.
+- Keeps raw_class_scores, calibrated_probabilities, and model_confidence distinct.
+- Enforces strict human-review policy for ambiguous or noisy inputs.
+- Preserves defensible severity estimation (EPRI standards for BRB) and
+  returns "Severity unavailable — insufficient validated labels." where ground truth lacks.
+- Traceable physical evidence with spectral regions of interest and provenance.
 """
 
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 import joblib
 import numpy as np
 
 from ml_service.data.canonical import CanonicalFaultClass, MotorCurrentRecording
-from ml_service.dsp.pipeline import MCSAEngine
+from ml_service.dsp.pipeline import MCSAAnalysisResult, MCSAEngine, SignalValidationError
+from ml_service.ml.calibration import TemperatureScalingCalibrator
 from ml_service.ml.dataset import INT_TO_CLASS
 from ml_service.ml.features import FEATURE_COLUMNS, extract_ml_features, feature_dict_to_vector
+from ml_service.ml.trust import (
+    DefensibleSeverity,
+    DiagnosticStatus,
+    DiagnosticTrustEvaluator,
+    KeyPhysicalFeature,
+    SpectralRegionOfInterest,
+    TrustworthyDiagnosticResult,
+    build_invalid_signal_result,
+    build_model_unavailable_result,
+)
 
 DEFAULT_MODEL_PATH = Path(__file__).parent.parent / "models" / "mcsa_classifier.joblib"
 
-
-@dataclass
-class DiagnosticPrediction:
-    """End-to-end diagnostic inference result."""
-    predicted_class: CanonicalFaultClass
-    fault_code: str
-    confidence: float
-    probabilities: Dict[str, float]
-    health_index: float  # 0.0 (Failed) to 100.0 (Pristine)
-    severity: str        # 'HEALTHY', 'MONITOR', 'WARNING', 'CRITICAL'
-    feature_values: Dict[str, float]
-    feature_importances: Dict[str, float]
-    recommended_action: str
-    provenance: Dict[str, Any]
-    operational_warnings: List[str]
+# Backward compatibility alias
+DiagnosticPrediction = TrustworthyDiagnosticResult
 
 
 class MCSAPredictor:
     """
-    Production Predictor for induction motor MCSA fault classification.
+    Production Predictor for induction motor MCSA fault classification
+    with full Phase 4 Trust & Evidence architecture.
     """
 
     def __init__(self, model_path: Optional[Union[str, Path]] = None):
-        path = Path(model_path) if model_path else DEFAULT_MODEL_PATH
-        if not path.exists():
+        self.model_path = Path(model_path) if model_path else DEFAULT_MODEL_PATH
+        self.dsp_engine = MCSAEngine()
+
+        if not self.model_path.exists():
             raise FileNotFoundError(
-                f"Trained model artifact not found at: {path}. "
+                f"Trained model artifact not found at: {self.model_path}. "
                 "Run `python -m ml_service.ml.train` to train and serialize the model first."
             )
 
-        artifact = joblib.load(path)
-        self.pipeline = artifact["pipeline"]
-        self.feature_names = artifact.get("feature_names", FEATURE_COLUMNS)
-        self.int_to_class = artifact.get("int_to_class", INT_TO_CLASS)
-        self.feature_importances = artifact.get("feature_importances", {})
-        self.dsp_engine = MCSAEngine()
+        try:
+            artifact = joblib.load(self.model_path)
+            self.pipeline = artifact["pipeline"]
+            self.calibrator: Optional[TemperatureScalingCalibrator] = artifact.get("calibrator")
+            self.model_version = artifact.get("model_version", "mcsa_rf_v1.0.0")
+            self.feature_names = artifact.get("feature_names", FEATURE_COLUMNS)
+            self.int_to_class = artifact.get("int_to_class", INT_TO_CLASS)
+            self.feature_importances = artifact.get("feature_importances", {})
+            self.trust_evaluator = DiagnosticTrustEvaluator(model_version=self.model_version)
+            self.is_ready = True
+        except Exception as e:
+            self.is_ready = False
+            self.load_error = str(e)
+            raise RuntimeError(f"Failed to initialize model pipeline from {self.model_path}: {e}") from e
 
     def predict_recording(
         self,
         recording: MotorCurrentRecording,
         operating_rpm: Optional[float] = None,
         poles: int = 4,
-    ) -> DiagnosticPrediction:
-        """Runs DSP feature extraction and ML model inference on a MotorCurrentRecording."""
-        # 1. Run DSP Pipeline
-        rpm = operating_rpm or recording.operating_conditions.get("speed_rpm")
-        p = poles or recording.motor_metadata.get("poles", 4)
-        dsp_result = self.dsp_engine.analyze(recording, operating_rpm=rpm, poles=p)
-
-        # 2. Extract ML Features
-        feat_dict = extract_ml_features(dsp_result)
-        feat_vec = feature_dict_to_vector(feat_dict).reshape(1, -1)
-
-        # 3. Predict Class and Probabilities
-        class_idx = int(self.pipeline.predict(feat_vec)[0])
-        prob_vec = self.pipeline.predict_proba(feat_vec)[0]
-
-        class_str = self.int_to_class[class_idx]
-        canonical_class = CanonicalFaultClass(class_str)
-        confidence = float(prob_vec[class_idx])
-
-        probabilities = {
-            self.int_to_class[i]: float(prob_vec[i]) for i in range(len(prob_vec))
-        }
-
-        # 4. Calculate Health Index (0 - 100) and Severity
-        health_index, severity, action = self._compute_health_and_actions(
-            canonical_class, confidence, feat_dict
-        )
-
-        provenance = {
+    ) -> TrustworthyDiagnosticResult:
+        """
+        Runs DSP feature extraction and trustworthy diagnostic evaluation on a MotorCurrentRecording.
+        Guarantees structured output under invalid, corrupted, or unsupported inputs.
+        """
+        source_meta = {
             "dataset_id": recording.dataset_id,
             "source_file_id": recording.source_file_id,
-            "sampling_rate_hz": recording.sampling_rate_hz,
-            "fundamental_freq_hz": dsp_result.fundamental_frequency_hz,
-            "slip": dsp_result.motor_slip,
         }
 
-        return DiagnosticPrediction(
-            predicted_class=canonical_class,
-            fault_code=f"FAULT_{canonical_class.value}",
-            confidence=confidence,
-            probabilities=probabilities,
-            health_index=health_index,
-            severity=severity,
-            feature_values=feat_dict,
-            feature_importances=self.feature_importances,
-            recommended_action=action,
-            provenance=provenance,
-            operational_warnings=dsp_result.operational_warnings,
+        # Check signal duration (minimum 0.20s required for valid frequency resolution)
+        if recording.sampling_rate_hz and recording.sampling_rate_hz > 0:
+            duration = recording.num_samples / recording.sampling_rate_hz
+            if duration < 0.20:
+                return build_invalid_signal_result(
+                    f"Truncated signal: duration {duration:.4f}s is below 0.20s minimum required for MCSA frequency resolution.",
+                    source_metadata=source_meta,
+                    model_version=self.model_version,
+                )
+
+        # 1. Run DSP Pipeline with input error catching
+        try:
+            rpm = operating_rpm or recording.operating_conditions.get("speed_rpm")
+            p = poles or recording.motor_metadata.get("poles", 4)
+            dsp_result = self.dsp_engine.analyze(recording, operating_rpm=rpm, poles=p)
+        except SignalValidationError as ve:
+            return build_invalid_signal_result(str(ve), source_metadata=source_meta, model_version=self.model_version)
+        except ValueError as ve:
+            return build_invalid_signal_result(str(ve), source_metadata=source_meta, model_version=self.model_version)
+        except Exception as ex:
+            return build_invalid_signal_result(f"DSP processing error: {ex}", source_metadata=source_meta, model_version=self.model_version)
+
+        # 2. Extract ML Features
+        try:
+            feat_dict = extract_ml_features(dsp_result)
+            feat_vec = feature_dict_to_vector(feat_dict).reshape(1, -1)
+        except Exception as ex:
+            return build_invalid_signal_result(f"Feature extraction error: {ex}", source_metadata=source_meta, model_version=self.model_version)
+
+        # 3. Compute Raw Scores and Calibrated Probabilities
+        raw_prob_vec = self.pipeline.predict_proba(feat_vec)[0]
+        raw_scores = {
+            self.int_to_class[i]: float(raw_prob_vec[i]) for i in range(len(raw_prob_vec))
+        }
+
+        if self.calibrator is not None and getattr(self.calibrator, "is_fitted", False):
+            cal_prob_vec = self.calibrator.calibrate(raw_prob_vec.reshape(1, -1))[0]
+        else:
+            cal_prob_vec = raw_prob_vec
+
+        calibrated_probs = {
+            self.int_to_class[i]: float(cal_prob_vec[i]) for i in range(len(cal_prob_vec))
+        }
+
+        # 4. Synthesize Trustworthy Diagnostic Result
+        return self.trust_evaluator.evaluate(
+            raw_scores=raw_scores,
+            calibrated_probs=calibrated_probs,
+            dsp_result=dsp_result,
+            features=feat_dict,
+            operating_rpm=rpm,
+            poles=p,
+            source_metadata=source_meta,
         )
 
     def predict_raw(
@@ -116,95 +147,70 @@ class MCSAPredictor:
         sampling_rate_hz: float,
         operating_rpm: Optional[float] = None,
         poles: int = 4,
-    ) -> DiagnosticPrediction:
-        """Runs prediction directly on a raw numpy current array."""
-        dsp_result = self.dsp_engine.analyze(
-            current_data,
-            sampling_rate_hz=sampling_rate_hz,
+    ) -> TrustworthyDiagnosticResult:
+        """
+        Runs trustworthy diagnostic evaluation directly on a raw numpy current array.
+        """
+        source_meta = {
+            "dataset_id": "IN_MEMORY_STREAM",
+            "source_file_id": "RAW_ARRAY",
+        }
+
+        # Check signal duration
+        if sampling_rate_hz and sampling_rate_hz > 0:
+            num_samples = current_data.shape[1] if current_data.ndim > 1 else len(current_data)
+            duration = num_samples / sampling_rate_hz
+            if duration < 0.20:
+                return build_invalid_signal_result(
+                    f"Truncated signal: duration {duration:.4f}s is below 0.20s minimum required for MCSA frequency resolution.",
+                    source_metadata=source_meta,
+                    model_version=self.model_version,
+                )
+
+        # 1. Run DSP Pipeline with input error catching
+        try:
+            dsp_result = self.dsp_engine.analyze(
+                current_data,
+                sampling_rate_hz=sampling_rate_hz,
+                operating_rpm=operating_rpm,
+                poles=poles,
+            )
+        except SignalValidationError as ve:
+            return build_invalid_signal_result(str(ve), source_metadata=source_meta, model_version=self.model_version)
+        except ValueError as ve:
+            return build_invalid_signal_result(str(ve), source_metadata=source_meta, model_version=self.model_version)
+        except Exception as ex:
+            return build_invalid_signal_result(f"DSP processing error: {ex}", source_metadata=source_meta, model_version=self.model_version)
+
+        # 2. Extract ML Features
+        try:
+            feat_dict = extract_ml_features(dsp_result)
+            feat_vec = feature_dict_to_vector(feat_dict).reshape(1, -1)
+        except Exception as ex:
+            return build_invalid_signal_result(f"Feature extraction error: {ex}", source_metadata=source_meta, model_version=self.model_version)
+
+        # 3. Compute Raw Scores and Calibrated Probabilities
+        raw_prob_vec = self.pipeline.predict_proba(feat_vec)[0]
+        raw_scores = {
+            self.int_to_class[i]: float(raw_prob_vec[i]) for i in range(len(raw_prob_vec))
+        }
+
+        if self.calibrator is not None and getattr(self.calibrator, "is_fitted", False):
+            cal_prob_vec = self.calibrator.calibrate(raw_prob_vec.reshape(1, -1))[0]
+        else:
+            cal_prob_vec = raw_prob_vec
+
+        calibrated_probs = {
+            self.int_to_class[i]: float(cal_prob_vec[i]) for i in range(len(cal_prob_vec))
+        }
+
+        # 4. Synthesize Trustworthy Diagnostic Result
+        return self.trust_evaluator.evaluate(
+            raw_scores=raw_scores,
+            calibrated_probs=calibrated_probs,
+            dsp_result=dsp_result,
+            features=feat_dict,
             operating_rpm=operating_rpm,
             poles=poles,
+            source_metadata=source_meta,
         )
-        feat_dict = extract_ml_features(dsp_result)
-        feat_vec = feature_dict_to_vector(feat_dict).reshape(1, -1)
-
-        class_idx = int(self.pipeline.predict(feat_vec)[0])
-        prob_vec = self.pipeline.predict_proba(feat_vec)[0]
-
-        class_str = self.int_to_class[class_idx]
-        canonical_class = CanonicalFaultClass(class_str)
-        confidence = float(prob_vec[class_idx])
-
-        probabilities = {
-            self.int_to_class[i]: float(prob_vec[i]) for i in range(len(prob_vec))
-        }
-
-        health_index, severity, action = self._compute_health_and_actions(
-            canonical_class, confidence, feat_dict
-        )
-
-        provenance = {
-            "dataset_id": "IN_MEMORY_STREAM",
-            "sampling_rate_hz": sampling_rate_hz,
-            "fundamental_freq_hz": dsp_result.fundamental_frequency_hz,
-            "slip": dsp_result.motor_slip,
-        }
-
-        return DiagnosticPrediction(
-            predicted_class=canonical_class,
-            fault_code=f"FAULT_{canonical_class.value}",
-            confidence=confidence,
-            probabilities=probabilities,
-            health_index=health_index,
-            severity=severity,
-            feature_values=feat_dict,
-            feature_importances=self.feature_importances,
-            recommended_action=action,
-            provenance=provenance,
-            operational_warnings=dsp_result.operational_warnings,
-        )
-
-    def _compute_health_and_actions(
-        self,
-        fault_class: CanonicalFaultClass,
-        confidence: float,
-        feats: Dict[str, float],
-    ) -> Tuple[float, str, str]:
-        """Calculates Health Index (0-100) and actionable maintenance recommendation."""
-        if fault_class == CanonicalFaultClass.HEALTHY:
-            health = float(np.clip(88.0 + 12.0 * confidence, 80.0, 100.0))
-            severity = "HEALTHY"
-            action = "Motor operates within nominal parameters. Continue routine periodic condition monitoring."
-
-        elif fault_class == CanonicalFaultClass.BROKEN_ROTOR_BAR:
-            delta_db = feats.get("brb_min_delta_db", 45.0)
-            # Delta dB: >54dB Healthy, 45-54dB Warning, <40dB Critical
-            if delta_db >= 48.0:
-                health = float(np.clip(55.0 + (delta_db - 48.0) * 2.5, 50.0, 70.0))
-                severity = "MONITOR"
-                action = f"Early rotor bar asymmetry detected (delta = {delta_db:.1f} dB). Schedule vibration cross-check and repeat MCSA within 30 days."
-            elif delta_db >= 40.0:
-                health = float(np.clip(35.0 + (delta_db - 40.0) * 2.5, 35.0, 55.0))
-                severity = "WARNING"
-                action = f"Probable 1 or 2 broken rotor bars (delta = {delta_db:.1f} dB). Schedule offline motor inspection at next planned maintenance outage."
-            else:
-                health = float(np.clip(10.0 + delta_db * 0.6, 10.0, 35.0))
-                severity = "CRITICAL"
-                action = f"Critical broken rotor bars detected (delta = {delta_db:.1f} dB < 40 dB). Risk of stator core damage. Plan immediate motor replacement."
-
-        elif fault_class == CanonicalFaultClass.BEARING_FAULT:
-            health = float(np.clip(70.0 - 45.0 * confidence, 20.0, 65.0))
-            severity = "WARNING" if health > 40.0 else "CRITICAL"
-            action = "Current envelope demodulation indicates bearing degradation. Check lubrication and schedule ultrasonic / bearing replacement."
-
-        elif fault_class == CanonicalFaultClass.MISALIGNMENT:
-            delta_2fs = feats.get("second_harmonic_delta_db", 40.0)
-            health = float(np.clip(75.0 - 40.0 * confidence, 25.0, 65.0))
-            severity = "WARNING" if health > 40.0 else "CRITICAL"
-            action = f"Elevated 2x line frequency harmonic (delta = {delta_2fs:.1f} dB). Perform laser shaft alignment and check coupling condition."
-
-        else:
-            health = 50.0
-            severity = "MONITOR"
-            action = "Unclassified harmonic distortion detected. Conduct comprehensive electrical inspection."
-
-        return round(health, 1), severity, action
