@@ -1,0 +1,201 @@
+{
+  "schema_version": "1.0.0",
+  "project": "Motor Health AI - Induction Motor Fault Diagnosis Using MCSA",
+  "last_audit_date": "2026-10-23",
+  "primary_sensor_constraint": "CURRENT_ONLY",
+  "diagnostic_rule": "Strictly electrical current signatures (Ia, Ib, Ic) in Amperes. All vibration, acoustic, and voltage sensor channels are strictly excluded from feature extraction and model inference.",
+  "canonical_classes": [
+    "HEALTHY",
+    "BROKEN_ROTOR_BAR",
+    "BEARING_FAULT",
+    "MISALIGNMENT"
+  ],
+  "datasets": [
+    {
+      "dataset_id": "4TU_NLN_EMP",
+      "role": "PRIMARY_SOURCE",
+      "title": "Motor Current and Vibration Monitoring Dataset for various Faults in an E-motor-driven Centrifugal Pump",
+      "organization": "Royal Netherlands Navy / University of Twente / 4TU.ResearchData",
+      "authors": [
+        "Sietze J. Bruinsma",
+        "Rinze D. Geertsma",
+        "Richard Loendersloot",
+        "Tiedo Tinga"
+      ],
+      "publication": "Data in Brief, Volume 52, February 2024, 109987",
+      "doi": "10.4121/2b61183e-c14f-4131-829b-cc4822c369d0",
+      "repository_url": "https://data.4tu.nl/datasets/2b61183e-c14f-4131-829b-cc4822c369d0",
+      "license": "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+      "total_dataset_size_gb": 60.5,
+      "raw_format": "CSV files compressed in 7z archives",
+      "sampling_rate_hz": 20000.0,
+      "duration_per_run_seconds": 12.0,
+      "motor_specifications": {
+        "motor_type": "Three-phase squirrel-cage induction motor (two setups)",
+        "rated_power_kw": [11.0, 22.0],
+        "supply": "Variable Frequency Drive (VFD) and direct-on-line grid",
+        "nominal_frequency_hz": 50.0,
+        "poles": 4,
+        "rated_speed_rpm": 1470
+      },
+      "measurement_channels": {
+        "current_channels_used": [
+          { "channel_index": 0, "name": "I_u", "description": "Phase U stator current", "unit": "A" },
+          { "channel_index": 1, "name": "I_v", "description": "Phase V stator current", "unit": "A" },
+          { "channel_index": 2, "name": "I_w", "description": "Phase W stator current", "unit": "A" }
+        ],
+        "excluded_channels": [
+          { "channel_indices": [3, 4, 5], "type": "VOLTAGE", "name": "V_u, V_v, V_w", "reason": "Excluded under MCSA current-only diagnostic constraint" },
+          { "channel_indices": [6, 7, 8, 9, 10], "type": "VIBRATION", "name": "Acc_1 through Acc_5", "reason": "Accelerometers excluded to preserve non-invasive electrical-only monitoring" }
+        ]
+      },
+      "supported_canonical_classes": {
+        "HEALTHY": {
+          "supported": true,
+          "source_labels": ["Healthy", "Baseline"],
+          "severity_levels": ["Nominal baseline"]
+        },
+        "BROKEN_ROTOR_BAR": {
+          "supported": true,
+          "source_labels": ["Broken_Rotor_Bar_1", "Broken_Rotor_Bar_2", "Broken_Rotor_Bar_3"],
+          "severity_levels": ["1 drilled bar", "2 drilled bars", "3 drilled bars"]
+        },
+        "BEARING_FAULT": {
+          "supported": true,
+          "source_labels": ["Bearing_OuterRace", "Bearing_InnerRace", "Bearing_Lubrication"],
+          "severity_levels": ["Outer race defect", "Inner race defect", "Contaminated lubricant"]
+        },
+        "MISALIGNMENT": {
+          "supported": true,
+          "source_labels": ["Misalignment_Angular", "Misalignment_Parallel"],
+          "severity_levels": ["Angular shim offset", "Parallel radial offset"]
+        }
+      },
+      "operating_conditions": {
+        "speeds_rpm": [1000, 1200, 1500, 1800],
+        "vfd_frequencies_hz": [25.0, 35.0, 45.0, 50.0],
+        "load_throttle_pct": [25, 50, 75, 100]
+      },
+      "adapter_implementation": "ml_service.data.nln_emp_adapter.NLNEMPAdapter"
+    },
+    {
+      "dataset_id": "LIAS_MCSA_DC",
+      "role": "COMPLEMENTARY_BENCHMARK",
+      "title": "Motor Current Signature Analysis Data Center (MCSA-DC) - Test Bench 1",
+      "organization": "LIAS Laboratory, University of Poitiers / ISAE-ENSMA, France",
+      "authors": [
+        "Gérard Champenois",
+        "LIAS MCSA Research Team"
+      ],
+      "repository_url": "https://github.com/lias-laboratory/mcsa-dc",
+      "license": "CC BY 4.0 (Creative Commons Attribution 4.0 International)",
+      "total_dataset_size_gb": 1.2,
+      "raw_format": "CSV files (ccs0.csv to ccs127.csv)",
+      "sampling_rate_hz": 10000.0,
+      "motor_specifications": {
+        "motor_type": "Three-phase squirrel-cage induction motor",
+        "rated_power_kw": 1.1,
+        "nominal_voltage_v": 400.0,
+        "nominal_frequency_hz": 50.0,
+        "poles": 4,
+        "rated_speed_rpm": 1425,
+        "supply": "Direct on-line 400V grid"
+      },
+      "measurement_channels": {
+        "current_channels_used": [
+          { "channel_index": 1, "name": "isa", "description": "Phase A stator current", "unit": "A" },
+          { "channel_index": 2, "name": "isb", "description": "Phase B stator current", "unit": "A" },
+          { "channel_index": 3, "name": "isc", "description": "Phase C stator current", "unit": "A" }
+        ],
+        "excluded_channels": [
+          { "channel_indices": [4, 5, 6], "type": "VOLTAGE", "name": "Vsa, Vsb, Vsc", "reason": "Excluded under current-only constraint" },
+          { "channel_indices": [7, 8], "type": "MECHANICAL", "name": "Speed, Rotor_Pos", "reason": "Mechanical tachometer/encoder signals excluded" }
+        ]
+      },
+      "supported_canonical_classes": {
+        "HEALTHY": {
+          "supported": true,
+          "source_labels": ["ccs0 - ccs17"],
+          "severity_levels": ["Healthy rotor"]
+        },
+        "BROKEN_ROTOR_BAR": {
+          "supported": true,
+          "source_labels": ["ccs60 - ccs67 (1 broken bar)", "ccs120 - ccs127 (2 broken bars)"],
+          "severity_levels": ["1 broken bar (rotor drilling)", "2 broken bars"]
+        },
+        "BEARING_FAULT": {
+          "supported": false,
+          "gap_explanation": "Test Bench 1 specifically isolates rotor bar defects. Bearing tests were not conducted on this bench."
+        },
+        "MISALIGNMENT": {
+          "supported": false,
+          "gap_explanation": "Shaft misalignment tests were not conducted on this bench."
+        }
+      },
+      "operating_conditions": {
+        "speeds_rpm": ["Low (1432-1439)", "Medium (1440-1460)", "High (1461-1485)"]
+      },
+      "adapter_implementation": "ml_service.data.lias_adapter.LIASAdapter"
+    },
+    {
+      "dataset_id": "PADERBORN_BEARING",
+      "role": "COMPLEMENTARY_BENCHMARK",
+      "title": "Paderborn University Bearing Data Center",
+      "organization": "Paderborn University, Chair of Design and Drive Technology (KAt)",
+      "authors": [
+        "Christian Lessmeier",
+        "James Kuria Kimotho",
+        "Detmar Zimmer",
+        "Walter Sexton"
+      ],
+      "publication": "PHM Society Conference 2016",
+      "repository_url": "https://mb.uni-paderborn.de/kat/forschung/datensaetze/bearing-data-center/",
+      "license": "CC BY 4.0 / Research Use",
+      "total_dataset_size_gb": 40.0,
+      "raw_format": "MATLAB .mat files",
+      "sampling_rate_hz": 64000.0,
+      "duration_per_run_seconds": 4.0,
+      "motor_specifications": {
+        "motor_type": "Permanent Magnet Synchronous Motor (PMSM)",
+        "rated_power_kw": 1.6,
+        "nominal_speed_rpm": 1500,
+        "current_sensor": "LEM CKSR 15-NP Hall-effect transducers"
+      },
+      "measurement_channels": {
+        "current_channels_used": [
+          { "channel_index": 0, "name": "phase_current_1", "description": "Motor phase current 1", "unit": "A" },
+          { "channel_index": 1, "name": "phase_current_2", "description": "Motor phase current 2", "unit": "A" }
+        ],
+        "excluded_channels": [
+          { "channel_indices": [2], "type": "VIBRATION", "name": "acceleration_signal", "reason": "Piezoelectric accelerometer channel excluded under current-only constraint" }
+        ]
+      },
+      "supported_canonical_classes": {
+        "HEALTHY": {
+          "supported": true,
+          "source_labels": ["K001", "K002", "K003", "K004", "K005", "K006"],
+          "severity_levels": ["6 run-in healthy reference bearings"]
+        },
+        "BEARING_FAULT": {
+          "supported": true,
+          "source_labels": ["KA (Outer Ring)", "KI (Inner Ring)", "KB (Combined)"],
+          "severity_levels": ["EDM Level 1/2", "Accelerated fatigue run-to-failure"]
+        },
+        "BROKEN_ROTOR_BAR": {
+          "supported": false,
+          "gap_explanation": "Physical limitation: PMSMs have permanent magnets on the rotor and no squirrel-cage rotor bars; BRB cannot occur."
+        },
+        "MISALIGNMENT": {
+          "supported": false,
+          "gap_explanation": "Rig test protocol evaluated exclusively bearing damage; shaft misalignment was not tested."
+        }
+      },
+      "operating_conditions": {
+        "speeds_rpm": [900, 1500],
+        "load_torques_nm": [0.1, 0.7],
+        "radial_forces_n": [400, 1000]
+      },
+      "adapter_implementation": "ml_service.data.paderborn_adapter.PaderbornAdapter"
+    }
+  ]
+}
