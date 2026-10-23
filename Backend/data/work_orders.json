@@ -1,0 +1,2968 @@
+[
+  {
+    "diagnostic_run_id": "RUN-1792744545145-JGWGM9",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:35:45.149Z",
+    "status": "OPEN",
+    "assigned_to": "ELECTRICAL_MAINTENANCE_CREW",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "completion_outcome": null,
+    "created_by": "RELIABILITY_BOT",
+    "creator_role": "SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744545150-9JK43",
+    "created_at": "2026-10-23T08:35:45.150Z",
+    "updated_at": "2026-10-23T08:35:45.150Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:35:45.150Z",
+        "user": "RELIABILITY_BOT",
+        "role": "SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744545165-1R3EQL",
+    "motor_id": "MTR-402",
+    "motor_tag": "CONV-FEED-03",
+    "motor_name": "Coal Conveyor Overland Drive Motor",
+    "motor_location": "Conveyor Transfer Tower B",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "raw_class_scores": {},
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "priority": "MEDIUM",
+    "target_completion_date": "2026-11-22T08:35:45.168Z",
+    "status": "REVIEW_PENDING",
+    "assigned_to": "RELIABILITY_ENGINEERING_QUEUE",
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "spectral_evidence": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "operational_warnings": [],
+    "dataset_provenance": {},
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "CONV-FEED-03 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "completion_outcome": null,
+    "created_by": "AUTOMATED_DIAGNOSTICS",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "id": "WO-1792744545169-F463O",
+    "created_at": "2026-10-23T08:35:45.169Z",
+    "updated_at": "2026-10-23T08:35:45.169Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:35:45.169Z",
+        "user": "AUTOMATED_DIAGNOSTICS",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "REVIEW_PENDING",
+        "notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "title": "PUMP-CW-01 - Coupling Inspection",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "predicted_class": "MISALIGNMENT",
+    "assigned_to": "JOHN_SMITH",
+    "mandatory_human_verification_gate": {
+      "gate_name": "SOFT FOOT VERIFICATION",
+      "sign_off_required": true,
+      "sign_off_role": "MECHANICAL_MAINTENANCE_LEAD",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Dial indicator check",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744545173-9VPEY",
+    "created_at": "2026-10-23T08:35:45.173Z",
+    "updated_at": "2026-10-23T08:35:45.182Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:35:45.173Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:35:45.179Z",
+        "user": "JANE_DOE",
+        "role": "PLANNING_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned to Senior Vibration Tech John Smith for week 43 schedule."
+      },
+      {
+        "timestamp": "2026-10-23T08:35:45.182Z",
+        "user": "JOHN_SMITH",
+        "role": "MAINTENANCE_TECH",
+        "action": "STATUS_CHANGE_TO_IN_PROGRESS",
+        "previous_status": "ASSIGNED",
+        "new_status": "IN_PROGRESS",
+        "notes": "Coupling guards removed; commencing radial and axial vibration scan."
+      }
+    ],
+    "reviewer_notes": "Coupling guards removed; commencing radial and axial vibration scan."
+  },
+  {
+    "motor_id": "MTR-204",
+    "title": "Boiler Fan - Suspected Bearing Replacement",
+    "status": "VERIFICATION_REQUIRED",
+    "predicted_class": "BEARING_FAULT",
+    "mandatory_human_verification_gate": {
+      "gate_name": "LUBRICATION TRIAL",
+      "sign_off_required": true,
+      "sign_off_role": "VIBRATION_SPECIALIST",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Ultrasonic dB drop trial",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744545188-LL858",
+    "created_at": "2026-10-23T08:35:45.188Z",
+    "updated_at": "2026-10-23T08:35:45.188Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:35:45.188Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "VERIFICATION_REQUIRED",
+        "notes": "Work order generated from MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection",
+    "status": "OPEN",
+    "priority": "HIGH",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "model_version": "mcsa_rf_v1.0.0",
+    "diagnostic_run_id": "RUN-20261023-TEST",
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines"
+    },
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": null,
+        "diagnostic_relevance": "Primary carrier baseline."
+      }
+    ],
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed before testing.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load.",
+        "required_tools": [
+          "Clamp-on Ammeter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "Mandatory single-phase rotation test before rotor extraction.",
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage and turn shaft 360 degrees.",
+          "confirmed": false,
+          "inspector_notes": "Pending execution"
+        }
+      ]
+    },
+    "id": "WO-1792744545195-RR6OK",
+    "created_at": "2026-10-23T08:35:45.195Z",
+    "updated_at": "2026-10-23T08:35:45.195Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:35:45.195Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744574578-BY5DRE",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:36:14.585Z",
+    "status": "OPEN",
+    "assigned_to": "ELECTRICAL_MAINTENANCE_CREW",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "completion_outcome": null,
+    "created_by": "RELIABILITY_BOT",
+    "creator_role": "SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744574586-OULWD",
+    "created_at": "2026-10-23T08:36:14.586Z",
+    "updated_at": "2026-10-23T08:36:14.586Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:36:14.586Z",
+        "user": "RELIABILITY_BOT",
+        "role": "SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744574602-F3MZKE",
+    "motor_id": "MTR-402",
+    "motor_tag": "CONV-FEED-03",
+    "motor_name": "Coal Conveyor Overland Drive Motor",
+    "motor_location": "Conveyor Transfer Tower B",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "raw_class_scores": {},
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "priority": "MEDIUM",
+    "target_completion_date": "2026-11-22T08:36:14.605Z",
+    "status": "REVIEW_PENDING",
+    "assigned_to": "RELIABILITY_ENGINEERING_QUEUE",
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "spectral_evidence": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "operational_warnings": [],
+    "dataset_provenance": {},
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "CONV-FEED-03 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "completion_outcome": null,
+    "created_by": "AUTOMATED_DIAGNOSTICS",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "id": "WO-1792744574606-J5EV3",
+    "created_at": "2026-10-23T08:36:14.606Z",
+    "updated_at": "2026-10-23T08:36:14.606Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:36:14.606Z",
+        "user": "AUTOMATED_DIAGNOSTICS",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "REVIEW_PENDING",
+        "notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "title": "PUMP-CW-01 - Coupling Inspection",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "predicted_class": "MISALIGNMENT",
+    "assigned_to": "JOHN_SMITH",
+    "mandatory_human_verification_gate": {
+      "gate_name": "SOFT FOOT VERIFICATION",
+      "sign_off_required": true,
+      "sign_off_role": "MECHANICAL_MAINTENANCE_LEAD",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Dial indicator check",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744574610-9Q9SX",
+    "created_at": "2026-10-23T08:36:14.610Z",
+    "updated_at": "2026-10-23T08:36:14.622Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:36:14.610Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:36:14.616Z",
+        "user": "JANE_DOE",
+        "role": "PLANNING_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned to Senior Vibration Tech John Smith for week 43 schedule."
+      },
+      {
+        "timestamp": "2026-10-23T08:36:14.622Z",
+        "user": "JOHN_SMITH",
+        "role": "MAINTENANCE_TECH",
+        "action": "STATUS_CHANGE_TO_IN_PROGRESS",
+        "previous_status": "ASSIGNED",
+        "new_status": "IN_PROGRESS",
+        "notes": "Coupling guards removed; commencing radial and axial vibration scan."
+      }
+    ],
+    "reviewer_notes": "Coupling guards removed; commencing radial and axial vibration scan."
+  },
+  {
+    "motor_id": "MTR-204",
+    "title": "Boiler Fan - Suspected Bearing Replacement",
+    "status": "COMPLETED",
+    "predicted_class": "BEARING_FAULT",
+    "mandatory_human_verification_gate": {
+      "gate_name": "LUBRICATION TRIAL",
+      "sign_off_required": true,
+      "sign_off_role": "VIBRATION_SPECIALIST",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Ultrasonic dB drop trial",
+          "confirmed": true,
+          "inspector_notes": "Ultrasonic signal dropped 12 dB following 15g Shell Gadus S3 grease injection. Anomaly was dry bearing."
+        }
+      ]
+    },
+    "id": "WO-1792744574629-0S4F2",
+    "created_at": "2026-10-23T08:36:14.629Z",
+    "updated_at": "2026-10-23T08:36:14.635Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:36:14.629Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "VERIFICATION_REQUIRED",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:36:14.635Z",
+        "user": "SARAH_CHIEF_ENG",
+        "role": "VIBRATION_SPECIALIST",
+        "action": "STATUS_CHANGE_TO_COMPLETED",
+        "previous_status": "VERIFICATION_REQUIRED",
+        "new_status": "COMPLETED",
+        "notes": "Verification confirmed. Motor returned to normal service."
+      }
+    ],
+    "reviewer_notes": "Verification confirmed. Motor returned to normal service.",
+    "completion_outcome": {
+      "confirmed_fault": "LUBRICATION_STARVATION_RESOLVED",
+      "physical_findings": "Dry bearing raceway; no spalling or pitting observed.",
+      "actions_taken": "Cleaned purge port, applied 15g lubricant, verified thermal steady state at 48 deg C.",
+      "completed_at": "2026-10-23T08:36:14.634Z",
+      "signed_off_by": "SARAH_CHIEF_ENG"
+    }
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection",
+    "status": "OPEN",
+    "priority": "HIGH",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "model_version": "mcsa_rf_v1.0.0",
+    "diagnostic_run_id": "RUN-20261023-TEST",
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines"
+    },
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": null,
+        "diagnostic_relevance": "Primary carrier baseline."
+      }
+    ],
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed before testing.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load.",
+        "required_tools": [
+          "Clamp-on Ammeter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "Mandatory single-phase rotation test before rotor extraction.",
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage and turn shaft 360 degrees.",
+          "confirmed": false,
+          "inspector_notes": "Pending execution"
+        }
+      ]
+    },
+    "id": "WO-1792744574639-2PI26",
+    "created_at": "2026-10-23T08:36:14.638Z",
+    "updated_at": "2026-10-23T08:36:14.638Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:36:14.638Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744621548-1TSXAA",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:37:01.557Z",
+    "status": "ASSIGNED",
+    "assigned_to": "LEAD_TECH_MIKE",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Assigned for immediate current signature corroboration.",
+    "completion_outcome": null,
+    "created_by": "DIAGNOSTIC_TESTER",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744621560-1UJZ1",
+    "created_at": "2026-10-23T08:37:01.560Z",
+    "updated_at": "2026-10-23T08:37:04.996Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:01.560Z",
+        "user": "DIAGNOSTIC_TESTER",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:37:04.996Z",
+        "user": "PLANNER_ALICE",
+        "role": "MAINTENANCE_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned for immediate current signature corroboration."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744643861-0L6YJJ",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:37:23.866Z",
+    "status": "OPEN",
+    "assigned_to": "ELECTRICAL_MAINTENANCE_CREW",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "completion_outcome": null,
+    "created_by": "RELIABILITY_BOT",
+    "creator_role": "SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744643868-NMCZZ",
+    "created_at": "2026-10-23T08:37:23.868Z",
+    "updated_at": "2026-10-23T08:37:23.868Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:23.868Z",
+        "user": "RELIABILITY_BOT",
+        "role": "SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744643883-I6433J",
+    "motor_id": "MTR-402",
+    "motor_tag": "CONV-FEED-03",
+    "motor_name": "Coal Conveyor Overland Drive Motor",
+    "motor_location": "Conveyor Transfer Tower B",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "raw_class_scores": {},
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "priority": "MEDIUM",
+    "target_completion_date": "2026-11-22T08:37:23.887Z",
+    "status": "REVIEW_PENDING",
+    "assigned_to": "RELIABILITY_ENGINEERING_QUEUE",
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "spectral_evidence": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "operational_warnings": [],
+    "dataset_provenance": {},
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "CONV-FEED-03 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "completion_outcome": null,
+    "created_by": "AUTOMATED_DIAGNOSTICS",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "id": "WO-1792744643888-PADJJ",
+    "created_at": "2026-10-23T08:37:23.888Z",
+    "updated_at": "2026-10-23T08:37:23.888Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:23.888Z",
+        "user": "AUTOMATED_DIAGNOSTICS",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "REVIEW_PENDING",
+        "notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "title": "PUMP-CW-01 - Coupling Inspection",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "predicted_class": "MISALIGNMENT",
+    "assigned_to": "JOHN_SMITH",
+    "mandatory_human_verification_gate": {
+      "gate_name": "SOFT FOOT VERIFICATION",
+      "sign_off_required": true,
+      "sign_off_role": "MECHANICAL_MAINTENANCE_LEAD",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Dial indicator check",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744643895-UP7Q3",
+    "created_at": "2026-10-23T08:37:23.895Z",
+    "updated_at": "2026-10-23T08:37:23.908Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:23.895Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:37:23.902Z",
+        "user": "JANE_DOE",
+        "role": "PLANNING_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned to Senior Vibration Tech John Smith for week 43 schedule."
+      },
+      {
+        "timestamp": "2026-10-23T08:37:23.908Z",
+        "user": "JOHN_SMITH",
+        "role": "MAINTENANCE_TECH",
+        "action": "STATUS_CHANGE_TO_IN_PROGRESS",
+        "previous_status": "ASSIGNED",
+        "new_status": "IN_PROGRESS",
+        "notes": "Coupling guards removed; commencing radial and axial vibration scan."
+      }
+    ],
+    "reviewer_notes": "Coupling guards removed; commencing radial and axial vibration scan."
+  },
+  {
+    "motor_id": "MTR-204",
+    "title": "Boiler Fan - Suspected Bearing Replacement",
+    "status": "COMPLETED",
+    "predicted_class": "BEARING_FAULT",
+    "mandatory_human_verification_gate": {
+      "gate_name": "LUBRICATION TRIAL",
+      "sign_off_required": true,
+      "sign_off_role": "VIBRATION_SPECIALIST",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Ultrasonic dB drop trial",
+          "confirmed": true,
+          "inspector_notes": "Ultrasonic signal dropped 12 dB following 15g Shell Gadus S3 grease injection. Anomaly was dry bearing."
+        }
+      ]
+    },
+    "id": "WO-1792744643917-DVYM7",
+    "created_at": "2026-10-23T08:37:23.917Z",
+    "updated_at": "2026-10-23T08:37:23.925Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:23.917Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "VERIFICATION_REQUIRED",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:37:23.925Z",
+        "user": "SARAH_CHIEF_ENG",
+        "role": "VIBRATION_SPECIALIST",
+        "action": "STATUS_CHANGE_TO_COMPLETED",
+        "previous_status": "VERIFICATION_REQUIRED",
+        "new_status": "COMPLETED",
+        "notes": "Verification confirmed. Motor returned to normal service."
+      }
+    ],
+    "reviewer_notes": "Verification confirmed. Motor returned to normal service.",
+    "completion_outcome": {
+      "confirmed_fault": "LUBRICATION_STARVATION_RESOLVED",
+      "physical_findings": "Dry bearing raceway; no spalling or pitting observed.",
+      "actions_taken": "Cleaned purge port, applied 15g lubricant, verified thermal steady state at 48 deg C.",
+      "completed_at": "2026-10-23T08:37:23.924Z",
+      "signed_off_by": "SARAH_CHIEF_ENG"
+    }
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection",
+    "status": "OPEN",
+    "priority": "HIGH",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "model_version": "mcsa_rf_v1.0.0",
+    "diagnostic_run_id": "RUN-20261023-TEST",
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines"
+    },
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": null,
+        "diagnostic_relevance": "Primary carrier baseline."
+      }
+    ],
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed before testing.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load.",
+        "required_tools": [
+          "Clamp-on Ammeter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "Mandatory single-phase rotation test before rotor extraction.",
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage and turn shaft 360 degrees.",
+          "confirmed": false,
+          "inspector_notes": "Pending execution"
+        }
+      ]
+    },
+    "id": "WO-1792744643930-JGRLY",
+    "created_at": "2026-10-23T08:37:23.930Z",
+    "updated_at": "2026-10-23T08:37:23.930Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:23.930Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744646880-HK0BHV",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:37:26.888Z",
+    "status": "ASSIGNED",
+    "assigned_to": "LEAD_TECH_MIKE",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Assigned for immediate current signature corroboration.",
+    "completion_outcome": null,
+    "created_by": "DIAGNOSTIC_TESTER",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744646889-GBRNP",
+    "created_at": "2026-10-23T08:37:26.889Z",
+    "updated_at": "2026-10-23T08:37:29.935Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:37:26.889Z",
+        "user": "DIAGNOSTIC_TESTER",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:37:29.935Z",
+        "user": "PLANNER_ALICE",
+        "role": "MAINTENANCE_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned for immediate current signature corroboration."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744691748-VSYO9E",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:38:11.753Z",
+    "status": "OPEN",
+    "assigned_to": "ELECTRICAL_MAINTENANCE_CREW",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "completion_outcome": null,
+    "created_by": "RELIABILITY_BOT",
+    "creator_role": "SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744691754-U6OO7",
+    "created_at": "2026-10-23T08:38:11.754Z",
+    "updated_at": "2026-10-23T08:38:11.754Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:11.754Z",
+        "user": "RELIABILITY_BOT",
+        "role": "SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744691771-KGGHC5",
+    "motor_id": "MTR-402",
+    "motor_tag": "CONV-FEED-03",
+    "motor_name": "Coal Conveyor Overland Drive Motor",
+    "motor_location": "Conveyor Transfer Tower B",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "raw_class_scores": {},
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "priority": "MEDIUM",
+    "target_completion_date": "2026-11-22T08:38:11.775Z",
+    "status": "REVIEW_PENDING",
+    "assigned_to": "RELIABILITY_ENGINEERING_QUEUE",
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "spectral_evidence": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "operational_warnings": [],
+    "dataset_provenance": {},
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "CONV-FEED-03 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "completion_outcome": null,
+    "created_by": "AUTOMATED_DIAGNOSTICS",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "id": "WO-1792744691777-L1VTE",
+    "created_at": "2026-10-23T08:38:11.777Z",
+    "updated_at": "2026-10-23T08:38:11.777Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:11.777Z",
+        "user": "AUTOMATED_DIAGNOSTICS",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "REVIEW_PENDING",
+        "notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "title": "PUMP-CW-01 - Coupling Inspection",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "predicted_class": "MISALIGNMENT",
+    "assigned_to": "JOHN_SMITH",
+    "mandatory_human_verification_gate": {
+      "gate_name": "SOFT FOOT VERIFICATION",
+      "sign_off_required": true,
+      "sign_off_role": "MECHANICAL_MAINTENANCE_LEAD",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Dial indicator check",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744691784-F9XCB",
+    "created_at": "2026-10-23T08:38:11.784Z",
+    "updated_at": "2026-10-23T08:38:11.802Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:11.784Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:11.794Z",
+        "user": "JANE_DOE",
+        "role": "PLANNING_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned to Senior Vibration Tech John Smith for week 43 schedule."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:11.802Z",
+        "user": "JOHN_SMITH",
+        "role": "MAINTENANCE_TECH",
+        "action": "STATUS_CHANGE_TO_IN_PROGRESS",
+        "previous_status": "ASSIGNED",
+        "new_status": "IN_PROGRESS",
+        "notes": "Coupling guards removed; commencing radial and axial vibration scan."
+      }
+    ],
+    "reviewer_notes": "Coupling guards removed; commencing radial and axial vibration scan."
+  },
+  {
+    "motor_id": "MTR-204",
+    "title": "Boiler Fan - Suspected Bearing Replacement",
+    "status": "COMPLETED",
+    "predicted_class": "BEARING_FAULT",
+    "mandatory_human_verification_gate": {
+      "gate_name": "LUBRICATION TRIAL",
+      "sign_off_required": true,
+      "sign_off_role": "VIBRATION_SPECIALIST",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Ultrasonic dB drop trial",
+          "confirmed": true,
+          "inspector_notes": "Ultrasonic signal dropped 12 dB following 15g Shell Gadus S3 grease injection. Anomaly was dry bearing."
+        }
+      ]
+    },
+    "id": "WO-1792744691811-OLHJL",
+    "created_at": "2026-10-23T08:38:11.811Z",
+    "updated_at": "2026-10-23T08:38:11.821Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:11.811Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "VERIFICATION_REQUIRED",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:11.821Z",
+        "user": "SARAH_CHIEF_ENG",
+        "role": "VIBRATION_SPECIALIST",
+        "action": "STATUS_CHANGE_TO_COMPLETED",
+        "previous_status": "VERIFICATION_REQUIRED",
+        "new_status": "COMPLETED",
+        "notes": "Verification confirmed. Motor returned to normal service."
+      }
+    ],
+    "reviewer_notes": "Verification confirmed. Motor returned to normal service.",
+    "completion_outcome": {
+      "confirmed_fault": "LUBRICATION_STARVATION_RESOLVED",
+      "physical_findings": "Dry bearing raceway; no spalling or pitting observed.",
+      "actions_taken": "Cleaned purge port, applied 15g lubricant, verified thermal steady state at 48 deg C.",
+      "completed_at": "2026-10-23T08:38:11.819Z",
+      "signed_off_by": "SARAH_CHIEF_ENG"
+    }
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection",
+    "status": "ASSIGNED",
+    "priority": "HIGH",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "model_version": "mcsa_rf_v1.0.0",
+    "diagnostic_run_id": "RUN-20261023-TEST",
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines"
+    },
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": null,
+        "diagnostic_relevance": "Primary carrier baseline."
+      }
+    ],
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed before testing.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load.",
+        "required_tools": [
+          "Clamp-on Ammeter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "Mandatory single-phase rotation test before rotor extraction.",
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage and turn shaft 360 degrees.",
+          "confirmed": false,
+          "inspector_notes": "Pending execution"
+        }
+      ]
+    },
+    "id": "WO-1792744691829-O9LEN",
+    "created_at": "2026-10-23T08:38:11.829Z",
+    "updated_at": "2026-10-23T08:38:12.527Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:11.829Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:12.527Z",
+        "user": "PLANNER_ALICE",
+        "role": "MAINTENANCE_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned for immediate current signature corroboration."
+      }
+    ],
+    "reviewer_notes": "Assigned for immediate current signature corroboration.",
+    "assigned_to": "LEAD_TECH_MIKE"
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744720908-N5QTVP",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:38:40.914Z",
+    "status": "OPEN",
+    "assigned_to": "ELECTRICAL_MAINTENANCE_CREW",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "completion_outcome": null,
+    "created_by": "RELIABILITY_BOT",
+    "creator_role": "SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744720916-HBGIC",
+    "created_at": "2026-10-23T08:38:40.916Z",
+    "updated_at": "2026-10-23T08:38:40.916Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:40.916Z",
+        "user": "RELIABILITY_BOT",
+        "role": "SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744720933-ROWN2H",
+    "motor_id": "MTR-402",
+    "motor_tag": "CONV-FEED-03",
+    "motor_name": "Coal Conveyor Overland Drive Motor",
+    "motor_location": "Conveyor Transfer Tower B",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "raw_class_scores": {},
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "priority": "MEDIUM",
+    "target_completion_date": "2026-11-22T08:38:40.937Z",
+    "status": "REVIEW_PENDING",
+    "assigned_to": "RELIABILITY_ENGINEERING_QUEUE",
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "spectral_evidence": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "operational_warnings": [],
+    "dataset_provenance": {},
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "CONV-FEED-03 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "completion_outcome": null,
+    "created_by": "AUTOMATED_DIAGNOSTICS",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes.",
+    "id": "WO-1792744720939-4DYJ6",
+    "created_at": "2026-10-23T08:38:40.939Z",
+    "updated_at": "2026-10-23T08:38:40.939Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:40.939Z",
+        "user": "AUTOMATED_DIAGNOSTICS",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "REVIEW_PENDING",
+        "notes": "Flagged for specialist human review before scheduling: Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+      }
+    ]
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "title": "PUMP-CW-01 - Coupling Inspection",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "predicted_class": "MISALIGNMENT",
+    "assigned_to": "JOHN_SMITH",
+    "mandatory_human_verification_gate": {
+      "gate_name": "SOFT FOOT VERIFICATION",
+      "sign_off_required": true,
+      "sign_off_role": "MECHANICAL_MAINTENANCE_LEAD",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Dial indicator check",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ]
+    },
+    "id": "WO-1792744720945-MMH8U",
+    "created_at": "2026-10-23T08:38:40.945Z",
+    "updated_at": "2026-10-23T08:38:40.963Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:40.945Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:40.954Z",
+        "user": "JANE_DOE",
+        "role": "PLANNING_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned to Senior Vibration Tech John Smith for week 43 schedule."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:40.963Z",
+        "user": "JOHN_SMITH",
+        "role": "MAINTENANCE_TECH",
+        "action": "STATUS_CHANGE_TO_IN_PROGRESS",
+        "previous_status": "ASSIGNED",
+        "new_status": "IN_PROGRESS",
+        "notes": "Coupling guards removed; commencing radial and axial vibration scan."
+      }
+    ],
+    "reviewer_notes": "Coupling guards removed; commencing radial and axial vibration scan."
+  },
+  {
+    "motor_id": "MTR-204",
+    "title": "Boiler Fan - Suspected Bearing Replacement",
+    "status": "COMPLETED",
+    "predicted_class": "BEARING_FAULT",
+    "mandatory_human_verification_gate": {
+      "gate_name": "LUBRICATION TRIAL",
+      "sign_off_required": true,
+      "sign_off_role": "VIBRATION_SPECIALIST",
+      "verification_steps": [
+        {
+          "code": "VERIF-01",
+          "name": "Ultrasonic dB drop trial",
+          "confirmed": true,
+          "inspector_notes": "Ultrasonic signal dropped 12 dB following 15g Shell Gadus S3 grease injection. Anomaly was dry bearing."
+        }
+      ]
+    },
+    "id": "WO-1792744720974-UIQ44",
+    "created_at": "2026-10-23T08:38:40.974Z",
+    "updated_at": "2026-10-23T08:38:40.981Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:40.974Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "VERIFICATION_REQUIRED",
+        "notes": "Work order generated from MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:40.981Z",
+        "user": "SARAH_CHIEF_ENG",
+        "role": "VIBRATION_SPECIALIST",
+        "action": "STATUS_CHANGE_TO_COMPLETED",
+        "previous_status": "VERIFICATION_REQUIRED",
+        "new_status": "COMPLETED",
+        "notes": "Verification confirmed. Motor returned to normal service."
+      }
+    ],
+    "reviewer_notes": "Verification confirmed. Motor returned to normal service.",
+    "completion_outcome": {
+      "confirmed_fault": "LUBRICATION_STARVATION_RESOLVED",
+      "physical_findings": "Dry bearing raceway; no spalling or pitting observed.",
+      "actions_taken": "Cleaned purge port, applied 15g lubricant, verified thermal steady state at 48 deg C.",
+      "completed_at": "2026-10-23T08:38:40.980Z",
+      "signed_off_by": "SARAH_CHIEF_ENG"
+    }
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection",
+    "status": "OPEN",
+    "priority": "HIGH",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "model_version": "mcsa_rf_v1.0.0",
+    "diagnostic_run_id": "RUN-20261023-TEST",
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines"
+    },
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": null,
+        "diagnostic_relevance": "Primary carrier baseline."
+      }
+    ],
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed before testing.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load.",
+        "required_tools": [
+          "Clamp-on Ammeter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "Mandatory single-phase rotation test before rotor extraction.",
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage and turn shaft 360 degrees.",
+          "confirmed": false,
+          "inspector_notes": "Pending execution"
+        }
+      ]
+    },
+    "id": "WO-1792744720988-VSOXJ",
+    "created_at": "2026-10-23T08:38:40.988Z",
+    "updated_at": "2026-10-23T08:38:40.988Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:40.988Z",
+        "user": "SYSTEM",
+        "role": "AUTOMATED_DIAGNOSTICS",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Work order generated from MCSA diagnostic run."
+      }
+    ]
+  },
+  {
+    "diagnostic_run_id": "RUN-1792744723874-N9OFFJ",
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "motor_location": "Pump House Bay 1",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "priority": "HIGH",
+    "target_completion_date": "2026-10-30T08:38:43.878Z",
+    "status": "ASSIGNED",
+    "assigned_to": "LEAD_TECH_MIKE",
+    "human_review_triggers": [],
+    "spectral_evidence": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "operational_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "dataset_provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "title": "PUMP-CW-01 - Rotor Cage & Bar Asymmetry Inspection Procedure",
+    "description": "MCSA spectral sidebands indicate potential broken rotor bars or high-resistance end-ring brazing joints.",
+    "safety_protocol": "Lockout/Tagout (LOTO) electrical feed. Discharge capacitors and verify zero voltage on stator leads before physical contact.",
+    "priority_basis": "Evaluated against EPRI NP-7502 logarithmic sideband attenuation delta dB relative to fundamental carrier.",
+    "inspection_tasks": [
+      {
+        "step": 1,
+        "task": "Operational Load Verification",
+        "details": "Verify motor is operating at >= 75% rated load to guarantee rotor slip (s >= 0.015) is sufficient for unambiguous sideband separation.",
+        "required_tools": [
+          "Clamp-on True-RMS Ammeter",
+          "Optical Tachometer"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 2,
+        "task": "High-Resolution Spectral Sideband Zoom",
+        "details": "Record 10-second current stream at fs >= 5 kHz. Verify presence of twin (1 +/- 2s)fs sidebands with delta dB < 45 dB.",
+        "required_tools": [
+          "Portable MCSA Data Collector / DAQ"
+        ],
+        "status": "PENDING"
+      },
+      {
+        "step": 3,
+        "task": "Acoustic / Slip-Beating Check",
+        "details": "Listen for characteristic 2*s*fs slip-frequency modulated acoustic hum and examine mechanical torque oscillation.",
+        "required_tools": [
+          "Mechanic Stethoscope / Sound Level Meter"
+        ],
+        "status": "PENDING"
+      }
+    ],
+    "mandatory_human_verification_gate": {
+      "gate_name": "PRE-TEARDOWN CONFIRMATORY TESTING",
+      "requirement": "MANDATORY: Before removing motor from service or ordering rotor replacement, execute offline electrical verification.",
+      "verification_steps": [
+        {
+          "code": "VERIF-BRB-01",
+          "name": "Single-Phase Rotor Rotation Test",
+          "instruction": "Apply low AC voltage (10-15% rated) to single stator phase. Rotate motor shaft slowly by hand through 360 degrees while recording current. Current fluctuation > 5-10% confirms broken rotor bars.",
+          "confirmed": false,
+          "inspector_notes": ""
+        },
+        {
+          "code": "VERIF-BRB-02",
+          "name": "Motor Circuit Analysis (MCA) & Inductance Symmetry",
+          "instruction": "Perform phase-to-phase inductance balance test. Rule out stator unbalance and static eccentricity before unseating rotor.",
+          "confirmed": false,
+          "inspector_notes": ""
+        }
+      ],
+      "sign_off_required": true,
+      "sign_off_role": "CHIEF_RELIABILITY_ENGINEER"
+    },
+    "reviewer_notes": "Assigned for immediate current signature corroboration.",
+    "completion_outcome": null,
+    "created_by": "DIAGNOSTIC_TESTER",
+    "creator_role": "CONDITION_MONITORING_SYSTEM",
+    "initial_notes": "Automated work order generated from high-confidence MCSA diagnostic run.",
+    "id": "WO-1792744723880-B6WO6",
+    "created_at": "2026-10-23T08:38:43.880Z",
+    "updated_at": "2026-10-23T08:38:46.668Z",
+    "history": [
+      {
+        "timestamp": "2026-10-23T08:38:43.880Z",
+        "user": "DIAGNOSTIC_TESTER",
+        "role": "CONDITION_MONITORING_SYSTEM",
+        "action": "CREATED",
+        "previous_status": null,
+        "new_status": "OPEN",
+        "notes": "Automated work order generated from high-confidence MCSA diagnostic run."
+      },
+      {
+        "timestamp": "2026-10-23T08:38:46.668Z",
+        "user": "PLANNER_ALICE",
+        "role": "MAINTENANCE_SUPERVISOR",
+        "action": "STATUS_CHANGE_TO_ASSIGNED",
+        "previous_status": "OPEN",
+        "new_status": "ASSIGNED",
+        "notes": "Assigned for immediate current signature corroboration."
+      }
+    ]
+  }
+]

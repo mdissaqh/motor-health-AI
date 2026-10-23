@@ -1,0 +1,1222 @@
+[
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "id": "RUN-1792744545145-JGWGM9",
+    "timestamp": "2026-10-23T08:35:45.145Z"
+  },
+  {
+    "motor_id": "MTR-204",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal duration 0.0500s is below 0.20s minimum.",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Duration below minimum FFT window."
+    ],
+    "id": "RUN-1792744545154-OQ4VM6",
+    "timestamp": "2026-10-23T08:35:45.154Z"
+  },
+  {
+    "motor_id": "MTR-305",
+    "diagnostic_status": "UNSUPPORTED_CONDITION",
+    "status_explanation": "Operating condition unsupported: Motor slip (0.0008) is below 0.002 (no-load threshold).",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Near zero slip."
+    ],
+    "id": "RUN-1792744545160-6E21FJ",
+    "timestamp": "2026-10-23T08:35:45.160Z"
+  },
+  {
+    "motor_id": "MTR-402",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "status_explanation": "Diagnostic requires specialist human review (1 rule(s) triggered).",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "id": "RUN-1792744545165-1R3EQL",
+    "timestamp": "2026-10-23T08:35:45.165Z"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "id": "RUN-1792744574578-BY5DRE",
+    "timestamp": "2026-10-23T08:36:14.578Z"
+  },
+  {
+    "motor_id": "MTR-204",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal duration 0.0500s is below 0.20s minimum.",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Duration below minimum FFT window."
+    ],
+    "id": "RUN-1792744574590-VARMO9",
+    "timestamp": "2026-10-23T08:36:14.590Z"
+  },
+  {
+    "motor_id": "MTR-305",
+    "diagnostic_status": "UNSUPPORTED_CONDITION",
+    "status_explanation": "Operating condition unsupported: Motor slip (0.0008) is below 0.002 (no-load threshold).",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Near zero slip."
+    ],
+    "id": "RUN-1792744574596-5I32SY",
+    "timestamp": "2026-10-23T08:36:14.596Z"
+  },
+  {
+    "motor_id": "MTR-402",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "status_explanation": "Diagnostic requires specialist human review (1 rule(s) triggered).",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "id": "RUN-1792744574602-F3MZKE",
+    "timestamp": "2026-10-23T08:36:14.602Z"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "timestamp": "2026-10-23T08:37:01.545Z",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "health_index": 36.974999999999994,
+    "human_review_triggers": [],
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "recommended_action": "Plan motor replacement or rotor re-barring during next scheduled plant shutdown.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {
+      "sampling_rate_hz": 5000,
+      "fft_window": "hanning",
+      "detrend": "constant",
+      "amplitude_recovery_factor": "2.0 / sum(window)",
+      "frequency_resolution_hz": 1
+    },
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "id": "RUN-1792744621548-1TSXAA"
+  },
+  {
+    "motor_id": "MTR-204",
+    "motor_tag": "FAN-ID-02",
+    "motor_name": "Induced Draft Boiler Exhaust Fan Motor",
+    "timestamp": "2026-10-23T08:37:04.965Z",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution.",
+    "predicted_class": null,
+    "fault_code": null,
+    "model_confidence": null,
+    "raw_class_scores": {},
+    "calibrated_probabilities": {},
+    "severity": {
+      "status": "UNSUPPORTED_SEVERITY",
+      "severity_level": "Severity unavailable — insufficient validated labels.",
+      "measurement_basis": "Invalid or corrupted current signal.",
+      "standard_reference": "Data Integrity Specification",
+      "quantitative_metric": null,
+      "notes": "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    },
+    "health_index": 0,
+    "human_review_triggers": [
+      "Invalid signal: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "spectral_regions": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "recommended_action": "Inspect current sensor cabling, verify sampling parameters, and eliminate NaN/Inf/zero data.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {},
+    "diagnostic_warnings": [
+      "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "provenance": {
+      "source": "RAW_ARRAY"
+    },
+    "id": "RUN-1792744624966-ETWKI7"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "id": "RUN-1792744643861-0L6YJJ",
+    "timestamp": "2026-10-23T08:37:23.861Z"
+  },
+  {
+    "motor_id": "MTR-204",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal duration 0.0500s is below 0.20s minimum.",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Duration below minimum FFT window."
+    ],
+    "id": "RUN-1792744643874-GDU75H",
+    "timestamp": "2026-10-23T08:37:23.874Z"
+  },
+  {
+    "motor_id": "MTR-305",
+    "diagnostic_status": "UNSUPPORTED_CONDITION",
+    "status_explanation": "Operating condition unsupported: Motor slip (0.0008) is below 0.002 (no-load threshold).",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Near zero slip."
+    ],
+    "id": "RUN-1792744643879-85NHME",
+    "timestamp": "2026-10-23T08:37:23.879Z"
+  },
+  {
+    "motor_id": "MTR-402",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "status_explanation": "Diagnostic requires specialist human review (1 rule(s) triggered).",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "id": "RUN-1792744643883-I6433J",
+    "timestamp": "2026-10-23T08:37:23.883Z"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "timestamp": "2026-10-23T08:37:26.878Z",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "health_index": 36.974999999999994,
+    "human_review_triggers": [],
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "recommended_action": "Plan motor replacement or rotor re-barring during next scheduled plant shutdown.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {
+      "sampling_rate_hz": 5000,
+      "fft_window": "hanning",
+      "detrend": "constant",
+      "amplitude_recovery_factor": "2.0 / sum(window)",
+      "frequency_resolution_hz": 1
+    },
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "id": "RUN-1792744646880-HK0BHV"
+  },
+  {
+    "motor_id": "MTR-204",
+    "motor_tag": "FAN-ID-02",
+    "motor_name": "Induced Draft Boiler Exhaust Fan Motor",
+    "timestamp": "2026-10-23T08:37:29.888Z",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution.",
+    "predicted_class": null,
+    "fault_code": null,
+    "model_confidence": null,
+    "raw_class_scores": {},
+    "calibrated_probabilities": {},
+    "severity": {
+      "status": "UNSUPPORTED_SEVERITY",
+      "severity_level": "Severity unavailable — insufficient validated labels.",
+      "measurement_basis": "Invalid or corrupted current signal.",
+      "standard_reference": "Data Integrity Specification",
+      "quantitative_metric": null,
+      "notes": "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    },
+    "health_index": 0,
+    "human_review_triggers": [
+      "Invalid signal: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "spectral_regions": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "recommended_action": "Inspect current sensor cabling, verify sampling parameters, and eliminate NaN/Inf/zero data.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {},
+    "diagnostic_warnings": [
+      "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "provenance": {
+      "source": "RAW_ARRAY"
+    },
+    "id": "RUN-1792744649889-C64HOY"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "id": "RUN-1792744691748-VSYO9E",
+    "timestamp": "2026-10-23T08:38:11.748Z"
+  },
+  {
+    "motor_id": "MTR-204",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal duration 0.0500s is below 0.20s minimum.",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Duration below minimum FFT window."
+    ],
+    "id": "RUN-1792744691761-EM9GBG",
+    "timestamp": "2026-10-23T08:38:11.761Z"
+  },
+  {
+    "motor_id": "MTR-305",
+    "diagnostic_status": "UNSUPPORTED_CONDITION",
+    "status_explanation": "Operating condition unsupported: Motor slip (0.0008) is below 0.002 (no-load threshold).",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Near zero slip."
+    ],
+    "id": "RUN-1792744691766-UUQ5NV",
+    "timestamp": "2026-10-23T08:38:11.766Z"
+  },
+  {
+    "motor_id": "MTR-402",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "status_explanation": "Diagnostic requires specialist human review (1 rule(s) triggered).",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "id": "RUN-1792744691771-KGGHC5",
+    "timestamp": "2026-10-23T08:38:11.771Z"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.994,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.0001,
+      "BROKEN_ROTOR_BAR": 0.994,
+      "BEARING_FAULT": 0.0058,
+      "MISALIGNMENT": 0.0001
+    },
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.98,
+      "BEARING_FAULT": 0.02,
+      "MISALIGNMENT": 0
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB"
+    },
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 10,
+        "measured_power_db": 20,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0.102,
+        "measured_power_db": -19.8,
+        "delta_db_relative_to_fund": 39.8,
+        "diagnostic_relevance": "Key indicator of broken rotor bars."
+      }
+    ],
+    "key_features": {
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.8,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED"
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation."
+    ],
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected."
+    ],
+    "provenance": {
+      "dataset_id": "TEST_SUITE",
+      "sampling_rate_hz": 5000,
+      "motor_slip": 0.02
+    },
+    "model_version": "mcsa_rf_v1.0.0",
+    "id": "RUN-1792744720908-N5QTVP",
+    "timestamp": "2026-10-23T08:38:40.908Z"
+  },
+  {
+    "motor_id": "MTR-204",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal duration 0.0500s is below 0.20s minimum.",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Duration below minimum FFT window."
+    ],
+    "id": "RUN-1792744720922-83OL52",
+    "timestamp": "2026-10-23T08:38:40.923Z"
+  },
+  {
+    "motor_id": "MTR-305",
+    "diagnostic_status": "UNSUPPORTED_CONDITION",
+    "status_explanation": "Operating condition unsupported: Motor slip (0.0008) is below 0.002 (no-load threshold).",
+    "predicted_class": null,
+    "model_confidence": null,
+    "diagnostic_warnings": [
+      "Near zero slip."
+    ],
+    "id": "RUN-1792744720928-P1O6ZJ",
+    "timestamp": "2026-10-23T08:38:40.928Z"
+  },
+  {
+    "motor_id": "MTR-402",
+    "diagnostic_status": "REVIEW_REQUIRED",
+    "status_explanation": "Diagnostic requires specialist human review (1 rule(s) triggered).",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "model_confidence": 0.58,
+    "calibrated_probabilities": {
+      "HEALTHY": 0.12,
+      "BROKEN_ROTOR_BAR": 0.58,
+      "BEARING_FAULT": 0.25,
+      "MISALIGNMENT": 0.05
+    },
+    "human_review_triggers": [
+      "Low model confidence (58.0% < 65.0%). Posterior distribution is diffused across multiple classes."
+    ],
+    "severity": {
+      "status": "UNDER_REVIEW",
+      "severity_level": null,
+      "measurement_basis": "Defensible severity deferred pending human review."
+    },
+    "id": "RUN-1792744720933-ROWN2H",
+    "timestamp": "2026-10-23T08:38:40.933Z"
+  },
+  {
+    "motor_id": "MTR-101",
+    "motor_tag": "PUMP-CW-01",
+    "motor_name": "Cooling Water Circulation Pump Motor",
+    "timestamp": "2026-10-23T08:38:43.869Z",
+    "diagnostic_status": "DIAGNOSIS_AVAILABLE",
+    "status_explanation": "High-confidence diagnosis supported by corroborating MCSA physical indicators.",
+    "predicted_class": "BROKEN_ROTOR_BAR",
+    "fault_code": "FAULT_BROKEN_ROTOR_BAR",
+    "model_confidence": 0.9975179416424051,
+    "raw_class_scores": {
+      "HEALTHY": 0,
+      "BROKEN_ROTOR_BAR": 0.9607575757575758,
+      "BEARING_FAULT": 0.03924242424242424,
+      "MISALIGNMENT": 0
+    },
+    "calibrated_probabilities": {
+      "HEALTHY": 6.0467192913099764e-12,
+      "BROKEN_ROTOR_BAR": 0.9975179416424051,
+      "BEARING_FAULT": 0.0024820583455011833,
+      "MISALIGNMENT": 6.0467192913099764e-12
+    },
+    "severity": {
+      "status": "FAULT_DETECTED",
+      "severity_level": "Severe — Multiple broken rotor bars",
+      "measurement_basis": "Sideband attenuation: 39.8 dB relative to fundamental",
+      "standard_reference": "EPRI NP-7502 / Thomson-Rankin MCSA Guidelines",
+      "quantitative_metric": "Delta dB: 39.8 dB",
+      "notes": "Standard EPRI scale based on sideband-to-fundamental logarithmic ratio."
+    },
+    "health_index": 36.974999999999994,
+    "human_review_triggers": [],
+    "spectral_regions": [
+      {
+        "name": "Fundamental Supply Carrier (fs)",
+        "frequency_range_hz": [
+          49.5,
+          50.5
+        ],
+        "center_frequency_hz": 50,
+        "measured_amplitude_a": 0,
+        "measured_power_db": 0,
+        "delta_db_relative_to_fund": 0,
+        "diagnostic_relevance": "Primary carrier frequency and electrical power baseline."
+      },
+      {
+        "name": "Broken Rotor Bar Lower Sideband (fs - 2s*fs)",
+        "frequency_range_hz": [
+          47.6,
+          48.4
+        ],
+        "center_frequency_hz": 48,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.82,
+        "delta_db_relative_to_fund": 39.82,
+        "diagnostic_relevance": "Key indicator of broken rotor bars and end-ring defects."
+      },
+      {
+        "name": "Broken Rotor Bar Upper Sideband (fs + 2s*fs)",
+        "frequency_range_hz": [
+          51.6,
+          52.4
+        ],
+        "center_frequency_hz": 52,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -39.79,
+        "delta_db_relative_to_fund": 39.79,
+        "diagnostic_relevance": "Upper modulation sideband corroborating rotor cage asymmetry."
+      },
+      {
+        "name": "2x Line Frequency Harmonic (2*fs)",
+        "frequency_range_hz": [
+          99.5,
+          100.5
+        ],
+        "center_frequency_hz": 100,
+        "measured_amplitude_a": 0,
+        "measured_power_db": -89.51,
+        "delta_db_relative_to_fund": 89.51,
+        "diagnostic_relevance": "Indicator of mechanical shaft misalignment and dynamic eccentricity."
+      }
+    ],
+    "key_features": {
+      "crest_factor": {
+        "feature_name": "Crest Factor (Peak / RMS)",
+        "value": 1.456,
+        "unit": "ratio",
+        "nominal_range": [
+          1.3,
+          1.6
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Sinusoidal waveform shape indicator (pure sine is sqrt(2) ~ 1.414)."
+      },
+      "kurtosis": {
+        "feature_name": "Kurtosis (Fisher Excess)",
+        "value": -1.488,
+        "unit": "dimensionless",
+        "nominal_range": [
+          -0.5,
+          1
+        ],
+        "status": "DEPRESSED",
+        "physical_interpretation": "Impulsiveness and tail-weight; elevated values indicate periodic bearing impacts."
+      },
+      "brb_min_delta_db": {
+        "feature_name": "BRB Sideband Attenuation (Delta dB)",
+        "value": 39.79,
+        "unit": "dB",
+        "nominal_range": [
+          54,
+          100
+        ],
+        "status": "ELEVATED",
+        "physical_interpretation": "EPRI/IEEE severity standard for rotor bar health (> 54 dB is healthy)."
+      },
+      "parks_vector_unbalance_ratio": {
+        "feature_name": "Park's Current Unbalance Ratio",
+        "value": 0.017,
+        "unit": "ratio",
+        "nominal_range": [
+          0,
+          0.05
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "3-phase stator current circularity (< 5% is acceptable industrial balance)."
+      },
+      "thd_pct": {
+        "feature_name": "Total Harmonic Distortion (THD)",
+        "value": 0,
+        "unit": "%",
+        "nominal_range": [
+          0,
+          5
+        ],
+        "status": "NOMINAL",
+        "physical_interpretation": "Ratio of harmonic content to fundamental carrier power."
+      }
+    },
+    "corroborating_indicators": [
+      "Fundamental supply carrier identified at 50.00 Hz.",
+      "Characteristic (1 +/- 2s)fs sideband detected with 39.8 dB attenuation, indicating rotor bar asymmetry.",
+      "Operating slip verified at s = 0.0200."
+    ],
+    "recommended_action": "Plan motor replacement or rotor re-barring during next scheduled plant shutdown.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {
+      "sampling_rate_hz": 5000,
+      "fft_window": "hanning",
+      "detrend": "constant",
+      "amplitude_recovery_factor": "2.0 / sum(window)",
+      "frequency_resolution_hz": 1
+    },
+    "diagnostic_warnings": [
+      "Elevated BRB sideband detected. Verify operating load and rotor slip before maintenance intervention."
+    ],
+    "provenance": {
+      "dataset_id": "SYNTHETIC_FIXTURE_NOT_RESEARCH_DATA",
+      "source_file_id": "synth_broken_rotor_bar_seed42.csv",
+      "sampling_rate_hz": 5000,
+      "fundamental_freq_hz": 50,
+      "motor_slip": 0.02,
+      "operating_rpm": null,
+      "poles": 4
+    },
+    "id": "RUN-1792744723874-N9OFFJ"
+  },
+  {
+    "motor_id": "MTR-204",
+    "motor_tag": "FAN-ID-02",
+    "motor_name": "Induced Draft Boiler Exhaust Fan Motor",
+    "timestamp": "2026-10-23T08:38:46.638Z",
+    "diagnostic_status": "INVALID_SIGNAL",
+    "status_explanation": "Signal validation failed: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution.",
+    "predicted_class": null,
+    "fault_code": null,
+    "model_confidence": null,
+    "raw_class_scores": {},
+    "calibrated_probabilities": {},
+    "severity": {
+      "status": "UNSUPPORTED_SEVERITY",
+      "severity_level": "Severity unavailable — insufficient validated labels.",
+      "measurement_basis": "Invalid or corrupted current signal.",
+      "standard_reference": "Data Integrity Specification",
+      "quantitative_metric": null,
+      "notes": "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    },
+    "health_index": 0,
+    "human_review_triggers": [
+      "Invalid signal: Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "spectral_regions": [],
+    "key_features": {},
+    "corroborating_indicators": [],
+    "recommended_action": "Inspect current sensor cabling, verify sampling parameters, and eliminate NaN/Inf/zero data.",
+    "model_version": "mcsa_rf_v1.0.0",
+    "preprocessing_config": {},
+    "diagnostic_warnings": [
+      "Truncated signal: duration 0.0010s is below 0.20s minimum required for MCSA frequency resolution."
+    ],
+    "provenance": {
+      "source": "RAW_ARRAY"
+    },
+    "id": "RUN-1792744726640-YNWIPU"
+  }
+]

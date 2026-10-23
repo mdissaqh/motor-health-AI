@@ -1,0 +1,82 @@
+[
+  {
+    "id": "MTR-101",
+    "tag": "PUMP-CW-01",
+    "name": "Cooling Water Circulation Pump Motor",
+    "location": "Pump House Bay 1",
+    "criticality": "HIGH",
+    "nameplate": {
+      "rated_power_kw": 75.0,
+      "rated_voltage_v": 400.0,
+      "rated_current_a": 135.0,
+      "rated_speed_rpm": 1475.0,
+      "supply_frequency_hz": 50.0,
+      "poles": 4,
+      "power_factor": 0.86,
+      "bearing_de": "SKF 6314-2Z",
+      "bearing_nde": "SKF 6312-2Z"
+    },
+    "created_at": "2026-01-15T08:00:00.000Z",
+    "status": "OPERATIONAL"
+  },
+  {
+    "id": "MTR-204",
+    "tag": "FAN-ID-02",
+    "name": "Induced Draft Boiler Exhaust Fan Motor",
+    "location": "Boiler House Level 3",
+    "criticality": "CRITICAL",
+    "nameplate": {
+      "rated_power_kw": 110.0,
+      "rated_voltage_v": 400.0,
+      "rated_current_a": 195.0,
+      "rated_speed_rpm": 1480.0,
+      "supply_frequency_hz": 50.0,
+      "poles": 4,
+      "power_factor": 0.88,
+      "bearing_de": "SKF NU 318 ECM",
+      "bearing_nde": "SKF 6318 C3"
+    },
+    "created_at": "2026-01-20T10:30:00.000Z",
+    "status": "OPERATIONAL"
+  },
+  {
+    "id": "MTR-305",
+    "tag": "COMP-AIR-01",
+    "name": "Instrument Air Screw Compressor Motor",
+    "location": "Compressor Utility Room",
+    "criticality": "HIGH",
+    "nameplate": {
+      "rated_power_kw": 45.0,
+      "rated_voltage_v": 400.0,
+      "rated_current_a": 82.0,
+      "rated_speed_rpm": 2950.0,
+      "supply_frequency_hz": 50.0,
+      "poles": 2,
+      "power_factor": 0.89,
+      "bearing_de": "SKF 6311-2RS1",
+      "bearing_nde": "SKF 6211-2RS1"
+    },
+    "created_at": "2026-02-01T14:15:00.000Z",
+    "status": "OPERATIONAL"
+  },
+  {
+    "id": "MTR-402",
+    "tag": "CONV-FEED-03",
+    "name": "Coal Conveyor Overland Drive Motor",
+    "location": "Conveyor Transfer Tower B",
+    "criticality": "MEDIUM",
+    "nameplate": {
+      "rated_power_kw": 30.0,
+      "rated_voltage_v": 400.0,
+      "rated_current_a": 55.0,
+      "rated_speed_rpm": 1465.0,
+      "supply_frequency_hz": 50.0,
+      "poles": 4,
+      "power_factor": 0.84,
+      "bearing_de": "SKF 6309-2Z",
+      "bearing_nde": "SKF 6209-2Z"
+    },
+    "created_at": "2026-02-10T11:00:00.000Z",
+    "status": "OPERATIONAL"
+  }
+]
