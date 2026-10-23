@@ -6,6 +6,7 @@ import OverviewTab from './components/OverviewTab';
 import DiagnoseTab from './components/DiagnoseTab';
 import DiagnosticLabTab from './components/DiagnosticLabTab';
 import VibrationTab from './components/VibrationTab';
+import Motor3DTab from './components/Motor3DTab';
 import MaintenanceTab from './components/MaintenanceTab';
 import ModelPerformanceTab from './components/ModelPerformanceTab';
 import SampleFilesTab from './components/SampleFilesTab';
@@ -15,7 +16,7 @@ import { api } from './api';
 export default function App() {
   const getInitialTab = () => {
     const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'maintenance', 'performance', 'samples'];
+    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'maintenance', 'performance', 'samples'];
     if (validDashboardTabs.includes(raw)) return raw;
     return 'landing'; // Default initial view is the new landing page
   };
@@ -52,7 +53,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'maintenance', 'performance', 'samples'];
+      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'maintenance', 'performance', 'samples'];
       if (validDashboardTabs.includes(raw)) {
         setActiveTab(raw);
       } else if (!raw || raw === 'landing') {
@@ -242,12 +243,20 @@ export default function App() {
                   selectedRun={selectedRun}
                   linkedWorkOrder={activeLinkedWorkOrder}
                   onNavigateToDiagnose={() => setActiveTab('diagnose')}
+                  onNavigateTo3D={() => setActiveTab('motor3d')}
                   onOpenWorkOrder={handleOpenWorkOrder}
                 />
               )}
 
               {activeTab === 'vibration' && (
                 <VibrationTab motors={motors} />
+              )}
+
+              {activeTab === 'motor3d' && (
+                <Motor3DTab
+                  onNavigateToDiagnose={() => setActiveTab('diagnose')}
+                  onNavigateToMaintenance={() => setActiveTab('maintenance')}
+                />
               )}
 
               {activeTab === 'maintenance' && (

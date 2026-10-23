@@ -6,6 +6,7 @@ export default function DiagnosticLabTab({
   selectedRun,
   linkedWorkOrder,
   onNavigateToDiagnose,
+  onNavigateTo3D,
   onOpenWorkOrder,
 }) {
   const [activeSignalView, setActiveSignalView] = useState('both'); // 'both' | 'spectrum' | 'waveform'
@@ -260,9 +261,21 @@ export default function DiagnosticLabTab({
               Ranked in order of confidence: the most likely condition appears first (#1), followed by the next most likely modes.
             </p>
           </div>
-          <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>
-            Ranked by Confidence (Highest First)
-          </span>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <span className="badge badge-purple" style={{ fontSize: '0.75rem' }}>
+              Ranked by Confidence (Highest First)
+            </span>
+            {onNavigateTo3D && (
+              <button
+                type="button"
+                className="btn btn-primary btn-sm"
+                onClick={onNavigateTo3D}
+                style={{ fontSize: '0.75rem', padding: '0.3rem 0.75rem', fontWeight: 600 }}
+              >
+                🧊 View in 3D Motor Twin →
+              </button>
+            )}
+          </div>
         </div>
 
         {/* 4 Cards Grid: Healthy vs Defects - Sorted in descending order of confidence */}
