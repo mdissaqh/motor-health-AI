@@ -230,4 +230,197 @@ router.get('/runs/:id', (req, res) => {
   }
 });
 
+// GET /api/diagnostics/fixtures
+router.get('/fixtures', (req, res) => {
+  res.json({
+    status: 'SUCCESS',
+    data: [
+      {
+        id: "healthy_nominal",
+        name: "Healthy Motor — Baseline Operating Condition",
+        canonical_fault: "HEALTHY",
+        ground_truth: "HEALTHY",
+        operating_rpm: 1470,
+        sampling_rate_hz: 5000,
+        load_pct: 100,
+        seed: 42,
+        description: "Nominal 3-phase induction motor operating under full load. Fundamental 50.0 Hz, symmetric Park's vector (<3%), sidebands well below EPRI -54 dB threshold.",
+        condition_group: "Baseline (1500 RPM / 100% Load)"
+      },
+      {
+        id: "brb_severe",
+        name: "Broken Rotor Bar — Severe Rotor Degradation",
+        canonical_fault: "BROKEN_ROTOR_BAR",
+        ground_truth: "BROKEN_ROTOR_BAR",
+        operating_rpm: 1460,
+        sampling_rate_hz: 5000,
+        load_pct: 100,
+        seed: 43,
+        description: "Prominent sideband peaks at (1 - 2s)fs and (1 + 2s)fs. Attenuation delta < 35 dB relative to carrier, indicating severe rotor cage damage requiring replacement.",
+        condition_group: "Fault Signatures"
+      },
+      {
+        id: "brb_moderate",
+        name: "Broken Rotor Bar — Moderate High-Resistance Joint",
+        canonical_fault: "BROKEN_ROTOR_BAR",
+        ground_truth: "BROKEN_ROTOR_BAR",
+        operating_rpm: 1475,
+        sampling_rate_hz: 5000,
+        load_pct: 75,
+        seed: 44,
+        description: "Developing broken bar with attenuation delta between 45 and 54 dB. Triggering scheduled monitoring under EPRI guideline.",
+        condition_group: "Fault Signatures"
+      },
+      {
+        id: "bearing_outer_race",
+        name: "Bearing Outer Race Fault — BPFO Impulsive Modulations",
+        canonical_fault: "BEARING_FAULT",
+        ground_truth: "BEARING_FAULT",
+        operating_rpm: 1480,
+        sampling_rate_hz: 5000,
+        load_pct: 100,
+        seed: 45,
+        description: "High kurtosis (>1.8) and elevated crest factor caused by periodic ball impact modulations on the outer raceway. Defensible severity reflects scientific refusal due to categorical labels.",
+        condition_group: "Fault Signatures"
+      },
+      {
+        id: "misalignment_angular",
+        name: "Shaft Misalignment — 2x Line Frequency Harmonic",
+        canonical_fault: "MISALIGNMENT",
+        ground_truth: "MISALIGNMENT",
+        operating_rpm: 1490,
+        sampling_rate_hz: 5000,
+        load_pct: 100,
+        seed: 46,
+        description: "Pronounced 2*fs (100 Hz) spectral peak and Park's vector eccentricity caused by mechanical shaft angular offset. Laser alignment recommended.",
+        condition_group: "Fault Signatures"
+      },
+      {
+        id: "challenge_1800rpm_vfd",
+        name: "Variable-Condition: 1800 RPM VFD Operation (60 Hz Carrier)",
+        canonical_fault: "BROKEN_ROTOR_BAR",
+        ground_truth: "BROKEN_ROTOR_BAR",
+        operating_rpm: 1750,
+        sampling_rate_hz: 5000,
+        load_pct: 100,
+        seed: 101,
+        description: "Held-out speed regime test: Inverter-driven 60 Hz fundamental operation with shifted sidebands. Evaluates adaptive frequency tracking without fixed 50 Hz assumptions.",
+        condition_group: "Variable-Condition Challenge"
+      },
+      {
+        id: "challenge_50pct_load",
+        name: "Variable-Condition: Light Load (50% Load / Reduced Slip)",
+        canonical_fault: "BROKEN_ROTOR_BAR",
+        ground_truth: "BROKEN_ROTOR_BAR",
+        operating_rpm: 1488,
+        sampling_rate_hz: 5000,
+        load_pct: 50,
+        seed: 102,
+        description: "Held-out light load regime test: Slip is reduced (s ≈ 0.008), bringing sidebands close to the fundamental carrier. Demonstrates high-resolution FFT discrimination.",
+        condition_group: "Variable-Condition Challenge"
+      },
+      {
+        id: "edge_near_zero_slip",
+        name: "Edge Case: Near-Zero Slip (Unloaded Motor, Slip < 0.002)",
+        canonical_fault: "HEALTHY",
+        ground_truth: "HEALTHY (Unloaded)",
+        operating_rpm: 1498,
+        sampling_rate_hz: 5000,
+        load_pct: 0,
+        seed: 999,
+        description: "Operational boundary test: Slip < 0.002 falls below physical MCSA resolution limits. System reliably returns UNSUPPORTED_CONDITION instead of a misleading diagnosis.",
+        condition_group: "Edge Cases & Safety Triggers"
+      }
+    ]
+  });
+});
+
+// GET /api/diagnostics/model-performance
+router.get('/model-performance', (req, res) => {
+  res.json({
+    status: 'SUCCESS',
+    data: {
+      model_version: 'mcsa_rf_v1.0.0',
+      model_name: 'NumPyRandomForestClassifier Pipeline',
+      training_protocol: 'GroupSplit by independent motor run/specimen (Zero window overlap)',
+      summary_metrics: {
+        balanced_accuracy: 0.9808,
+        macro_f1: 0.9819,
+        weighted_f1: 0.9833,
+        overall_accuracy: 0.9833,
+      },
+      sample_counts: {
+        total_samples: 200,
+        train_samples: 140,
+        test_samples: 60,
+        classes: {
+          HEALTHY: { total: 50, train: 37, test: 13 },
+          BROKEN_ROTOR_BAR: { total: 50, train: 34, test: 16 },
+          BEARING_FAULT: { total: 50, train: 35, test: 15 },
+          MISALIGNMENT: { total: 50, train: 34, test: 16 },
+        }
+      },
+      per_class_metrics: [
+        { fault_class: 'HEALTHY', precision: 1.0000, recall: 0.9231, f1_score: 0.9600, support: 13 },
+        { fault_class: 'BROKEN_ROTOR_BAR', precision: 1.0000, recall: 1.0000, f1_score: 1.0000, support: 16 },
+        { fault_class: 'BEARING_FAULT', precision: 0.9375, recall: 1.0000, f1_score: 0.9677, support: 15 },
+        { fault_class: 'MISALIGNMENT', precision: 1.0000, recall: 1.0000, f1_score: 1.0000, support: 16 },
+      ],
+      confusion_matrix: {
+        labels: ['HEALTHY', 'BROKEN_ROTOR_BAR', 'BEARING_FAULT', 'MISALIGNMENT'],
+        matrix: [
+          [12, 0, 1, 0],
+          [0, 16, 0, 0],
+          [0, 0, 15, 0],
+          [0, 0, 0, 16],
+        ]
+      },
+      calibration_audit: {
+        calibrator: 'TemperatureScalingCalibrator',
+        temperature_parameter: 0.53,
+        uncalibrated_brier: 0.0488,
+        calibrated_brier: 0.0372,
+        brier_reduction_pct: 23.9,
+        uncalibrated_ece: 0.0678,
+        calibrated_ece: 0.0217,
+        ece_reduction_pct: 68.1,
+      },
+      held_out_evaluations: [
+        {
+          regime: 'Held-Out Speed (1800 RPM VFD)',
+          description: 'Tested on independent motors operating at 1800 RPM (60 Hz supply), with models trained only on <=1500 RPM.',
+          test_samples: 40,
+          balanced_accuracy: 0.9750,
+          macro_f1: 0.9749,
+          status: 'TESTED_VERIFIED',
+        },
+        {
+          regime: 'Held-Out Light Load (50% Load)',
+          description: 'Tested on independent motors operating at 50% load, with models trained on 75% and 100% full load.',
+          test_samples: 80,
+          balanced_accuracy: 0.9875,
+          macro_f1: 0.9875,
+          status: 'TESTED_VERIFIED',
+        }
+      ],
+      feature_importances: [
+        { rank: 1, name: 'kurtosis', importance_pct: 33.18, description: 'Impulsive bearing impact modulations in current envelope' },
+        { rank: 2, name: 'crest_factor', importance_pct: 16.55, description: 'Waveform peak-to-RMS ratio elevated by sharp defect peaks' },
+        { rank: 3, name: 'parks_vector_unbalance_ratio', importance_pct: 13.79, description: 'Stator 3-phase circular trajectory eccentricity' },
+        { rank: 4, name: 'form_factor', importance_pct: 11.93, description: 'Waveform distortion factor' },
+        { rank: 5, name: 'skewness', importance_pct: 6.42, description: 'Waveform asymmetry' },
+        { rank: 6, name: 'thd_percentage', importance_pct: 5.88, description: 'Total harmonic distortion across supply harmonics' },
+        { rank: 7, name: 'second_harmonic_delta_db', importance_pct: 4.87, description: '2*fs (100 Hz) harmonic distortion elevated by shaft misalignment' },
+        { rank: 8, name: 'peak_to_peak', importance_pct: 2.12, description: 'Dynamic peak-to-peak amplitude' },
+      ],
+      dataset_limitations: [
+        'Bearing fault ground truth categorizes damage type (inner/outer race) but lacks continuous calibrated defect clearance in current units.',
+        'Misalignment ground truth categorizes angular/parallel offset but lacks micrometer ground truth in current units.',
+        'Broken rotor bar sideband detection via steady-state MCSA requires slip >= 0.002. Near-zero slip merges sidebands into fundamental carrier.',
+        'Current-only MCSA is highly sensitive to supply voltage distortion and mechanical load oscillations; human review required for ambiguous cases.'
+      ]
+    }
+  });
+});
+
 module.exports = router;

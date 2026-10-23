@@ -95,6 +95,7 @@ def serialize_diagnostic_result(result: TrustworthyDiagnosticResult) -> Dict[str
         "preprocessing_config": result.preprocessing_config,
         "diagnostic_warnings": result.diagnostic_warnings,
         "provenance": result.provenance,
+        "plotting_data": result.plotting_data,
     }
 
 

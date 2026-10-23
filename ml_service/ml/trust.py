@@ -114,6 +114,7 @@ class TrustworthyDiagnosticResult:
     preprocessing_config: Dict[str, Any]
     diagnostic_warnings: List[str]
     provenance: Dict[str, Any]
+    plotting_data: Optional[Dict[str, Any]] = None
 
     @property
     def confidence(self) -> float:
@@ -333,6 +334,7 @@ class DiagnosticTrustEvaluator:
             preprocessing_config=preprocessing_config,
             diagnostic_warnings=diagnostic_warnings,
             provenance=provenance,
+            plotting_data=self._build_plotting_data(dsp_result),
         )
 
     def _check_unsupported_condition(
@@ -737,7 +739,87 @@ class DiagnosticTrustEvaluator:
                 "fundamental_freq_hz": dsp_result.fundamental_frequency_hz,
                 "slip": dsp_result.motor_slip,
             },
+            plotting_data=self._build_plotting_data(dsp_result),
         )
+
+    def _build_plotting_data(self, dsp_result: MCSAAnalysisResult) -> Optional[Dict[str, Any]]:
+        """Extracts downsampled waveform and spectrum for frontend visualization."""
+        try:
+            # 1. Downsampled Time Domain
+            raw = dsp_result.raw_signal
+            if raw is not None and len(raw) > 0:
+                raw_1d = np.squeeze(raw[0] if raw.ndim > 1 else raw)
+                total_n = len(raw_1d)
+                fs = dsp_result.sampling_rate_hz or 5000.0
+                target_pts = min(250, total_n)
+                step = max(1, total_n // target_pts)
+                indices = np.arange(0, total_n, step)[:250]
+                time_s = np.round(indices / fs, 4).tolist()
+                current_a = np.round(raw_1d[indices], 3).tolist()
+            else:
+                time_s, current_a = [], []
+
+            # 2. Downsampled Frequency Domain (0 to 160 Hz)
+            freqs = dsp_result.spectrum_frequencies
+            mags_db = dsp_result.spectrum_magnitudes_db
+            if freqs is not None and len(freqs) > 0 and mags_db is not None:
+                mask = (freqs >= 0.0) & (freqs <= 160.0)
+                sub_freqs = freqs[mask]
+                sub_mags = mags_db[mask]
+                target_f_pts = min(250, len(sub_freqs))
+                f_step = max(1, len(sub_freqs) // target_f_pts) if target_f_pts > 0 else 1
+                f_indices = np.arange(0, len(sub_freqs), f_step)[:250]
+                plot_freqs = np.round(sub_freqs[f_indices], 2).tolist()
+                plot_mags = np.round(sub_mags[f_indices], 2).tolist()
+            else:
+                plot_freqs, plot_mags = [], []
+
+            # 3. Spectral markers for visual aid
+            markers = []
+            f_fund = dsp_result.fundamental_frequency_hz
+            if f_fund > 0:
+                markers.append({
+                    "name": f"Fundamental ({f_fund:.1f} Hz)",
+                    "frequency_hz": round(f_fund, 2),
+                    "color": "#06b6d4",
+                    "role": "fundamental"
+                })
+                slip = dsp_result.motor_slip
+                if slip is not None and 0.002 <= slip <= 0.20:
+                    fl = (1.0 - 2.0 * slip) * f_fund
+                    fr = (1.0 + 2.0 * slip) * f_fund
+                    if fl > 0:
+                        markers.append({
+                            "name": f"BRB Lower ({fl:.1f} Hz)",
+                            "frequency_hz": round(fl, 2),
+                            "color": "#f59e0b",
+                            "role": "sideband"
+                        })
+                    markers.append({
+                        "name": f"BRB Upper ({fr:.1f} Hz)",
+                        "frequency_hz": round(fr, 2),
+                        "color": "#f59e0b",
+                        "role": "sideband"
+                    })
+                if 2.0 * f_fund <= 160.0:
+                    markers.append({
+                        "name": f"2x Line Freq ({2*f_fund:.1f} Hz)",
+                        "frequency_hz": round(2.0 * f_fund, 2),
+                        "color": "#ec4899",
+                        "role": "harmonic"
+                    })
+
+            return {
+                "time_axis_s": time_s,
+                "current_waveform_a": current_a,
+                "frequency_axis_hz": plot_freqs,
+                "spectrum_db": plot_mags,
+                "markers": markers,
+                "fundamental_frequency_hz": round(f_fund, 2),
+                "motor_slip": round(dsp_result.motor_slip, 4) if dsp_result.motor_slip is not None else None,
+            }
+        except Exception:
+            return None
 
 
 def build_invalid_signal_result(
