@@ -112,7 +112,7 @@ export default function AiGraphExplanation({
       </div>
 
       {isOpen && (
-        <div style={{ padding: '0.85rem 1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '0.8rem', color: '#cbd5e1' }}>
+        <div style={{ padding: '0.85rem 1rem', borderTop: '1px solid var(--border-subtle)', fontSize: '0.8rem', color: 'var(--text-main)', background: 'var(--bg-surface-elevated)' }}>
           {loading && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.5rem 0' }}>
               <span className="spinner" style={{ width: '14px', height: '14px' }} />
@@ -121,7 +121,7 @@ export default function AiGraphExplanation({
           )}
 
           {error && (
-            <div style={{ color: '#fb7185', background: 'rgba(244, 63, 94, 0.1)', padding: '0.5rem', borderRadius: '6px' }}>
+            <div style={{ color: 'var(--rose-danger)', background: 'var(--rose-bg)', border: '1px solid var(--rose-border)', padding: '0.5rem', borderRadius: '6px' }}>
               ⚠️ {error}
             </div>
           )}
@@ -129,23 +129,23 @@ export default function AiGraphExplanation({
           {data && data.explanation && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', lineHeight: 1.5 }}>
               <div>
-                <strong style={{ color: '#fff' }}>1. What it displays: </strong>
+                <strong style={{ color: 'var(--navy-primary)' }}>1. What it displays: </strong>
                 <span>{data.explanation.what_it_displays}</span>
               </div>
               <div>
-                <strong style={{ color: '#38bdf8' }}>2. Observed signal pattern: </strong>
+                <strong style={{ color: 'var(--blue-accent)' }}>2. Observed signal pattern: </strong>
                 <span>{data.explanation.visible_pattern}</span>
               </div>
               <div>
-                <strong style={{ color: '#fbbf24' }}>3. Relevance to MCSA: </strong>
+                <strong style={{ color: 'var(--amber-warning)' }}>3. Relevance to MCSA: </strong>
                 <span>{data.explanation.relevance_to_mcsa}</span>
               </div>
               <div>
-                <strong style={{ color: '#34d399' }}>4. What this supports: </strong>
+                <strong style={{ color: 'var(--emerald-success)' }}>4. What this supports: </strong>
                 <span>{data.explanation.what_it_supports}</span>
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontStyle: 'italic', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.4rem', marginTop: '0.2rem' }}>
-                <strong>Scientific limitation: </strong>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic', borderTop: '1px solid var(--border-subtle)', paddingTop: '0.4rem', marginTop: '0.2rem' }}>
+                <strong style={{ color: 'var(--text-main)' }}>Scientific limitation: </strong>
                 <span>{data.explanation.limitations}</span>
               </div>
             </div>

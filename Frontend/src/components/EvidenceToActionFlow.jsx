@@ -36,19 +36,19 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', fontSize: '0.85rem' }}>
             <div>
               <span style={{ color: 'var(--text-dim)' }}>Source Dataset:</span>
-              <p className="mono" style={{ color: '#fff', fontWeight: 600 }}>{diagnosticRun.provenance?.dataset_id || 'LIVE_RECORDING'}</p>
+              <p className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{diagnosticRun.provenance?.dataset_id || 'LIVE_RECORDING'}</p>
             </div>
             <div>
               <span style={{ color: 'var(--text-dim)' }}>Sampling Rate:</span>
-              <p className="mono" style={{ color: '#fff', fontWeight: 600 }}>{diagnosticRun.provenance?.sampling_rate_hz || 5000} Hz</p>
+              <p className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{diagnosticRun.provenance?.sampling_rate_hz || 5000} Hz</p>
             </div>
             <div>
               <span style={{ color: 'var(--text-dim)' }}>Fundamental Frequency:</span>
-              <p className="mono" style={{ color: '#38bdf8', fontWeight: 600 }}>{diagnosticRun.provenance?.fundamental_freq_hz?.toFixed(2) || '50.00'} Hz</p>
+              <p className="mono" style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>{diagnosticRun.provenance?.fundamental_freq_hz?.toFixed(2) || '50.00'} Hz</p>
             </div>
             <div>
               <span style={{ color: 'var(--text-dim)' }}>Operating Slip (s):</span>
-              <p className="mono" style={{ color: '#fff', fontWeight: 600 }}>{diagnosticRun.provenance?.motor_slip?.toFixed(4) || 'N/A'}</p>
+              <p className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{diagnosticRun.provenance?.motor_slip?.toFixed(4) || 'N/A'}</p>
             </div>
           </div>
           <p style={{ marginTop: '0.75rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -67,9 +67,9 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
         <div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.75rem', fontSize: '0.85rem' }}>
             {Object.entries(keyFeatures).slice(0, 4).map(([key, f]) => (
-              <div key={key} style={{ background: 'rgba(0,0,0,0.2)', padding: '0.5rem', borderRadius: '6px' }}>
+              <div key={key} style={{ background: '#FFFFFF', border: '1px solid var(--border-subtle)', padding: '0.5rem', borderRadius: '6px' }}>
                 <span style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>{f.feature_name}</span>
-                <p className="mono" style={{ color: f.status === 'NOMINAL' ? '#34d399' : '#fbbf24', fontWeight: 600 }}>
+                <p className="mono" style={{ color: f.status === 'NOMINAL' ? 'var(--emerald-success)' : 'var(--amber-warning)', fontWeight: 700 }}>
                   {f.value} {f.unit !== 'ratio' && f.unit}
                 </p>
               </div>
@@ -98,14 +98,14 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
           <div style={{ marginBottom: '0.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '0.2rem' }}>
               <span style={{ color: 'var(--text-muted)' }}>Temperature Calibrated Posterior:</span>
-              <span className="mono" style={{ color: '#fff', fontWeight: 600 }}>{confidence}%</span>
+              <span className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 700 }}>{confidence}%</span>
             </div>
-            <div style={{ width: '100%', height: '6px', background: '#1e293b', borderRadius: '3px', overflow: 'hidden' }}>
-              <div style={{ width: `${Math.min(100, parseFloat(confidence) || 0)}%`, height: '100%', background: 'linear-gradient(90deg, #06b6d4, #a855f7)' }} />
+            <div style={{ width: '100%', height: '6px', background: 'var(--border-subtle)', borderRadius: '3px', overflow: 'hidden' }}>
+              <div style={{ width: `${Math.min(100, parseFloat(confidence) || 0)}%`, height: '100%', background: 'linear-gradient(90deg, var(--blue-accent), var(--navy-primary))' }} />
             </div>
           </div>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-            Model version: <span className="mono" style={{ color: '#cbd5e1' }}>{diagnosticRun.model_version || 'mcsa_rf_v1.0.0'}</span> (T=0.53 calibrated)
+            Model version: <span className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{diagnosticRun.model_version || 'mcsa_rf_v1.0.0'}</span> (T=0.53 calibrated)
           </p>
         </div>
       ),
@@ -120,7 +120,7 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
         <div>
           <div style={{ marginBottom: '0.6rem' }}>
             <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Defensible Severity Standard:</span>
-            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff', marginTop: '0.1rem' }}>
+            <p style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--navy-primary)', marginTop: '0.1rem' }}>
               {severityLevel}
             </p>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
@@ -160,7 +160,7 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
                   {linkedWorkOrder.status}
                 </span>
               </div>
-              <p style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 500, marginBottom: '0.5rem' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--navy-primary)', fontWeight: 600, marginBottom: '0.5rem' }}>
                 {linkedWorkOrder.title}
               </p>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
@@ -215,8 +215,8 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
               key={step.id}
               onClick={() => setActiveStep(step.id)}
               style={{
-                background: isSelected ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255, 255, 255, 0.02)',
-                border: isSelected ? '1px solid var(--cyan-primary)' : '1px solid var(--border-subtle)',
+                background: isSelected ? 'rgba(8, 122, 203, 0.12)' : 'var(--bg-card)',
+                border: isSelected ? '1px solid var(--blue-accent)' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '0.85rem 0.75rem',
                 cursor: 'pointer',
@@ -225,14 +225,14 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', color: isSelected ? '#38bdf8' : 'var(--text-dim)' }}>
+                <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', color: isSelected ? 'var(--blue-accent)' : 'var(--text-dim)' }}>
                   {step.title}
                 </span>
                 <span className={`badge badge-${step.color}`} style={{ fontSize: '0.65rem', padding: '0.1rem 0.4rem' }}>
                   {step.badge}
                 </span>
               </div>
-              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--navy-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {step.subtitle}
               </p>
             </div>
@@ -241,9 +241,9 @@ export default function EvidenceToActionFlow({ diagnosticRun, linkedWorkOrder, o
       </div>
 
       {/* Active Step Detailed Evidence View */}
-      <div style={{ background: '#080c14', padding: '1.25rem', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
+      <div style={{ background: 'var(--bg-surface-elevated)', padding: '1.25rem', borderRadius: '10px', border: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#38bdf8' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--blue-accent)' }}>
             Evidence Detail: {steps[activeStep].title}
           </span>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>

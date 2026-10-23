@@ -306,7 +306,7 @@ export default function DiagnoseTab({
       <div>
         {/* Page Header */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <h1 style={{ fontSize: '1.4rem', color: '#fff', fontWeight: 700, margin: 0 }}>
+          <h1 style={{ fontSize: '1.45rem', color: 'var(--navy-primary)', fontWeight: 800, margin: 0 }}>
             Diagnose Motor — Upload Motor Current Recording
           </h1>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '0.35rem 0 0' }}>
@@ -315,18 +315,18 @@ export default function DiagnoseTab({
         </div>
 
         {/* 1. Downloadable Sample Current Files Section */}
-        <div className="card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.05), rgba(99, 102, 241, 0.05))' }}>
+        <div className="card" style={{ marginBottom: '1.5rem', background: '#FFFFFF', border: '1px solid #BFDBFE', boxShadow: '0 2px 8px rgba(7, 59, 120, 0.05)' }}>
           <div className="card-header" style={{ marginBottom: '0.85rem' }}>
             <div>
-              <h2 className="card-title" style={{ fontSize: '1.05rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h2 className="card-title" style={{ fontSize: '1.05rem', color: 'var(--navy-primary)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span>📁</span>
                 <span>Downloadable Sample Current Files (Ready for Immediate Testing)</span>
               </h2>
-              <p className="card-desc">
+              <p className="card-desc" style={{ color: '#64748B' }}>
                 Need a recording to test the system? Download any of these 4 verified CSV current files, then upload it into the dropzone below.
               </p>
             </div>
-            <span className="badge badge-cyan">4 Verified Samples</span>
+            <span className="badge badge-cyan" style={{ background: '#EFF6FF', color: '#0284C7', border: '1px solid #BFDBFE', fontWeight: 700 }}>4 Verified Samples</span>
           </div>
 
           <div className="grid-4" style={{ gap: '0.85rem' }}>
@@ -334,24 +334,25 @@ export default function DiagnoseTab({
               <div
                 key={s.filename}
                 style={{
-                  background: 'rgba(10, 14, 23, 0.8)',
-                  border: '1px solid var(--border-subtle)',
+                  background: '#F8FAFC',
+                  border: '1px solid #E2E8F0',
                   borderRadius: '8px',
                   padding: '0.85rem 1rem',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   gap: '0.75rem',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
                 }}
               >
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                    <span style={{ fontWeight: 700, color: '#fff', fontSize: '0.875rem' }}>{s.label}</span>
-                    <span className="badge" style={{ background: `${s.color}22`, color: s.color, border: `1px solid ${s.color}44`, fontSize: '0.68rem' }}>
+                    <span style={{ fontWeight: 700, color: 'var(--navy-primary)', fontSize: '0.875rem' }}>{s.label}</span>
+                    <span className="badge" style={{ background: `${s.color}18`, color: s.color, border: `1px solid ${s.color}44`, fontSize: '0.68rem', fontWeight: 700 }}>
                       {s.badge}
                     </span>
                   </div>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', lineHeight: 1.4, margin: 0 }}>
+                  <p style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.4, margin: 0 }}>
                     {s.subtitle}
                   </p>
                 </div>
@@ -360,7 +361,16 @@ export default function DiagnoseTab({
                   href={api.getSampleDownloadUrl(s.filename)}
                   download={s.filename}
                   className="btn btn-secondary btn-sm"
-                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.75rem', padding: '0.4rem 0.5rem' }}
+                  style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    fontSize: '0.75rem',
+                    padding: '0.45rem 0.5rem',
+                    background: '#FFFFFF',
+                    border: '1px solid #087ACB',
+                    color: '#087ACB',
+                    fontWeight: 600,
+                  }}
                 >
                   📥 Download {s.filename}
                 </a>
@@ -370,13 +380,13 @@ export default function DiagnoseTab({
         </div>
 
         {/* 2. Upload Motor Current File Dropzone */}
-        <div className="card" style={{ marginBottom: '1.5rem' }}>
+        <div className="card" style={{ marginBottom: '1.5rem', background: '#FFFFFF', border: '1px solid #E2E8F0' }}>
           <div className="card-header" style={{ marginBottom: '0.85rem' }}>
             <div>
-              <h2 className="card-title" style={{ fontSize: '1.1rem' }}>Upload Motor Current File (CSV / JSON)</h2>
-              <p className="card-desc">Select or drag & drop a file containing stator current measurements.</p>
+              <h2 className="card-title" style={{ fontSize: '1.1rem', color: 'var(--navy-primary)', fontWeight: 800 }}>Upload Motor Current File (CSV / JSON)</h2>
+              <p className="card-desc" style={{ color: '#64748B' }}>Select or drag & drop a file containing stator current measurements.</p>
             </div>
-            <span className="mono" style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+            <span className="mono" style={{ fontSize: '0.75rem', color: '#64748B' }}>
               Formats: CSV, JSON • Min 1,000 samples
             </span>
           </div>
@@ -386,8 +396,8 @@ export default function DiagnoseTab({
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             style={{
-              border: isDragging ? '2px dashed var(--cyan-primary)' : '2px dashed var(--border-medium)',
-              background: isDragging ? 'rgba(6, 182, 212, 0.08)' : 'rgba(0, 0, 0, 0.25)',
+              border: isDragging ? '2px dashed #087ACB' : '2px dashed #CBD5E1',
+              background: isDragging ? '#EFF6FF' : '#F8FAFC',
               borderRadius: '10px',
               padding: '2.5rem 1.5rem',
               textAlign: 'center',
@@ -404,15 +414,16 @@ export default function DiagnoseTab({
               onChange={handleFileInputChange}
             />
             <div style={{ fontSize: '2.4rem', marginBottom: '0.65rem' }}>⚡</div>
-            <div style={{ fontSize: '1rem', fontWeight: 600, color: '#fff', marginBottom: '0.35rem' }}>
+            <div style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--navy-primary)', marginBottom: '0.35rem' }}>
               {uploadedFile ? uploadedFile.name : 'Drag and drop your motor current file here'}
             </div>
-            <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', maxWidth: '520px', margin: '0 auto 1rem' }}>
+            <p style={{ fontSize: '0.825rem', color: '#64748B', maxWidth: '520px', margin: '0 auto 1rem' }}>
               Upload CSV with columns like <code className="mono">time_s,current_a</code> or 3-phase <code className="mono">ia,ib,ic</code>. Or JSON containing a numeric sample array.
             </p>
             <button
               type="button"
               className="btn btn-secondary btn-sm"
+              style={{ background: '#FFFFFF', border: '1px solid #087ACB', color: '#087ACB', fontWeight: 600 }}
               onClick={(e) => {
                 e.stopPropagation();
                 document.getElementById('motor-file-input')?.click();
@@ -424,24 +435,24 @@ export default function DiagnoseTab({
 
           {/* Validation Feedback & Signal Preview */}
           {fileValidationMsg && (
-            <div style={{ marginTop: '1rem', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.3)', borderRadius: '8px', padding: '0.85rem 1rem' }}>
-              <div style={{ fontSize: '0.825rem', color: '#34d399', fontWeight: 600, marginBottom: '0.35rem' }}>
-                {fileValidationMsg}
+            <div style={{ marginTop: '1rem', background: '#F0FDF4', border: '1px solid #86EFAC', borderRadius: '8px', padding: '0.85rem 1rem' }}>
+              <div style={{ fontSize: '0.825rem', color: '#15803D', fontWeight: 700, marginBottom: '0.35rem' }}>
+                ✓ {fileValidationMsg}
               </div>
               {fileValidationStats && (
-                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', fontSize: '0.78rem', color: '#cbd5e1' }}>
-                  <span>Total Samples: <strong className="mono" style={{ color: '#fff' }}>{fileValidationStats.sampleCount.toLocaleString()}</strong></span>
-                  <span>Duration: <strong className="mono" style={{ color: '#fff' }}>{fileValidationStats.durationSec} s</strong></span>
-                  <span>Sampling Rate: <strong className="mono" style={{ color: '#38bdf8' }}>{fileValidationStats.samplingRateHz} Hz</strong></span>
-                  <span>RMS Current: <strong className="mono" style={{ color: '#fff' }}>{fileValidationStats.rms} A</strong></span>
-                  <span>Peak Current: <strong className="mono" style={{ color: '#fff' }}>{fileValidationStats.peak} A</strong></span>
+                <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', fontSize: '0.78rem', color: '#334155' }}>
+                  <span>Total Samples: <strong className="mono" style={{ color: '#073B78' }}>{fileValidationStats.sampleCount.toLocaleString()}</strong></span>
+                  <span>Duration: <strong className="mono" style={{ color: '#073B78' }}>{fileValidationStats.durationSec} s</strong></span>
+                  <span>Sampling Rate: <strong className="mono" style={{ color: '#087ACB' }}>{fileValidationStats.samplingRateHz} Hz</strong></span>
+                  <span>RMS Current: <strong className="mono" style={{ color: '#073B78' }}>{fileValidationStats.rms} A</strong></span>
+                  <span>Peak Current: <strong className="mono" style={{ color: '#073B78' }}>{fileValidationStats.peak} A</strong></span>
                 </div>
               )}
             </div>
           )}
 
           {errorMessage && (
-            <div style={{ marginTop: '1rem', background: 'rgba(244, 63, 94, 0.1)', border: '1px solid rgba(244, 63, 94, 0.3)', borderRadius: '8px', padding: '0.85rem 1rem', color: '#fb7185', fontSize: '0.825rem' }}>
+            <div style={{ marginTop: '1rem', background: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: '8px', padding: '0.85rem 1rem', color: '#DC2626', fontSize: '0.825rem', fontWeight: 600 }}>
               ⚠️ {errorMessage}
             </div>
           )}
@@ -476,7 +487,7 @@ export default function DiagnoseTab({
 
           {/* Target Asset Dropdown (Strict 4 choices) */}
           <div className="form-group" style={{ marginBottom: '1.25rem' }}>
-            <label className="form-label" style={{ fontWeight: 600, color: '#fff' }}>
+            <label className="form-label" style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>
               Which motor is this recording from?
             </label>
             <select
@@ -604,10 +615,10 @@ export default function DiagnoseTab({
           }}
         >
           <div>
-            <div style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
+            <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy-primary)' }}>
               Ready to Execute MCSA Diagnostic Analysis
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0.2rem 0 0' }}>
+            <p style={{ fontSize: '0.825rem', color: '#475569', margin: '0.2rem 0 0' }}>
               Signal will be processed through deterministic Hanning FFT spectral extraction and calibrated Random Forest inference.
             </p>
           </div>

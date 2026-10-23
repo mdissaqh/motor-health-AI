@@ -188,7 +188,7 @@ export default function MaintenanceTab({
       <ErrorBoundary title="Maintenance Center">
         <div className="card" style={{ textAlign: 'center', padding: '3.5rem 1.5rem' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📋</div>
-          <h2 style={{ fontSize: '1.35rem', color: '#fff', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.35rem', color: 'var(--navy-primary)', marginBottom: '0.5rem' }}>
             Maintenance Center — No Active Work Orders
           </h2>
           <p style={{ color: 'var(--text-muted)', maxWidth: '540px', margin: '0 auto 1.5rem', fontSize: '0.9rem', lineHeight: 1.5 }}>
@@ -215,7 +215,7 @@ export default function MaintenanceTab({
         {/* Top Controls & Status Filters */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
-            <h1 style={{ fontSize: '1.35rem', color: '#fff', fontWeight: 700, margin: 0 }}>
+            <h1 style={{ fontSize: '1.35rem', color: 'var(--navy-primary)', fontWeight: 700, margin: 0 }}>
               Maintenance Center & Work Orders
             </h1>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '0.2rem 0 0' }}>
@@ -223,7 +223,7 @@ export default function MaintenanceTab({
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.4rem', background: 'rgba(0,0,0,0.3)', padding: '0.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ display: 'flex', gap: '0.4rem', background: 'var(--bg-surface-elevated)', padding: '0.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
             {['ALL', 'OPEN', 'IN_PROGRESS', 'REVIEW_PENDING', 'COMPLETED'].map((st) => (
               <button
                 key={st}
@@ -267,8 +267,8 @@ export default function MaintenanceTab({
                       key={wo.id}
                       onClick={() => handleSelectOrder(wo)}
                       style={{
-                        background: isSelected ? 'rgba(6, 182, 212, 0.12)' : 'rgba(255, 255, 255, 0.02)',
-                        border: isSelected ? '1px solid var(--cyan-primary)' : '1px solid var(--border-subtle)',
+                        background: isSelected ? 'rgba(8, 122, 203, 0.12)' : 'var(--bg-card)',
+                        border: isSelected ? '1px solid var(--blue-accent)' : '1px solid var(--border-subtle)',
                         borderRadius: '8px',
                         padding: '0.85rem 1rem',
                         cursor: 'pointer',
@@ -276,7 +276,7 @@ export default function MaintenanceTab({
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                        <span className="mono" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#38bdf8' }}>
+                        <span className="mono" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--blue-accent)' }}>
                           {wo.id}
                         </span>
                         <div style={{ display: 'flex', gap: '0.35rem' }}>
@@ -288,11 +288,11 @@ export default function MaintenanceTab({
                           </span>
                         </div>
                       </div>
-                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff', marginBottom: '0.2rem' }}>
+                      <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--navy-primary)', marginBottom: '0.2rem' }}>
                         {wo.title || `${wo.motor_tag} - Maintenance Inspection`}
                       </p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-                        <span>Motor: <strong style={{ color: '#cbd5e1' }}>{wo.motor_tag}</strong></span>
+                        <span>Motor: <strong style={{ color: 'var(--navy-primary)' }}>{wo.motor_tag}</strong></span>
                         <span>{wo.created_at ? new Date(wo.created_at).toLocaleDateString() : 'Active'}</span>
                       </div>
                     </div>
@@ -304,15 +304,15 @@ export default function MaintenanceTab({
 
           {/* Column 2: Selected Work Order Details */}
           {activeOrder ? (
-            <div className="card" style={{ borderTop: `4px solid ${activeOrder.priority === 'CRITICAL' ? '#f43f5e' : '#06b6d4'}` }}>
+            <div className="card" style={{ borderTop: `4px solid ${activeOrder.priority === 'CRITICAL' ? '#f43f5e' : '#087ACB'}` }}>
               <div className="card-header" style={{ marginBottom: '1.25rem' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
-                    <span className="mono" style={{ fontSize: '0.85rem', color: '#38bdf8', fontWeight: 700 }}>{activeOrder.id}</span>
+                    <span className="mono" style={{ fontSize: '0.85rem', color: 'var(--blue-accent)', fontWeight: 700 }}>{activeOrder.id}</span>
                     <span className={`badge badge-${activeOrder.status === 'COMPLETED' ? 'emerald' : 'amber'}`}>{activeOrder.status}</span>
                     <span className="badge badge-rose">{activeOrder.priority || 'HIGH'} Priority</span>
                   </div>
-                  <h2 className="card-title" style={{ fontSize: '1.2rem', color: '#fff' }}>
+                  <h2 className="card-title" style={{ fontSize: '1.2rem', color: 'var(--navy-primary)' }}>
                     {activeOrder.title || `${activeOrder.motor_tag} Inspection`}
                   </h2>
                   <p className="card-desc">Work Order Summary & Verification Checklist</p>
@@ -342,11 +342,11 @@ export default function MaintenanceTab({
 
               {/* AI Recommendation Banner (if triggered) */}
               {aiRecommendation && (
-                <div style={{ background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.3)', borderRadius: '8px', padding: '1rem', marginBottom: '1.25rem' }}>
+                <div style={{ background: 'var(--purple-bg)', border: '1px solid var(--purple-border)', borderRadius: '8px', padding: '1rem', marginBottom: '1.25rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <span style={{ fontSize: '1rem' }}>🤖</span>
-                      <strong style={{ color: '#a5b4fc', fontSize: '0.85rem' }}>
+                      <strong style={{ color: 'var(--purple-calib)', fontSize: '0.85rem' }}>
                         Hugging Face AI Maintenance Advice
                       </strong>
                     </div>
@@ -356,12 +356,12 @@ export default function MaintenanceTab({
                   </div>
 
                   {aiRecommendation.recommendations && (
-                    <div style={{ fontSize: '0.825rem', color: '#cbd5e1', lineHeight: 1.5 }}>
+                    <div style={{ fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.5 }}>
                       <p style={{ marginBottom: '0.5rem' }}>
-                        <strong style={{ color: '#fff' }}>Engineering Justification:</strong> {aiRecommendation.recommendations.engineering_justification}
+                        <strong style={{ color: 'var(--navy-primary)' }}>Engineering Justification:</strong> {aiRecommendation.recommendations.engineering_justification}
                       </p>
                       {aiRecommendation.recommendations.follow_up_checks && (
-                        <p style={{ fontSize: '0.78rem', color: '#94a3b8' }}>
+                        <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                           <strong>Follow-up:</strong> {aiRecommendation.recommendations.follow_up_checks}
                         </p>
                       )}
@@ -371,7 +371,7 @@ export default function MaintenanceTab({
               )}
 
               {aiError && (
-                <div style={{ color: '#fb7185', fontSize: '0.8rem', background: 'rgba(244,63,94,0.1)', padding: '0.65rem', borderRadius: '6px', marginBottom: '1rem' }}>
+                <div style={{ color: 'var(--rose-danger)', fontSize: '0.8rem', background: 'var(--rose-bg)', border: '1px solid var(--rose-border)', padding: '0.65rem', borderRadius: '6px', marginBottom: '1rem' }}>
                   ⚠️ AI Recommendation Notice: {aiError}
                 </div>
               )}
@@ -380,25 +380,25 @@ export default function MaintenanceTab({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 
                 {/* 1. Which motor needs attention? */}
-                <div style={{ background: '#0a0e17', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <div style={{ background: 'var(--bg-surface-elevated)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--blue-accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     1. Which motor needs attention?
                   </div>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff', marginTop: '0.25rem' }}>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--navy-primary)', marginTop: '0.25rem' }}>
                     {activeOrder.motor_tag} — {activeOrder.motor_name}
                   </div>
                   <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.2rem', margin: 0 }}>
-                    Location: {activeOrder.motor_location || 'Facility'} • Linked Diagnostic Run: <span className="mono" style={{ color: '#38bdf8' }}>{activeOrder.diagnostic_run_id || 'N/A'}</span>
+                    Location: {activeOrder.motor_location || 'Facility'} • Linked Diagnostic Run: <span className="mono" style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>{activeOrder.diagnostic_run_id || 'N/A'}</span>
                   </p>
                 </div>
 
                 {/* 2. What did the system detect? */}
-                <div style={{ background: '#0a0e17', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fbbf24', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <div style={{ background: 'var(--bg-surface-elevated)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--amber-warning)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     2. What did the system detect?
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.3rem', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '1rem', fontWeight: 700, color: '#fff' }}>
+                    <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--navy-primary)' }}>
                       {activeOrder.predicted_class || 'Condition Alert'}
                     </span>
                     <span className="badge badge-cyan" style={{ fontSize: '0.75rem' }}>
@@ -413,24 +413,24 @@ export default function MaintenanceTab({
                 </div>
 
                 {/* 3. Why is an inspection recommended? */}
-                <div style={{ background: '#0a0e17', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#a855f7', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <div style={{ background: 'var(--bg-surface-elevated)', padding: '0.85rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--purple-calib)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     3. Why is an inspection recommended?
                   </div>
-                  <p style={{ fontSize: '0.85rem', color: '#e2e8f0', marginTop: '0.35rem', lineHeight: 1.5, margin: '0.35rem 0 0' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', marginTop: '0.35rem', lineHeight: 1.5, margin: '0.35rem 0 0' }}>
                     {activeOrder.priority_basis || activeOrder.description || 'Abnormal stator current modulations detected above nominal threshold. Scheduled physical inspection is recommended to confirm defect before mechanical failure worsens.'}
                   </p>
                 </div>
 
                 {/* 4. What should the technician check? */}
                 <div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--emerald-success)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
                     4. What should the technician check? ({rawInspectionTasks.length} tasks)
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                     {rawInspectionTasks.map((task, idx) => (
-                      <div key={idx} style={{ background: 'rgba(255,255,255,0.02)', padding: '0.65rem 0.85rem', borderRadius: '6px', border: '1px solid var(--border-subtle)', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                        <span className="mono" style={{ color: '#38bdf8', fontSize: '0.8rem', fontWeight: 700 }}>Task {idx + 1}:</span>
+                      <div key={idx} style={{ background: '#FFFFFF', padding: '0.65rem 0.85rem', borderRadius: '6px', border: '1px solid var(--border-subtle)', display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                        <span className="mono" style={{ color: 'var(--blue-accent)', fontSize: '0.8rem', fontWeight: 700 }}>Task {idx + 1}:</span>
                         <span style={{ fontSize: '0.825rem', color: 'var(--text-main)', lineHeight: 1.45 }}>
                           {renderTaskText(task)}
                         </span>
@@ -440,27 +440,27 @@ export default function MaintenanceTab({
                 </div>
 
                 {/* 5. What needs human verification before action? */}
-                <div style={{ background: 'rgba(99, 102, 241, 0.08)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(99, 102, 241, 0.3)' }}>
+                <div style={{ background: 'var(--purple-bg)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--purple-border)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
                     <span style={{ fontSize: '1.1rem' }}>🛡️</span>
-                    <span style={{ fontSize: '0.825rem', fontWeight: 700, color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <span style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--purple-calib)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       5. What needs human verification before action?
                     </span>
                   </div>
-                  <p style={{ fontSize: '0.78rem', color: '#cbd5e1', marginBottom: '0.65rem', lineHeight: 1.45 }}>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--text-main)', marginBottom: '0.65rem', lineHeight: 1.45 }}>
                     <strong>Safety Rule:</strong> Never dismantle or order replacement parts based solely on an AI prediction. Complete and tick off every physical verification step below:
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
                     {rawVerificationSteps.map((step, idx) => {
                       const isConfirmed = step.confirmed === true || !!checkedVerifications[idx] || activeOrder.status === 'COMPLETED';
                       return (
-                        <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.825rem', color: '#e2e8f0', cursor: 'pointer', background: 'rgba(0,0,0,0.2)', padding: '0.45rem 0.65rem', borderRadius: '6px' }}>
+                        <label key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', fontSize: '0.825rem', color: 'var(--text-main)', cursor: 'pointer', background: '#FFFFFF', border: '1px solid var(--border-subtle)', padding: '0.55rem 0.75rem', borderRadius: '6px' }}>
                           <input
                             type="checkbox"
                             checked={isConfirmed}
                             onChange={() => toggleVerificationCheck(idx)}
                             disabled={activeOrder.status === 'COMPLETED'}
-                            style={{ accentColor: '#06b6d4', width: '16px', height: '16px' }}
+                            style={{ accentColor: 'var(--blue-accent)', width: '16px', height: '16px' }}
                           />
                           <span>{renderStepText(step)}</span>
                         </label>
@@ -470,9 +470,9 @@ export default function MaintenanceTab({
                 </div>
 
                 {/* 6. Current work-order status & actions */}
-                <div style={{ background: '#0a0e17', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <div style={{ background: 'var(--bg-surface-elevated)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--blue-accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       6. Current work-order status
                     </div>
                     <span className={`badge badge-${activeOrder.status === 'COMPLETED' ? 'emerald' : activeOrder.status === 'OPEN' ? 'rose' : 'amber'}`}>
@@ -523,7 +523,7 @@ export default function MaintenanceTab({
                       </button>
                     )}
                     {activeOrder.status === 'COMPLETED' && (
-                      <span style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 600 }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--emerald-success)', fontWeight: 600 }}>
                         ✓ Work order fully completed and verified by reliability engineer.
                       </span>
                     )}
@@ -541,8 +541,8 @@ export default function MaintenanceTab({
                         <div key={idx} style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'flex', gap: '0.5rem' }}>
                           <span className="mono">{entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString() : ''}</span>
                           <span style={{ color: 'var(--text-muted)' }}>[{entry.user}]:</span>
-                          <span style={{ color: '#fff' }}>{entry.action}</span>
-                          {entry.notes && <span style={{ fontStyle: 'italic', color: '#94a3b8' }}>"{entry.notes}"</span>}
+                          <span style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{entry.action}</span>
+                          {entry.notes && <span style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>"{entry.notes}"</span>}
                         </div>
                       ))}
                     </div>
@@ -562,7 +562,7 @@ export default function MaintenanceTab({
           <div className="modal-overlay">
             <div className="modal-content">
               <div className="modal-header">
-                <h3 style={{ fontSize: '1.1rem', color: '#fff' }}>
+                <h3 style={{ fontSize: '1.1rem', color: 'var(--navy-primary)' }}>
                   Update Work Order to: {targetStatus.replace('_', ' ')}
                 </h3>
                 <button

@@ -134,4 +134,26 @@ export const api = {
       })
     );
   },
+
+  // Vibration Sensor & ISO 10816 Endpoints
+  getVibrationPresets: async () => {
+    return handleResponse(await fetch(`${BASE_URL}/vibration/presets`));
+  },
+
+  getVibrationMotorSpecs: async (tag) => {
+    return handleResponse(await fetch(`${BASE_URL}/vibration/motor-specs/${encodeURIComponent(tag)}`));
+  },
+
+  analyzeVibration: async (payload) => {
+    return handleResponse(
+      await fetch(`${BASE_URL}/vibration/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+    );
+  },
+
+  getVibrationSampleExcelDownloadUrl: () => `${BASE_URL}/vibration/sample-download`,
 };
+

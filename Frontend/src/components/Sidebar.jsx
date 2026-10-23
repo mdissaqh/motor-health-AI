@@ -51,6 +51,16 @@ export default function Sidebar({
       ),
     },
     {
+      id: 'vibration',
+      label: 'Vibration Sensor',
+      badge: 'ISO',
+      icon: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12h2l3-6 4 12 3-9 2 6 2-3h4" />
+        </svg>
+      ),
+    },
+    {
       id: 'maintenance',
       label: 'Maintenance Center',
       badge: null,

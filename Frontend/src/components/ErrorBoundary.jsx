@@ -32,7 +32,7 @@ export default class ErrorBoundary extends React.Component {
       return (
         <div className="card" style={{ padding: '2.5rem', textAlign: 'center', margin: '2rem 0', border: '1px solid var(--rose-danger)' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🛡️</div>
-          <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.25rem', color: 'var(--navy-primary)', marginBottom: '0.5rem' }}>
             {this.props.title || 'Screen Render Recovery Active'}
           </h2>
           <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 1.5rem', fontSize: '0.85rem' }}>

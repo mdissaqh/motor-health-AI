@@ -18,6 +18,8 @@ export default function Header({
         return { title: 'Diagnose Motor — Upload File', subtitle: 'Upload stator current recordings (CSV/JSON) with auto-initialized Excel operating conditions' };
       case 'lab':
         return { title: 'Diagnostic Analysis & Signal Lab', subtitle: 'Interactive current waveforms, MCSA Fourier spectra, and Hugging Face AI graph explanations' };
+      case 'vibration':
+        return { title: 'Vibration Sensor & Mechanical Lab', subtitle: 'ISO 10816 vibration severity, accelerometer spectrum, and bearing impact fault analysis' };
       case 'maintenance':
         return { title: 'Maintenance Center & Work Orders', subtitle: 'Evidence-linked corrective actions with Task 5 human physical verification safety gates' };
       case 'performance':
@@ -68,18 +70,30 @@ export default function Header({
         {/* Motor Quick Selector */}
         {motors && motors.length > 0 && (
           <div className="header-asset-select-wrapper desktop-only">
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: 600, textTransform: 'uppercase' }}>
+            <span style={{ fontSize: '0.75rem', color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Asset:
             </span>
             <select
               className="form-select"
-              style={{ fontSize: '0.8rem', padding: '0.35rem 0.65rem', width: 'auto', background: 'rgba(10, 14, 23, 0.85)' }}
+              style={{
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                padding: '0.35rem 0.75rem',
+                width: 'auto',
+                background: '#1E293B',
+                color: '#FFFFFF',
+                border: '1px solid #334155',
+                borderRadius: '6px',
+                cursor: 'pointer',
+              }}
               value={selectedMotorId || ''}
               onChange={(e) => setSelectedMotorId(e.target.value)}
             >
-              <option value="">All Fleet Motors</option>
+              <option value="" style={{ background: '#1E293B', color: '#FFFFFF' }}>
+                All Fleet Motors
+              </option>
               {motors.map((m) => (
-                <option key={m.id} value={m.id}>
+                <option key={m.id} value={m.id} style={{ background: '#1E293B', color: '#FFFFFF' }}>
                   {m.tag} — {m.name}
                 </option>
               ))}

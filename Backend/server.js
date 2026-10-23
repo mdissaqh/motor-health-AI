@@ -37,6 +37,7 @@ app.use('/api/motors', require('./routes/motors'));
 app.use('/api/diagnostics', require('./routes/diagnostics'));
 app.use('/api/work-orders', require('./routes/workOrders'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/vibration', require('./routes/vibration'));
 
 // Global 404 Handler
 app.use((req, res) => {

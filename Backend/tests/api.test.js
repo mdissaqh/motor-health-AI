@@ -257,4 +257,48 @@ describe('Express Gateway HTTP REST API Integration', () => {
     assert.ok(body.data.recommendations.verification_steps.length >= 2);
   });
 
+  test('GET /api/vibration/presets returns 4 benchmark vibration condition profiles', async () => {
+    const res = await fetch(`${baseUrl}/api/vibration/presets`);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.equal(body.data.length, 4);
+    const ids = body.data.map(p => p.id);
+    assert.ok(ids.includes('HEALTHY'));
+    assert.ok(ids.includes('BEARING_FAILURE'));
+    assert.ok(ids.includes('BROKEN_ROTOR_BAR'));
+    assert.ok(ids.includes('MISALIGNMENT'));
+  });
+
+  test('GET /api/vibration/motor-specs/:tag returns bearing & ISO data from Excel', async () => {
+    const res = await fetch(`${baseUrl}/api/vibration/motor-specs/PUMP-CW-01`);
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.equal(body.data.asset_tag, 'PUMP-CW-01');
+    assert.ok(body.data.de_bearing);
+    assert.ok(body.data.bearing_frequencies.bpfo > 0);
+  });
+
+  test('POST /api/vibration/analyze classifies vibration fault and evaluates ISO 10816', async () => {
+    const res = await fetch(`${baseUrl}/api/vibration/analyze`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        motor_tag: 'PUMP-CW-01',
+        condition_preset: 'BEARING_FAILURE',
+        sampling_rate_hz: 5000,
+      }),
+    });
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.status, 'SUCCESS');
+    assert.equal(body.diagnostic.predicted_class, 'BEARING_FAILURE');
+    assert.ok(body.diagnostic.iso_zone.zone);
+    assert.ok(body.diagnostic.time_features.kurtosis > 3.0);
+    assert.ok(body.visualization.waveform.length > 0);
+    assert.ok(body.visualization.spectrum.length > 0);
+  });
+
 });
+

@@ -67,37 +67,38 @@ export default function ModelPerformanceTab() {
   return (
     <div>
       {/* Performance Summary Banner */}
-      <div className="card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(30, 41, 59, 0.95))' }}>
+      {/* Scientific Performance Banner */}
+      <div className="card" style={{ marginBottom: '1.5rem', background: 'linear-gradient(135deg, rgba(8, 122, 203, 0.08), rgba(126, 34, 206, 0.08))' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.35rem' }}>
               <span className="badge badge-purple">{model_version}</span>
               <span className="badge badge-cyan">{model_name}</span>
             </div>
-            <h2 style={{ fontSize: '1.4rem', color: '#fff', margin: '0.2rem 0' }}>
+            <h2 style={{ fontSize: '1.4rem', color: 'var(--navy-primary)', margin: '0.2rem 0' }}>
               Empirical Model Evaluation & Scientific Benchmark
             </h2>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
-              Protocol: <strong style={{ color: '#cbd5e1' }}>{training_protocol}</strong>
+              Protocol: <strong style={{ color: 'var(--navy-primary)' }}>{training_protocol}</strong>
             </p>
           </div>
 
           <div style={{ display: 'flex', gap: '1.5rem', textAlign: 'center' }}>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Balanced Acc</span>
-              <div className="stat-value" style={{ color: '#34d399', fontSize: '1.6rem' }}>
+              <div className="stat-value" style={{ color: 'var(--emerald-success)', fontSize: '1.6rem' }}>
                 {(summary_metrics.balanced_accuracy * 100).toFixed(2)}%
               </div>
             </div>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Macro F1</span>
-              <div className="stat-value" style={{ color: '#38bdf8', fontSize: '1.6rem' }}>
+              <div className="stat-value" style={{ color: 'var(--blue-accent)', fontSize: '1.6rem' }}>
                 {summary_metrics.macro_f1.toFixed(4)}
               </div>
             </div>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Test Samples</span>
-              <div className="stat-value" style={{ color: '#fff', fontSize: '1.6rem' }}>
+              <div className="stat-value" style={{ color: 'var(--navy-primary)', fontSize: '1.6rem' }}>
                 {sample_counts.test_samples}
               </div>
             </div>
@@ -134,7 +135,7 @@ export default function ModelPerformanceTab() {
               <tbody>
                 {matrix.map((row, rIdx) => (
                   <tr key={rIdx}>
-                    <td style={{ textAlign: 'left', padding: '0.65rem 0.5rem', fontWeight: 600, color: '#fff', fontSize: '0.75rem' }}>
+                    <td style={{ textAlign: 'left', padding: '0.65rem 0.5rem', fontWeight: 600, color: 'var(--navy-primary)', fontSize: '0.75rem' }}>
                       {matrixLabels[rIdx].replace('_', ' ')}
                     </td>
                     {row.map((val, cIdx) => {
@@ -145,11 +146,11 @@ export default function ModelPerformanceTab() {
                           style={{
                             padding: '0.65rem',
                             background: isDiag
-                              ? val > 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(255,255,255,0.02)'
-                              : val > 0 ? 'rgba(244, 63, 94, 0.25)' : 'rgba(255,255,255,0.01)',
+                              ? val > 0 ? 'rgba(22, 168, 121, 0.18)' : '#F8FAFC'
+                              : val > 0 ? 'rgba(220, 76, 100, 0.18)' : '#FFFFFF',
                             border: '1px solid var(--border-subtle)',
-                            fontWeight: isDiag ? 700 : 400,
-                            color: isDiag ? '#34d399' : val > 0 ? '#fb7185' : '#64748b',
+                            fontWeight: isDiag ? 700 : 500,
+                            color: isDiag ? 'var(--emerald-success)' : val > 0 ? 'var(--rose-danger)' : 'var(--text-dim)',
                             fontSize: '0.9rem',
                           }}
                         >
@@ -202,10 +203,10 @@ export default function ModelPerformanceTab() {
               <tbody>
                 {per_class_metrics.map((m) => (
                   <tr key={m.fault_class}>
-                    <td style={{ fontWeight: 600, color: '#fff' }}>{m.fault_class}</td>
-                    <td className="mono" style={{ color: '#38bdf8' }}>{m.precision.toFixed(4)}</td>
-                    <td className="mono" style={{ color: '#34d399' }}>{m.recall.toFixed(4)}</td>
-                    <td className="mono" style={{ fontWeight: 600, color: '#fff' }}>{m.f1_score.toFixed(4)}</td>
+                    <td style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>{m.fault_class}</td>
+                    <td className="mono" style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>{m.precision.toFixed(4)}</td>
+                    <td className="mono" style={{ color: 'var(--emerald-success)', fontWeight: 600 }}>{m.recall.toFixed(4)}</td>
+                    <td className="mono" style={{ fontWeight: 700, color: 'var(--navy-primary)' }}>{m.f1_score.toFixed(4)}</td>
                     <td className="mono" style={{ color: 'var(--text-muted)' }}>{m.support}</td>
                   </tr>
                 ))}
@@ -214,9 +215,9 @@ export default function ModelPerformanceTab() {
           </div>
 
           <div style={{ marginTop: '0.75rem', display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-dim)' }}>
-            <span>Macro Avg Precision: <strong>0.9844</strong></span>
-            <span>Macro Avg Recall: <strong>0.9808</strong></span>
-            <span>Macro F1: <strong>0.9819</strong></span>
+            <span>Macro Avg Precision: <strong style={{ color: 'var(--navy-primary)' }}>0.9844</strong></span>
+            <span>Macro Avg Recall: <strong style={{ color: 'var(--navy-primary)' }}>0.9808</strong></span>
+            <span>Macro F1: <strong style={{ color: 'var(--navy-primary)' }}>0.9819</strong></span>
           </div>
         </div>
       </div>
@@ -245,16 +246,16 @@ export default function ModelPerformanceTab() {
               </thead>
               <tbody>
                 <tr>
-                  <td style={{ fontWeight: 600, color: '#fff' }}>Brier Score (Mean Squared Error)</td>
-                  <td className="mono">{calibration_audit.uncalibrated_brier}</td>
-                  <td className="mono" style={{ color: '#34d399', fontWeight: 600 }}>{calibration_audit.calibrated_brier}</td>
-                  <td className="mono" style={{ color: '#34d399' }}>+{calibration_audit.brier_reduction_pct}% reduction</td>
+                  <td style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>Brier Score (Mean Squared Error)</td>
+                  <td className="mono" style={{ color: 'var(--text-main)' }}>{calibration_audit.uncalibrated_brier}</td>
+                  <td className="mono" style={{ color: 'var(--emerald-success)', fontWeight: 700 }}>{calibration_audit.calibrated_brier}</td>
+                  <td className="mono" style={{ color: 'var(--emerald-success)', fontWeight: 600 }}>+{calibration_audit.brier_reduction_pct}% reduction</td>
                 </tr>
                 <tr>
-                  <td style={{ fontWeight: 600, color: '#fff' }}>Expected Calibration Error (ECE)</td>
-                  <td className="mono">{calibration_audit.uncalibrated_ece}</td>
-                  <td className="mono" style={{ color: '#34d399', fontWeight: 600 }}>{calibration_audit.calibrated_ece}</td>
-                  <td className="mono" style={{ color: '#34d399' }}>+{calibration_audit.ece_reduction_pct}% reduction</td>
+                  <td style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>Expected Calibration Error (ECE)</td>
+                  <td className="mono" style={{ color: 'var(--text-main)' }}>{calibration_audit.uncalibrated_ece}</td>
+                  <td className="mono" style={{ color: 'var(--emerald-success)', fontWeight: 700 }}>{calibration_audit.calibrated_ece}</td>
+                  <td className="mono" style={{ color: 'var(--emerald-success)', fontWeight: 600 }}>+{calibration_audit.ece_reduction_pct}% reduction</td>
                 </tr>
               </tbody>
             </table>
@@ -277,17 +278,17 @@ export default function ModelPerformanceTab() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {held_out_evaluations.map((ev, idx) => (
-              <div key={idx} style={{ background: '#0a0e17', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+              <div key={idx} style={{ background: 'var(--bg-surface-elevated)', padding: '0.85rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                  <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.875rem' }}>{ev.regime}</span>
+                  <span style={{ fontWeight: 700, color: 'var(--navy-primary)', fontSize: '0.875rem' }}>{ev.regime}</span>
                   <span className="badge badge-cyan">{ev.test_samples} Samples</span>
                 </div>
                 <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
                   {ev.description}
                 </p>
                 <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8rem' }}>
-                  <span>Balanced Acc: <strong className="mono" style={{ color: '#34d399' }}>{(ev.balanced_accuracy * 100).toFixed(2)}%</strong></span>
-                  <span>Macro F1: <strong className="mono" style={{ color: '#38bdf8' }}>{ev.macro_f1.toFixed(4)}</strong></span>
+                  <span>Balanced Acc: <strong className="mono" style={{ color: 'var(--emerald-success)' }}>{(ev.balanced_accuracy * 100).toFixed(2)}%</strong></span>
+                  <span>Macro F1: <strong className="mono" style={{ color: 'var(--blue-accent)' }}>{ev.macro_f1.toFixed(4)}</strong></span>
                 </div>
               </div>
             ))}
@@ -311,11 +312,11 @@ export default function ModelPerformanceTab() {
             {feature_importances.slice(0, 6).map((feat) => (
               <div key={feat.name}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', marginBottom: '0.2rem' }}>
-                  <span className="mono" style={{ color: '#fff', fontWeight: 600 }}>{feat.name}</span>
-                  <span className="mono" style={{ color: '#38bdf8' }}>{feat.importance_pct}%</span>
+                  <span className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>{feat.name}</span>
+                  <span className="mono" style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>{feat.importance_pct}%</span>
                 </div>
-                <div style={{ width: '100%', height: '5px', background: '#1e293b', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ width: `${feat.importance_pct * 2.5}%`, height: '100%', background: 'linear-gradient(90deg, #06b6d4, #a855f7)' }} />
+                <div style={{ width: '100%', height: '6px', background: 'var(--border-subtle)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ width: `${feat.importance_pct * 2.5}%`, height: '100%', background: 'linear-gradient(90deg, var(--blue-accent), var(--navy-primary))' }} />
                 </div>
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{feat.description}</span>
               </div>
@@ -333,9 +334,9 @@ export default function ModelPerformanceTab() {
             <span className="badge badge-amber">Integrity</span>
           </div>
 
-          <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', paddingLeft: '1.25rem', fontSize: '0.825rem', color: '#cbd5e1' }}>
+          <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', paddingLeft: '1.25rem', fontSize: '0.85rem', color: '#1E293B', lineHeight: 1.55 }}>
             {dataset_limitations.map((lim, idx) => (
-              <li key={idx} style={{ lineHeight: 1.45 }}>{lim}</li>
+              <li key={idx} style={{ color: '#1E293B' }}>{lim}</li>
             ))}
           </ul>
         </div>

@@ -108,7 +108,7 @@ export default function VariableConditionTab({ onSelectRun }) {
               <span className="badge badge-purple">Challenge Lab</span>
               <span className="badge badge-cyan">Speed & Load Invariance</span>
             </div>
-            <h2 style={{ fontSize: '1.35rem', color: '#fff', margin: '0.2rem 0' }}>
+            <h2 style={{ fontSize: '1.35rem', color: 'var(--navy-primary)', margin: '0.2rem 0' }}>
               Variable-Condition Generalization & Safety Challenge
             </h2>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', maxWidth: '750px' }}>
@@ -141,8 +141,8 @@ export default function VariableConditionTab({ onSelectRun }) {
               key={tc.id}
               onClick={() => setSelectedCaseIdx(idx)}
               style={{
-                background: isSelected ? 'rgba(6, 182, 212, 0.12)' : 'var(--bg-card)',
-                border: isSelected ? '1px solid var(--cyan-primary)' : '1px solid var(--border-subtle)',
+                background: isSelected ? 'rgba(8, 122, 203, 0.12)' : 'var(--bg-card)',
+                border: isSelected ? '1px solid var(--blue-accent)' : '1px solid var(--border-subtle)',
                 borderRadius: '10px',
                 padding: '1.1rem',
                 cursor: 'pointer',
@@ -152,10 +152,10 @@ export default function VariableConditionTab({ onSelectRun }) {
               <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600, marginBottom: '0.25rem' }}>
                 Regime {idx + 1}
               </div>
-              <h4 style={{ fontSize: '0.9rem', color: '#fff', marginBottom: '0.35rem' }}>
+              <h4 style={{ fontSize: '0.9rem', color: 'var(--navy-primary)', marginBottom: '0.35rem' }}>
                 {tc.title.split(':')[1] || tc.title}
               </h4>
-              <p className="mono" style={{ fontSize: '0.75rem', color: '#38bdf8', marginBottom: '0.65rem' }}>
+              <p className="mono" style={{ fontSize: '0.75rem', color: 'var(--blue-accent)', fontWeight: 600, marginBottom: '0.65rem' }}>
                 {tc.condition}
               </p>
 
@@ -169,7 +169,7 @@ export default function VariableConditionTab({ onSelectRun }) {
                       {status || 'ERROR'}
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.78rem', color: '#fff', fontWeight: 600 }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--navy-primary)', fontWeight: 700 }}>
                     {predClass || 'Refused (Safe)'}
                   </div>
                   <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
@@ -229,19 +229,19 @@ export default function VariableConditionTab({ onSelectRun }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', background: '#0a0e17', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Fundamental Carrier (f_fund):</span>
-              <p className="mono" style={{ color: '#38bdf8', fontWeight: 600 }}>
+              <p className="mono" style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>
                 {activeResult.diagnostic_run.provenance?.fundamental_freq_hz?.toFixed(2) || '50.00'} Hz
               </p>
             </div>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Motor Slip (s):</span>
-              <p className="mono" style={{ color: '#fff', fontWeight: 600 }}>
+              <p className="mono" style={{ color: 'var(--navy-primary)', fontWeight: 600 }}>
                 {activeResult.diagnostic_run.provenance?.motor_slip?.toFixed(4) || 'N/A'}
               </p>
             </div>
             <div>
               <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Diagnostic Assessment:</span>
-              <p style={{ color: '#34d399', fontWeight: 600, fontSize: '0.85rem' }}>
+              <p style={{ color: 'var(--emerald-success)', fontWeight: 600, fontSize: '0.85rem' }}>
                 {activeResult.diagnostic_run.status_explanation}
               </p>
             </div>
@@ -276,8 +276,8 @@ export default function VariableConditionTab({ onSelectRun }) {
                 return (
                   <tr key={tc.id}>
                     <td>
-                      <div style={{ fontWeight: 600, color: '#fff' }}>{tc.title}</div>
-                      <div className="mono" style={{ fontSize: '0.75rem', color: '#38bdf8' }}>{tc.condition}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>{tc.title}</div>
+                      <div className="mono" style={{ fontSize: '0.75rem', color: 'var(--blue-accent)', fontWeight: 600 }}>{tc.condition}</div>
                     </td>
                     <td>
                       <span className="badge badge-muted">{tc.ground_truth}</span>
@@ -287,7 +287,7 @@ export default function VariableConditionTab({ onSelectRun }) {
                     </td>
                     <td>
                       {res ? (
-                        <span style={{ fontWeight: 600, color: '#fff' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--navy-primary)' }}>
                           {res.diagnostic_run?.predicted_class || 'Refused'}
                         </span>
                       ) : (

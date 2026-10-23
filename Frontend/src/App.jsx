@@ -5,6 +5,7 @@ import Header from './components/Header';
 import OverviewTab from './components/OverviewTab';
 import DiagnoseTab from './components/DiagnoseTab';
 import DiagnosticLabTab from './components/DiagnosticLabTab';
+import VibrationTab from './components/VibrationTab';
 import MaintenanceTab from './components/MaintenanceTab';
 import ModelPerformanceTab from './components/ModelPerformanceTab';
 import SampleFilesTab from './components/SampleFilesTab';
@@ -14,7 +15,7 @@ import { api } from './api';
 export default function App() {
   const getInitialTab = () => {
     const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'maintenance', 'performance', 'samples'];
+    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'maintenance', 'performance', 'samples'];
     if (validDashboardTabs.includes(raw)) return raw;
     return 'landing'; // Default initial view is the new landing page
   };
@@ -51,7 +52,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'maintenance', 'performance', 'samples'];
+      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'maintenance', 'performance', 'samples'];
       if (validDashboardTabs.includes(raw)) {
         setActiveTab(raw);
       } else if (!raw || raw === 'landing') {
@@ -243,6 +244,10 @@ export default function App() {
                   onNavigateToDiagnose={() => setActiveTab('diagnose')}
                   onOpenWorkOrder={handleOpenWorkOrder}
                 />
+              )}
+
+              {activeTab === 'vibration' && (
+                <VibrationTab motors={motors} />
               )}
 
               {activeTab === 'maintenance' && (
