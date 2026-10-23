@@ -90,7 +90,7 @@ function getDeterministicGraphExplanation(graphType, stats = {}, conditions = {}
       return {
         title: 'Motor Stator Current Waveform i(t)',
         what_it_displays: 'Time-domain instantaneous current (Amperes vs Time in seconds) flowing into the motor stator windings.',
-        visible_pattern: `Observed continuous AC current cycle with RMS amplitude of ${rms.toFixed(2)} A and crest factor of ${crestFactor.toFixed(2)}. ${isElevated ? 'Impulsive peak disturbances or transient current ripple detected.' : 'Waveform exhibits regular sinusoidal symmetry with nominal crest ratio (~1.41-1.50).' }`,
+        visible_pattern: `Observed continuous AC current cycle with RMS amplitude of ${rms.toFixed(2)} A and crest factor of ${crestFactor.toFixed(2)}. ${isElevated ? 'Impulsive peak disturbances or transient current ripple detected.' : 'Waveform exhibits regular sinusoidal symmetry with nominal crest ratio (~1.41-1.50).'}`,
         relevance_to_mcsa: 'In healthy induction motors, stator current is predominantly sinusoidal. Rotor bar fractures or mechanical torque load oscillations introduce low-frequency amplitude modulation envelopes.',
         what_it_supports: isElevated ? 'Supports further examination of high-frequency envelope kurtosis and sideband power.' : 'Supports nominal steady-state electromagnetic flux across motor pole faces.',
         limitations: 'Time-domain waveforms alone cannot reliably isolate individual bearing harmonic defect frequencies without Fourier spectral transformation.',

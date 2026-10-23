@@ -50,18 +50,18 @@ export default function DiagnosticLabTab({
   return (
     <div>
       {/* Run Header Diagnostic Summary Card */}
-      <div className="card" style={{ marginBottom: '1.5rem', borderLeft: `4px solid ${
-        status === 'DIAGNOSIS_AVAILABLE' ? '#10b981' : status === 'REVIEW_REQUIRED' ? '#f59e0b' : '#f43f5e'
-      }` }}>
+      <div className="card" style={{
+        marginBottom: '1.5rem', borderLeft: `4px solid ${status === 'DIAGNOSIS_AVAILABLE' ? '#10b981' : status === 'REVIEW_REQUIRED' ? '#f59e0b' : '#f43f5e'
+          }`
+      }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem' }}>
               <span className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
                 RUN ID: {selectedRun.id}
               </span>
-              <span className={`badge badge-${
-                status === 'DIAGNOSIS_AVAILABLE' ? 'emerald' : status === 'REVIEW_REQUIRED' ? 'amber' : 'rose'
-              }`}>
+              <span className={`badge badge-${status === 'DIAGNOSIS_AVAILABLE' ? 'emerald' : status === 'REVIEW_REQUIRED' ? 'amber' : 'rose'
+                }`}>
                 {status}
               </span>
               {selectedRun.fault_code && (
@@ -418,9 +418,8 @@ export default function DiagnosticLabTab({
                       [{feat.nominal_range?.[0]}, {feat.nominal_range?.[1]}]
                     </td>
                     <td>
-                      <span className={`badge badge-${
-                        feat.status === 'NOMINAL' ? 'emerald' : feat.status === 'ELEVATED' ? 'amber' : 'rose'
-                      }`}>
+                      <span className={`badge badge-${feat.status === 'NOMINAL' ? 'emerald' : feat.status === 'ELEVATED' ? 'amber' : 'rose'
+                        }`}>
                         {feat.status}
                       </span>
                     </td>
