@@ -45,7 +45,7 @@ export default function OverviewTab({
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <span style={{ fontSize: '1.25rem' }}>⚡</span>
           <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#fff' }}>
+            <p style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--navy-primary)' }}>
               Condition Monitoring System: MCSA Diagnostic Engine Active
             </p>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
@@ -128,7 +128,7 @@ export default function OverviewTab({
                       {item.count} runs ({pct}%)
                     </span>
                   </div>
-                  <div style={{ width: '100%', height: '6px', background: '#1e293b', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '6px', background: '#E2E8F0', borderRadius: '3px', overflow: 'hidden' }}>
                     <div style={{ width: `${pct}%`, height: '100%', background: item.color }} />
                   </div>
                 </div>
@@ -161,7 +161,7 @@ export default function OverviewTab({
                 {motors.map((m) => (
                   <tr key={m.id}>
                     <td>
-                      <div className="mono" style={{ fontWeight: 600, color: '#fff' }}>{m.tag}</div>
+                      <div className="mono" style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>{m.tag}</div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>{m.name}</div>
                     </td>
                     <td style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{m.location}</td>
@@ -214,13 +214,13 @@ export default function OverviewTab({
                 {runs.slice(-8).reverse().map((run) => (
                   <tr key={run.id} style={{ cursor: 'pointer' }} onClick={() => onSelectRun(run)}>
                     <td className="mono" style={{ fontSize: '0.8rem' }}>
-                      <div style={{ color: '#38bdf8', fontWeight: 600 }}>{run.id}</div>
+                      <div style={{ color: 'var(--blue-accent)', fontWeight: 600 }}>{run.id}</div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         {new Date(run.timestamp).toLocaleString()}
                       </div>
                     </td>
                     <td>
-                      <div className="mono" style={{ fontWeight: 600 }}>{run.motor_tag}</div>
+                      <div className="mono" style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>{run.motor_tag}</div>
                       <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>{run.motor_name}</div>
                     </td>
                     <td>
@@ -232,7 +232,7 @@ export default function OverviewTab({
                       </span>
                     </td>
                     <td>
-                      <span style={{ fontWeight: 600, color: '#fff' }}>
+                      <span style={{ fontWeight: 600, color: 'var(--navy-primary)' }}>
                         {run.predicted_class || 'N/A'}
                       </span>
                     </td>

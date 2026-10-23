@@ -33,11 +33,11 @@ export default function SignalCanvas({
     const plotH = h - padding.top - padding.bottom;
 
     // Clear background
-    ctx.fillStyle = '#080c14';
+    ctx.fillStyle = '#0B1F3A';
     ctx.fillRect(0, 0, w, h);
 
     if (!data) {
-      ctx.fillStyle = '#64748b';
+      ctx.fillStyle = '#94A3B8';
       ctx.font = '13px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText('No signal data available for rendering.', w / 2, h / 2);
@@ -58,7 +58,7 @@ export default function SignalCanvas({
       yMax += ySpan * 0.1;
 
       // Draw Grid Lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(220, 231, 242, 0.12)';
       ctx.lineWidth = 1;
       const numGridY = 4;
       for (let i = 0; i <= numGridY; i++) {
@@ -69,7 +69,7 @@ export default function SignalCanvas({
         ctx.lineTo(w - padding.right, yPx);
         ctx.stroke();
 
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#94A3B8';
         ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'right';
         ctx.fillText(`${yVal.toFixed(1)} ${units}`, padding.left - 8, yPx + 3);
@@ -78,7 +78,7 @@ export default function SignalCanvas({
       // Zero-crossing line
       if (yMin < 0 && yMax > 0) {
         const zeroY = padding.top + plotH - ((0 - yMin) / (yMax - yMin)) * plotH;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.strokeStyle = 'rgba(220, 231, 242, 0.25)';
         ctx.beginPath();
         ctx.moveTo(padding.left, zeroY);
         ctx.lineTo(w - padding.right, zeroY);
@@ -90,14 +90,14 @@ export default function SignalCanvas({
       for (let i = 0; i <= numGridX; i++) {
         const xVal = xMin + (i / numGridX) * (xMax - xMin);
         const xPx = padding.left + (i / numGridX) * plotW;
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#94A3B8';
         ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText(`${(xVal * 1000).toFixed(0)} ms`, xPx, h - 12);
       }
 
       // Plot Signal Waveform
-      ctx.strokeStyle = '#06b6d4';
+      ctx.strokeStyle = '#16B9E8';
       ctx.lineWidth = 1.75;
       ctx.beginPath();
       for (let i = 0; i < xs.length; i++) {
@@ -122,7 +122,7 @@ export default function SignalCanvas({
       yMax += ySpan * 0.1;
 
       // Draw Grid Lines (Y: dB)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.strokeStyle = 'rgba(220, 231, 242, 0.12)';
       ctx.lineWidth = 1;
       const numGridY = 4;
       for (let i = 0; i <= numGridY; i++) {
@@ -133,7 +133,7 @@ export default function SignalCanvas({
         ctx.lineTo(w - padding.right, yPx);
         ctx.stroke();
 
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#94A3B8';
         ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'right';
         ctx.fillText(`${yVal.toFixed(0)} dB`, padding.left - 8, yPx + 3);
@@ -144,13 +144,13 @@ export default function SignalCanvas({
       for (const f of xTicks) {
         if (f > xMax) continue;
         const xPx = padding.left + (f / xMax) * plotW;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.strokeStyle = 'rgba(220, 231, 242, 0.1)';
         ctx.beginPath();
         ctx.moveTo(xPx, padding.top);
         ctx.lineTo(xPx, padding.top + plotH);
         ctx.stroke();
 
-        ctx.fillStyle = '#64748b';
+        ctx.fillStyle = '#94A3B8';
         ctx.font = '10px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText(`${f} Hz`, xPx, h - 12);
@@ -161,7 +161,7 @@ export default function SignalCanvas({
       for (const m of markers) {
         if (m.frequency_hz >= 0 && m.frequency_hz <= xMax) {
           const mPx = padding.left + (m.frequency_hz / xMax) * plotW;
-          ctx.strokeStyle = m.color || '#f59e0b';
+          ctx.strokeStyle = m.color || '#E9A23B';
           ctx.lineWidth = 1.25;
           ctx.setLineDash([4, 3]);
           ctx.beginPath();
@@ -171,7 +171,7 @@ export default function SignalCanvas({
           ctx.setLineDash([]);
 
           // Marker Label on top
-          ctx.fillStyle = m.color || '#f59e0b';
+          ctx.fillStyle = m.color || '#E9A23B';
           ctx.font = '9px JetBrains Mono, monospace';
           ctx.textAlign = 'center';
           ctx.fillText(m.name, mPx, padding.top - 7);
@@ -180,8 +180,8 @@ export default function SignalCanvas({
 
       // Draw Gradient Area under Spectrum Curve
       const grad = ctx.createLinearGradient(0, padding.top, 0, padding.top + plotH);
-      grad.addColorStop(0, 'rgba(6, 182, 212, 0.35)');
-      grad.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+      grad.addColorStop(0, 'rgba(22, 185, 232, 0.35)');
+      grad.addColorStop(1, 'rgba(22, 185, 232, 0.0)');
 
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -196,7 +196,7 @@ export default function SignalCanvas({
       ctx.fill();
 
       // Plot Spectrum Curve
-      ctx.strokeStyle = '#22d3ee';
+      ctx.strokeStyle = '#16B9E8';
       ctx.lineWidth = 1.6;
       ctx.beginPath();
       for (let i = 0; i < xs.length; i++) {

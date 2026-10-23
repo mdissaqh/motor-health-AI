@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LandingPage from './components/LandingPage';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import OverviewTab from './components/OverviewTab';
@@ -11,7 +12,14 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { api } from './api';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const getInitialTab = () => {
+    const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'maintenance', 'performance', 'samples'];
+    if (validDashboardTabs.includes(raw)) return raw;
+    return 'landing'; // Default initial view is the new landing page
+  };
+
+  const [activeTab, setActiveTab] = useState(getInitialTab);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
@@ -24,6 +32,36 @@ export default function App() {
   const [selectedRun, setSelectedRun] = useState(null);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState(null);
   const [notification, setNotification] = useState(null);
+
+  // Sync activeTab with URL hash for browser history & direct URL support
+  useEffect(() => {
+    if (activeTab === 'landing') {
+      if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '#/' && window.location.hash !== '#/landing') {
+        window.history.pushState(null, '', window.location.pathname);
+      }
+    } else {
+      const targetHash = `#/${activeTab}`;
+      if (window.location.hash !== targetHash) {
+        window.location.hash = targetHash;
+      }
+    }
+  }, [activeTab]);
+
+  // Handle browser back/forward navigation
+  useEffect(() => {
+    const handleHashChange = () => {
+      const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
+      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'maintenance', 'performance', 'samples'];
+      if (validDashboardTabs.includes(raw)) {
+        setActiveTab(raw);
+      } else if (!raw || raw === 'landing') {
+        setActiveTab('landing');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   const showToast = (message, type = 'info') => {
     setNotification({ message, type });
@@ -110,6 +148,20 @@ export default function App() {
     ? workOrders.find((w) => w.diagnostic_run_id === selectedRun.id)
     : null;
 
+  // Render Landing Page as standalone first page
+  if (activeTab === 'landing') {
+    return (
+      <ErrorBoundary title="Motor Health AI">
+        <LandingPage
+          onGetStarted={() => setActiveTab('overview')}
+          onStartDiagnosis={() => setActiveTab('overview')}
+          backendHealth={backendHealth}
+        />
+      </ErrorBoundary>
+    );
+  }
+
+  // Render Full Dashboard Layout
   return (
     <ErrorBoundary title="Motor Health AI Application">
       <div className={`app-layout-root ${sidebarCollapsed ? 'sidebar-is-collapsed' : ''}`}>
@@ -219,7 +271,7 @@ export default function App() {
           <footer className="app-main-footer">
             <div className="footer-content">
               <div>
-                <strong style={{ color: '#fff' }}>Motor Health AI</strong> — Motor Health Digital Diagnostic Lab
+                <strong style={{ color: '#073B78' }}>Motor Health AI</strong> — Motor Health Digital Diagnostic Lab
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                 <span>MCSA Scientific DSP Engine Active</span>

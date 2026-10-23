@@ -63,7 +63,7 @@ export default function DiagnosticLabTab({
     return (
       <div className="card" style={{ textAlign: 'center', padding: '3.5rem 1.5rem' }}>
         <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>⚡</div>
-        <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: '#fff' }}>
+        <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--navy-primary)' }}>
           Motor Diagnostic & Signal Lab
         </h2>
         <p style={{ color: 'var(--text-muted)', maxWidth: '500px', margin: '0 auto 1.5rem' }}>
@@ -95,9 +95,9 @@ export default function DiagnosticLabTab({
       case 'HEALTHY':
         return {
           title: 'Normal / Healthy Operation',
-          color: '#10b981',
-          bg: 'rgba(16, 185, 129, 0.15)',
-          border: 'rgba(16, 185, 129, 0.3)',
+          color: '#16A879',
+          bg: '#E6F8F2',
+          border: '#A3E9D2',
           badgeClass: 'badge-emerald',
           icon: '✅',
           desc: 'The motor current is balanced with no abnormal electrical or mechanical defects detected.',
@@ -105,9 +105,9 @@ export default function DiagnosticLabTab({
       case 'BROKEN_ROTOR_BAR':
         return {
           title: 'Possible Broken Rotor Bar (BRB)',
-          color: '#f43f5e',
-          bg: 'rgba(244, 63, 94, 0.15)',
-          border: 'rgba(244, 63, 94, 0.35)',
+          color: '#DC4C64',
+          bg: '#FDF1F3',
+          border: '#F9BAC5',
           badgeClass: 'badge-rose',
           icon: '⚠️',
           desc: 'Cracked or broken rotor cage bar detected. Creates cyclic torque oscillations and harmonic sidebands.',
@@ -115,9 +115,9 @@ export default function DiagnosticLabTab({
       case 'BEARING_FAULT':
         return {
           title: 'Possible Bearing Raceway Wear',
-          color: '#f59e0b',
-          bg: 'rgba(245, 158, 11, 0.15)',
-          border: 'rgba(245, 158, 11, 0.35)',
+          color: '#E9A23B',
+          bg: '#FEF7EC',
+          border: '#FCD8A2',
           badgeClass: 'badge-amber',
           icon: '⚠️',
           desc: 'Mechanical wear detected on bearing raceways or rolling elements, causing high-frequency impact pulses.',
@@ -125,19 +125,19 @@ export default function DiagnosticLabTab({
       case 'MISALIGNMENT':
         return {
           title: 'Shaft Misalignment Detected',
-          color: '#eab308',
-          bg: 'rgba(234, 179, 8, 0.15)',
-          border: 'rgba(234, 179, 8, 0.35)',
-          badgeClass: 'badge-amber',
+          color: '#7E22CE',
+          bg: '#F5EEFD',
+          border: '#D8B4FE',
+          badgeClass: 'badge-purple',
           icon: '⚠️',
           desc: 'Motor shaft and driven load shaft are misaligned or coupling is offset, generating 2x line frequency stress.',
         };
       default:
         return {
           title: cls,
-          color: '#38bdf8',
-          bg: 'rgba(56, 189, 248, 0.15)',
-          border: 'rgba(56, 189, 248, 0.3)',
+          color: '#087ACB',
+          bg: '#EFF6FF',
+          border: '#BFDBFE',
           badgeClass: 'badge-cyan',
           icon: '🔍',
           desc: 'Condition diagnosed from motor current signature analysis.',
@@ -158,14 +158,14 @@ export default function DiagnosticLabTab({
         style={{
           marginBottom: '1.5rem',
           borderLeft: `5px solid ${faultMeta.color}`,
-          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85))',
+          background: 'var(--bg-surface)',
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.25rem' }}>
           {/* Motor Name & Condition */}
           <div style={{ flex: '1 1 360px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
-              <span className="mono" style={{ fontSize: '0.8rem', color: 'var(--text-dim)', background: 'rgba(0,0,0,0.3)', padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
+              <span className="mono" style={{ fontSize: '0.8rem', color: 'var(--navy-primary)', background: 'var(--bg-surface-elevated)', padding: '0.15rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-subtle)' }}>
                 MOTOR: {selectedRun.motor_tag}
               </span>
               <span className={`badge ${faultMeta.badgeClass}`} style={{ fontSize: '0.8rem', padding: '0.2rem 0.6rem' }}>
@@ -176,7 +176,7 @@ export default function DiagnosticLabTab({
               </span>
             </div>
 
-            <h1 style={{ fontSize: '1.5rem', margin: '0.25rem 0', color: '#fff', fontWeight: 700 }}>
+            <h1 style={{ fontSize: '1.5rem', margin: '0.25rem 0', color: 'var(--navy-primary)', fontWeight: 800 }}>
               {selectedRun.motor_name}
             </h1>
 
@@ -195,10 +195,10 @@ export default function DiagnosticLabTab({
             >
               <div style={{ fontSize: '1.75rem', lineHeight: 1 }}>{faultMeta.icon}</div>
               <div>
-                <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#fff' }}>
+                <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy-primary)' }}>
                   Result: <span style={{ color: faultMeta.color }}>{faultMeta.title}</span>
                 </div>
-                <div style={{ fontSize: '0.825rem', color: '#cbd5e1', marginTop: '0.15rem' }}>
+                <div style={{ fontSize: '0.825rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
                   {faultMeta.desc}
                 </div>
               </div>
@@ -206,12 +206,12 @@ export default function DiagnosticLabTab({
           </div>
 
           {/* Key Metrics: Confidence, Health, Severity */}
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', background: 'rgba(0,0,0,0.3)', padding: '1rem 1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', background: 'var(--bg-surface-elevated)', padding: '1rem 1.25rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
             <div style={{ textAlign: 'center', minWidth: '85px' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>
                 AI Confidence
               </span>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#38bdf8', lineHeight: 1.2 }}>
+              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--blue-accent)', lineHeight: 1.2 }}>
                 {confidence}%
               </div>
               <span style={{ fontSize: '0.68rem', color: 'var(--text-dim)' }}>
@@ -220,10 +220,10 @@ export default function DiagnosticLabTab({
             </div>
 
             <div style={{ textAlign: 'center', minWidth: '85px', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1.25rem' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Health Score
               </span>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: Number(healthIndex) > 70 ? '#34d399' : Number(healthIndex) > 40 ? '#fbbf24' : '#f87171', lineHeight: 1.2 }}>
+              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: Number(healthIndex) > 70 ? 'var(--emerald-success)' : Number(healthIndex) > 40 ? 'var(--amber-warning)' : 'var(--rose-danger)', lineHeight: 1.2 }}>
                 {healthIndex}/100
               </div>
               <span style={{ fontSize: '0.68rem', color: 'var(--text-dim)' }}>
@@ -232,10 +232,10 @@ export default function DiagnosticLabTab({
             </div>
 
             <div style={{ textAlign: 'center', minWidth: '95px', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '1.25rem' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Severity
               </span>
-              <div style={{ fontSize: '1rem', fontWeight: 700, color: '#fbbf24', marginTop: '0.35rem' }}>
+              <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--amber-warning)', marginTop: '0.35rem' }}>
                 {severity.severity_level || severity.status || 'Normal'}
               </div>
               <span style={{ fontSize: '0.68rem', color: 'var(--text-dim)' }}>
@@ -273,9 +273,9 @@ export default function DiagnosticLabTab({
               label: 'Healthy Motor',
               type: 'HEALTHY',
               typeLabel: 'Nominal Baseline',
-              color: '#10b981',
-              bgActive: 'rgba(16, 185, 129, 0.12)',
-              borderActive: 'rgba(16, 185, 129, 0.4)',
+              color: '#16A879',
+              bgActive: '#E6F8F2',
+              borderActive: '#A3E9D2',
               icon: '🟢',
             },
             {
@@ -283,9 +283,9 @@ export default function DiagnosticLabTab({
               label: 'Broken Rotor Bar',
               type: 'DEFECT',
               typeLabel: 'Rotor Cage Defect',
-              color: '#f43f5e',
-              bgActive: 'rgba(244, 63, 94, 0.12)',
-              borderActive: 'rgba(244, 63, 94, 0.4)',
+              color: '#DC4C64',
+              bgActive: '#FDF1F3',
+              borderActive: '#F9BAC5',
               icon: '🔴',
             },
             {
@@ -293,9 +293,9 @@ export default function DiagnosticLabTab({
               label: 'Bearing Raceway Wear',
               type: 'DEFECT',
               typeLabel: 'Mechanical Bearing Defect',
-              color: '#f59e0b',
-              bgActive: 'rgba(245, 158, 11, 0.12)',
-              borderActive: 'rgba(245, 158, 11, 0.4)',
+              color: '#E9A23B',
+              bgActive: '#FEF7EC',
+              borderActive: '#FCD8A2',
               icon: '🟠',
             },
             {
@@ -303,9 +303,9 @@ export default function DiagnosticLabTab({
               label: 'Shaft Misalignment',
               type: 'DEFECT',
               typeLabel: 'Coupling / Offset Defect',
-              color: '#a855f7',
-              bgActive: 'rgba(168, 85, 247, 0.12)',
-              borderActive: 'rgba(168, 85, 247, 0.4)',
+              color: '#7E22CE',
+              bgActive: '#F5EEFD',
+              borderActive: '#D8B4FE',
               icon: '🟣',
             },
           ]
@@ -320,7 +320,6 @@ export default function DiagnosticLabTab({
               const pct = Math.min(100, Math.max(0, parseFloat(calVal) || 0));
               return { ...item, isTop, calVal, rawVal, pct };
             })
-            // Sort in order of performance/confidence: highest comes first, next highest after
             .sort((a, b) => b.pct - a.pct)
             .map((item, rankIndex) => {
               const isTop = item.isTop;
@@ -329,14 +328,14 @@ export default function DiagnosticLabTab({
                 <div
                   key={item.key}
                   style={{
-                    background: isTop ? item.bgActive : 'rgba(15, 23, 42, 0.5)',
+                    background: isTop ? item.bgActive : 'var(--bg-surface)',
                     border: `1px solid ${isTop ? item.borderActive : 'var(--border-subtle)'}`,
                     borderRadius: '8px',
                     padding: '1rem',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    boxShadow: isTop ? `0 4px 15px -3px ${item.borderActive}` : 'none',
+                    boxShadow: isTop ? `0 4px 15px -3px rgba(7, 59, 120, 0.1)` : 'none',
                     transition: 'all 0.2s ease',
                     position: 'relative',
                   }}
@@ -347,7 +346,7 @@ export default function DiagnosticLabTab({
                         style={{
                           fontSize: '0.68rem',
                           fontWeight: 700,
-                          color: item.type === 'HEALTHY' ? '#34d399' : '#fca5a5',
+                          color: item.type === 'HEALTHY' ? 'var(--emerald-success)' : 'var(--rose-danger)',
                           textTransform: 'uppercase',
                           letterSpacing: '0.04em',
                           display: 'flex',
@@ -355,11 +354,11 @@ export default function DiagnosticLabTab({
                           gap: '0.35rem',
                         }}
                       >
-                        <span style={{ opacity: 0.7 }}>#{rankIndex + 1}</span>
+                        <span style={{ opacity: 0.8 }}>#{rankIndex + 1}</span>
                         {item.type === 'HEALTHY' ? '🟢 ' : '⚠️ '}{item.typeLabel}
                       </span>
                       {isTop ? (
-                        <span className="badge" style={{ background: item.color, color: '#0f172a', fontWeight: 800, fontSize: '0.65rem' }}>
+                        <span className="badge" style={{ background: item.color, color: '#fff', fontWeight: 800, fontSize: '0.65rem' }}>
                           ★ DETECTED
                         </span>
                       ) : (
@@ -369,7 +368,7 @@ export default function DiagnosticLabTab({
                       )}
                     </div>
 
-                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: isTop ? '#fff' : 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--navy-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <span>{item.icon}</span>
                       <span>{item.label}</span>
                     </div>
@@ -380,20 +379,20 @@ export default function DiagnosticLabTab({
                       <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
                         Confidence
                       </span>
-                      <span className="mono" style={{ fontSize: '1rem', fontWeight: 700, color: isTop ? item.color : 'var(--text-muted)' }}>
+                      <span className="mono" style={{ fontSize: '1rem', fontWeight: 800, color: isTop ? item.color : 'var(--text-muted)' }}>
                         {item.calVal}%
                       </span>
                     </div>
 
                     {/* Progress Bar */}
-                    <div style={{ width: '100%', height: '6px', background: '#1e293b', borderRadius: '3px', overflow: 'hidden' }}>
+                    <div style={{ width: '100%', height: '6px', background: '#E2E8F0', borderRadius: '3px', overflow: 'hidden' }}>
                       <div
                         style={{
                           width: `${item.pct}%`,
                           height: '100%',
                           background: isTop
-                            ? `linear-gradient(90deg, ${item.color}, #38bdf8)`
-                            : '#475569',
+                            ? `linear-gradient(90deg, ${item.color}, var(--blue-accent))`
+                            : '#94A3B8',
                           borderRadius: '3px',
                           transition: 'width 0.4s ease',
                         }}
@@ -497,31 +496,31 @@ export default function DiagnosticLabTab({
         className="card"
         style={{
           marginBottom: '1.5rem',
-          border: '1px solid rgba(168, 85, 247, 0.4)',
-          background: 'linear-gradient(135deg, rgba(30, 27, 75, 0.6), rgba(15, 23, 42, 0.9))',
-          boxShadow: '0 10px 25px -5px rgba(168, 85, 247, 0.1)',
+          border: '1px solid #C7D2FE',
+          background: 'linear-gradient(135deg, #EEF2FF 0%, #FFFFFF 100%)',
+          boxShadow: '0 8px 24px -4px rgba(79, 70, 229, 0.08)',
         }}
       >
-        <div className="card-header" style={{ borderBottom: '1px solid rgba(168, 85, 247, 0.2)', paddingBottom: '0.85rem' }}>
+        <div className="card-header" style={{ borderBottom: '1px solid #E0E7FF', paddingBottom: '0.85rem' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
               <span style={{ fontSize: '1.25rem' }}>🤖</span>
-              <h3 className="card-title" style={{ color: '#c084fc', fontSize: '1.15rem' }}>
+              <h3 className="card-title" style={{ color: '#4338CA', fontSize: '1.15rem' }}>
                 Hugging Face AI Technician Guide — How to Fix Issues
               </h3>
               <span
                 className="badge"
                 style={{
-                  background: 'rgba(168, 85, 247, 0.2)',
-                  color: '#e9d5ff',
-                  border: '1px solid rgba(168, 85, 247, 0.3)',
+                  background: '#E0E7FF',
+                  color: '#3730A3',
+                  border: '1px solid #C7D2FE',
                   fontSize: '0.72rem',
                 }}
               >
                 {mentorData?.provider === 'HUGGING_FACE_AI' ? `HF: ${mentorData.model}` : 'Physics Fallback Engine'}
               </span>
             </div>
-            <p className="card-desc" style={{ color: '#cbd5e1' }}>
+            <p className="card-desc" style={{ color: 'var(--text-muted)' }}>
               Plain-English guidance on what issue was found and simple, step-by-step instructions on what to do next to inspect and fix it.
             </p>
           </div>
@@ -554,51 +553,51 @@ export default function DiagnosticLabTab({
         {mentorLoading ? (
           <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
             <div className="spinner" style={{ width: '28px', height: '28px', margin: '0 auto 0.75rem' }} />
-            <div style={{ color: '#c084fc', fontWeight: 600 }}>Analyzing diagnostic results with Hugging Face AI guide...</div>
+            <div style={{ color: '#4338CA', fontWeight: 700 }}>Analyzing diagnostic results with Hugging Face AI guide...</div>
             <div style={{ color: 'var(--text-muted)', fontSize: '0.8rem', marginTop: '0.25rem' }}>
               Generating simple, step-by-step repair and inspection instructions
             </div>
           </div>
         ) : mentorError ? (
-          <div style={{ padding: '1rem', color: '#fca5a5', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '6px' }}>
+          <div style={{ padding: '1rem', color: '#BE123C', background: 'var(--rose-bg)', borderRadius: '6px', border: '1px solid var(--rose-border)' }}>
             ⚠️ {mentorError}
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', paddingTop: '0.5rem' }}>
             {/* 1. What the issue is (Simple explanation) */}
-            <div style={{ background: 'rgba(0, 0, 0, 0.35)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <div style={{ background: '#FFFFFF', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                 <span style={{ fontSize: '1rem' }}>💡</span>
-                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--navy-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                   What is the Issue? (Simple Summary)
                 </span>
               </div>
-              <p style={{ fontSize: '0.9rem', color: '#e2e8f0', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.5, margin: 0 }}>
                 {recs.engineering_justification || recs.suspected_condition || faultMeta.desc}
               </p>
             </div>
 
             {/* 2. What the graphs show */}
             {recs.what_graphs_show && (
-              <div style={{ background: 'rgba(0, 0, 0, 0.35)', padding: '1rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+              <div style={{ background: '#FFFFFF', padding: '1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
                   <span style={{ fontSize: '1rem' }}>📊</span>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#a78bfa', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4338CA', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     What the Graphs Show
                   </span>
                 </div>
-                <p style={{ fontSize: '0.875rem', color: '#e2e8f0', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-main)', lineHeight: 1.5, margin: 0 }}>
                   {recs.what_graphs_show}
                 </p>
               </div>
             )}
 
             {/* 3. Simple Step-by-Step Fix / Repair Guide: What next to do to fix issues */}
-            <div style={{ background: 'rgba(0, 0, 0, 0.35)', padding: '1.2rem', borderRadius: '8px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <div style={{ background: '#FFFFFF', padding: '1.2rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', boxShadow: 'var(--shadow-sm)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <span style={{ fontSize: '1.1rem' }}>🛠️</span>
-                  <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#34d399', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--navy-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     What Next to Do to Fix & Inspect this Motor
                   </span>
                 </div>
@@ -619,16 +618,16 @@ export default function DiagnosticLabTab({
                         display: 'flex',
                         alignItems: 'flex-start',
                         gap: '0.75rem',
-                        background: 'rgba(255, 255, 255, 0.03)',
+                        background: 'var(--bg-surface-elevated)',
                         padding: '0.65rem 0.85rem',
                         borderRadius: '6px',
-                        borderLeft: '3px solid #34d399',
+                        borderLeft: '3px solid var(--emerald-success)',
                       }}
                     >
                       <span
                         style={{
-                          background: '#10b981',
-                          color: '#0f172a',
+                          background: 'var(--emerald-success)',
+                          color: '#fff',
                           fontWeight: 800,
                           fontSize: '0.75rem',
                           borderRadius: '50%',
@@ -642,27 +641,27 @@ export default function DiagnosticLabTab({
                       >
                         {idx + 1}
                       </span>
-                      <span style={{ fontSize: '0.85rem', color: '#f1f5f9', lineHeight: 1.45 }}>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: 1.45 }}>
                         {task}
                       </span>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p style={{ fontSize: '0.85rem', color: '#cbd5e1' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
                   Routine monitoring: Inspect general operating noise, ventilation cleanliness, and standard lubrication schedule.
                 </p>
               )}
 
               {/* Follow-up re-check interval */}
               {recs.follow_up_checks && (
-                <div style={{ marginTop: '0.85rem', padding: '0.6rem 0.85rem', background: 'rgba(56, 189, 248, 0.08)', borderRadius: '6px', border: '1px solid rgba(56, 189, 248, 0.2)', fontSize: '0.825rem', color: '#bae6fd' }}>
+                <div style={{ marginTop: '0.85rem', padding: '0.6rem 0.85rem', background: '#EFF6FF', borderRadius: '6px', border: '1px solid #BFDBFE', fontSize: '0.825rem', color: '#1E40AF' }}>
                   ⏱️ <strong>Follow-Up Re-Check:</strong> {recs.follow_up_checks}
                 </div>
               )}
 
               {/* Verification & Human Sign-off Notice */}
-              <div style={{ marginTop: '1rem', paddingTop: '0.85rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div style={{ marginTop: '1rem', paddingTop: '0.85rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                 <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   🔒 <strong>Technician Safety Rule:</strong> Always conduct physical verification before replacing expensive motor components.
                 </div>
