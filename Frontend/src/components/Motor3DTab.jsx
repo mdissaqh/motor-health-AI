@@ -447,14 +447,27 @@ export default function Motor3DTab({
     return FLEET_MOTORS.find((m) => m.tag === selectedTag) || FLEET_MOTORS[0];
   }, [selectedTag]);
 
+  // Single source of truth for the defect mode across the active dataset and fleet motor
+  const effectiveDefectMode = useMemo(() => {
+    if (customDefectMetrics && customDefectMetrics.predictedClass) {
+      return customDefectMetrics.predictedClass;
+    }
+    if (selectedSourceFile) {
+      const match = BENCHMARK_DATA_FILES.find((f) => f.id === selectedSourceFile);
+      if (match && match.defectMode && match.defectMode !== 'DYNAMIC_EXCEL') {
+        return match.defectMode;
+      }
+    }
+    return defectMode;
+  }, [customDefectMetrics, selectedSourceFile, defectMode]);
+
   const activeDefect = useMemo(() => {
-    return DEFECT_MODES.find((d) => d.id === defectMode) || DEFECT_MODES[0];
-  }, [defectMode]);
+    return DEFECT_MODES.find((d) => d.id === effectiveDefectMode) || DEFECT_MODES[0];
+  }, [effectiveDefectMode]);
 
   // Derive Exact Defect Percentage from Active CSV / Excel Data
-  // Derive Exact Defect Percentage from Active CSV / Excel Data
   const activeDefectMetrics = useMemo(() => {
-    const isHealthy = defectMode === 'HEALTHY';
+    const isHealthy = effectiveDefectMode === 'HEALTHY';
 
     // 1. Direct user file upload in 3D tab
     if (customDefectMetrics) {
@@ -478,7 +491,7 @@ export default function Motor3DTab({
     }
 
     // 2. Matching diagnostic run from CSV analysis in Diagnose / Lab tab
-    if (selectedRun && selectedRun.predicted_class === defectMode) {
+    if (selectedRun && selectedRun.predicted_class === effectiveDefectMode) {
       const isRunHealthy = selectedRun.predicted_class === 'HEALTHY' || isHealthy;
       const confPct = selectedRun.model_confidence ? (selectedRun.model_confidence * 100).toFixed(1) : (isRunHealthy ? '98.5' : (activeDefect.defectPercentage || 88.0));
       return {
@@ -506,7 +519,7 @@ export default function Motor3DTab({
         sourceName: 'motor_operating_conditions.xlsx',
         sourceType: 'Excel Workbook (.xlsx)',
         defectPercentage: pct,
-        predictedClass: defectMode,
+        predictedClass: effectiveDefectMode,
         component: isHealthy ? 'All Components Balanced' : activeDefect.componentName,
         confidence: activeMotor.confidence || 90.0,
         healthScore: isHealthy ? 99 : Math.max(20, Math.round(100 - pct * 0.72)),
@@ -520,9 +533,9 @@ export default function Motor3DTab({
       };
     }
 
-    // 4. Benchmark sample CSV files mapped directly to active defectMode
-    const benchmarkForMode = BENCHMARK_DATA_FILES.find((f) => f.defectMode === defectMode) || BENCHMARK_DATA_FILES[0];
-    const benchmark = (selectedSourceFile && BENCHMARK_DATA_FILES.find((f) => f.id === selectedSourceFile)?.defectMode === defectMode)
+    // 4. Benchmark sample CSV files mapped directly to active effectiveDefectMode
+    const benchmarkForMode = BENCHMARK_DATA_FILES.find((f) => f.defectMode === effectiveDefectMode) || BENCHMARK_DATA_FILES[0];
+    const benchmark = (selectedSourceFile && BENCHMARK_DATA_FILES.find((f) => f.id === selectedSourceFile)?.defectMode === effectiveDefectMode)
       ? BENCHMARK_DATA_FILES.find((f) => f.id === selectedSourceFile)
       : benchmarkForMode;
 
@@ -532,10 +545,10 @@ export default function Motor3DTab({
       sourceName: benchmark.name,
       sourceType: benchmark.format,
       defectPercentage: defectPct,
-      predictedClass: defectMode,
+      predictedClass: effectiveDefectMode,
       component: isHealthy ? 'All Components Balanced' : activeDefect.componentName,
       confidence: activeMotor.confidence || (isHealthy ? 90.0 : defectPct),
-      healthScore: isHealthy ? 99 : (defectMode === 'BEARING_FAULT' ? 58 : defectMode === 'BROKEN_ROTOR_BAR' ? 42 : 64),
+      healthScore: isHealthy ? 99 : (effectiveDefectMode === 'BEARING_FAULT' ? 58 : effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? 42 : 64),
       severity: isHealthy ? 'Nominal Baseline (0.0% Defect)' : benchmark.severity,
       subsystemBreakdown: isHealthy ? {
         ROTOR_BARS: 0.0,
@@ -543,13 +556,13 @@ export default function Motor3DTab({
         SHAFT_COUPLING: 0.0,
         STATOR_WINDINGS: 0.0,
       } : {
-        ROTOR_BARS: defectMode === 'BROKEN_ROTOR_BAR' ? defectPct : 0.0,
-        BEARING_DE: defectMode === 'BEARING_FAULT' ? defectPct : 0.0,
-        SHAFT_COUPLING: defectMode === 'MISALIGNMENT' ? defectPct : 0.0,
+        ROTOR_BARS: effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? defectPct : 0.0,
+        BEARING_DE: effectiveDefectMode === 'BEARING_FAULT' ? defectPct : 0.0,
+        SHAFT_COUPLING: effectiveDefectMode === 'MISALIGNMENT' ? defectPct : 0.0,
         STATOR_WINDINGS: 0.0,
       },
     };
-  }, [customDefectMetrics, selectedRun, selectedSourceFile, defectMode, activeDefect, activeMotor]);
+  }, [customDefectMetrics, selectedRun, selectedSourceFile, effectiveDefectMode, activeDefect, activeMotor]);
 
   // Handle source file switcher
   const handleSelectSourceFile = (filename) => {
@@ -564,6 +577,8 @@ export default function Motor3DTab({
       if (matchingMotor) {
         setSelectedTag(matchingMotor.tag);
       }
+      const cameraPreset = matched.defectMode === 'BEARING_FAULT' ? 'bearing' : matched.defectMode === 'BROKEN_ROTOR_BAR' ? 'rotor' : matched.defectMode === 'MISALIGNMENT' ? 'drive' : 'iso';
+      handleCameraPreset(cameraPreset);
     }
   };
 
@@ -853,11 +868,11 @@ export default function Motor3DTab({
     const m = FLEET_MOTORS.find((mot) => mot.tag === tag);
     if (m && m.defaultCondition) {
       setDefectMode(m.defaultCondition);
-      if (!customUploadedFile) {
-        const fileMatch = BENCHMARK_DATA_FILES.find((f) => f.defectMode === m.defaultCondition);
-        if (fileMatch) {
-          setSelectedSourceFile(fileMatch.id);
-        }
+      setCustomUploadedFile(null);
+      setCustomDefectMetrics(null);
+      const fileMatch = BENCHMARK_DATA_FILES.find((f) => f.defectMode === m.defaultCondition);
+      if (fileMatch) {
+        setSelectedSourceFile(fileMatch.id);
       }
     }
   };
@@ -865,15 +880,15 @@ export default function Motor3DTab({
   // When defect mode is changed via pills or cards, sync active source file and matching motor
   const handleSelectDefectMode = (mode) => {
     setDefectMode(mode);
-    if (!customUploadedFile) {
-      const fileMatch = BENCHMARK_DATA_FILES.find((f) => f.defectMode === mode);
-      if (fileMatch) {
-        setSelectedSourceFile(fileMatch.id);
-      }
-      const matchingMotor = FLEET_MOTORS.find((m) => m.defaultCondition === mode);
-      if (matchingMotor && matchingMotor.tag !== selectedTag) {
-        setSelectedTag(matchingMotor.tag);
-      }
+    setCustomUploadedFile(null);
+    setCustomDefectMetrics(null);
+    const fileMatch = BENCHMARK_DATA_FILES.find((f) => f.defectMode === mode);
+    if (fileMatch) {
+      setSelectedSourceFile(fileMatch.id);
+    }
+    const matchingMotor = FLEET_MOTORS.find((m) => m.defaultCondition === mode);
+    if (matchingMotor && matchingMotor.tag !== selectedTag) {
+      setSelectedTag(matchingMotor.tag);
     }
   };
 
@@ -1378,13 +1393,13 @@ export default function Motor3DTab({
 
     // Set spatial coordinates corresponding to each defect
     const beaconBaseY = 1.85;
-    if (defectMode === 'BEARING_FAULT') {
+    if (effectiveDefectMode === 'BEARING_FAULT') {
       defectBeaconGroup.position.set(1.8, beaconBaseY, 0);
       defectBeaconGroup.visible = true;
-    } else if (defectMode === 'BROKEN_ROTOR_BAR') {
+    } else if (effectiveDefectMode === 'BROKEN_ROTOR_BAR') {
       defectBeaconGroup.position.set(0, beaconBaseY, 0.84);
       defectBeaconGroup.visible = true;
-    } else if (defectMode === 'MISALIGNMENT') {
+    } else if (effectiveDefectMode === 'MISALIGNMENT') {
       defectBeaconGroup.position.set(3.32, beaconBaseY, 0);
       defectBeaconGroup.visible = true;
     } else {
@@ -1410,13 +1425,13 @@ export default function Motor3DTab({
       phi: Math.PI / 3,
     };
 
-    if (activeCameraAngle === 'bearing' || (defectMode === 'BEARING_FAULT' && activeCameraAngle !== 'iso' && activeCameraAngle !== 'drive')) {
+    if (activeCameraAngle === 'bearing' || (effectiveDefectMode === 'BEARING_FAULT' && activeCameraAngle !== 'iso' && activeCameraAngle !== 'drive')) {
       cameraTarget.set(1.8, 0, 0);
       spherical = { radius: 4.8, theta: 0.60, phi: 1.13 };
-    } else if (activeCameraAngle === 'rotor' || (defectMode === 'BROKEN_ROTOR_BAR' && activeCameraAngle !== 'iso' && activeCameraAngle !== 'drive')) {
+    } else if (activeCameraAngle === 'rotor' || (effectiveDefectMode === 'BROKEN_ROTOR_BAR' && activeCameraAngle !== 'iso' && activeCameraAngle !== 'drive')) {
       cameraTarget.set(0, 0, 0);
       spherical = { radius: 5.6, theta: 0.04, phi: 1.11 };
-    } else if (activeCameraAngle === 'drive' || (defectMode === 'MISALIGNMENT' && activeCameraAngle !== 'iso')) {
+    } else if (activeCameraAngle === 'drive' || (effectiveDefectMode === 'MISALIGNMENT' && activeCameraAngle !== 'iso')) {
       cameraTarget.set(2.5, 0, 0);
       spherical = { radius: 5.2, theta: 1.10, phi: 1.33 };
     } else if (activeCameraAngle === 'rear') {
@@ -1478,15 +1493,24 @@ export default function Motor3DTab({
         return;
       }
 
-      // Smart Penetration: When xrayOpacity < 0.88, prioritize internal components
-      // so user hovering over rotor bars, bearings, or shaft doesn't get blocked by the outer housing
+      // Priority selection:
+      // 1. If motor has an active defect, and ray intersects the defect component or its locator beacon, prioritize it immediately!
+      // 2. Otherwise, if xrayOpacity < 0.92 or internal non-housing intersects exist, prioritize non-housing components over the outer stator shell.
+      // 3. Otherwise pick the closest valid intersect.
       let hitPartKey = null;
+
+      const defectTargetPart = activeDefect.highlightPart;
+      const defectIntersect = intersects.find(
+        (it) => it.object.userData?.partKey && it.object.userData.partKey === defectTargetPart
+      );
 
       const nonHousingIntersects = intersects.filter(
         (it) => it.object.userData?.partKey && it.object.userData.partKey !== 'STATOR_HOUSING'
       );
 
-      if (nonHousingIntersects.length > 0 && xrayOpacity < 0.88) {
+      if (defectIntersect && effectiveDefectMode !== 'HEALTHY') {
+        hitPartKey = defectIntersect.object.userData.partKey;
+      } else if (nonHousingIntersects.length > 0 && (xrayOpacity < 0.92 || nonHousingIntersects[0].distance < 12)) {
         hitPartKey = nonHousingIntersects[0].object.userData.partKey;
       } else {
         const validIntersects = intersects.filter((it) => it.object.userData?.partKey);
@@ -1520,7 +1544,7 @@ export default function Motor3DTab({
         // Apply new highlight
         currentHoveredPartKey = hitPartKey;
         const meta = MOTOR_PARTS_METADATA[hitPartKey];
-        const isDefectivePart = meta.defectId === defectMode;
+        const isDefectivePart = meta.defectId === effectiveDefectMode;
 
         const targetMeshes = interactiveObjects.filter((m) => m.userData.partKey === hitPartKey);
         targetMeshes.forEach((mesh) => {
@@ -1549,7 +1573,7 @@ export default function Motor3DTab({
 
       // Always update screen coordinates for fluid tooltip following
       const meta = MOTOR_PARTS_METADATA[hitPartKey];
-      const isDefectivePart = meta.defectId === defectMode;
+      const isDefectivePart = meta.defectId === effectiveDefectMode;
       setHoveredPartInfo({
         partKey: hitPartKey,
         name: meta.name,
@@ -1560,8 +1584,9 @@ export default function Motor3DTab({
         nominalCondition: meta.nominalCondition,
         activeDefectPartName: activeDefect.componentName,
         activeDefectLabel: activeDefect.label,
-        activeDefectId: defectMode,
+        activeDefectId: effectiveDefectMode,
         activeDefectColor: activeDefect.color,
+        activeDefectPercentage: activeDefectMetrics.defectPercentage,
         screenX: clientX - rect.left,
         screenY: clientY - rect.top,
       });
@@ -1682,7 +1707,7 @@ export default function Motor3DTab({
         rotorGroupRef.current.rotation.x += rotSpeed * delta * 2 * Math.PI;
 
         // In Shaft Misalignment mode, simulate minute angular wobble at the coupling hub
-        if (defectMode === 'MISALIGNMENT' && couplingMeshRef.current) {
+        if (effectiveDefectMode === 'MISALIGNMENT' && couplingMeshRef.current) {
           couplingMeshRef.current.rotation.y = Math.sin(elapsedTime * 12) * 0.08;
           couplingMeshRef.current.position.y = Math.cos(elapsedTime * 12) * 0.04;
         } else if (couplingMeshRef.current) {
@@ -1717,7 +1742,7 @@ export default function Motor3DTab({
         }
 
         // Project 3D defect beacon position to 2D screen coordinates for floating holographic defect percentage tag
-        if (defectTagElemRef.current && canvas && defectMode !== 'HEALTHY') {
+        if (defectTagElemRef.current && canvas && effectiveDefectMode !== 'HEALTHY') {
           const beaconWorldPos = new THREE.Vector3();
           defectBeaconRef.current.getWorldPosition(beaconWorldPos);
           beaconWorldPos.y += 0.58;
@@ -1741,7 +1766,7 @@ export default function Motor3DTab({
       if (highlightPulse) {
         const pulse = 0.5 + 0.5 * Math.sin(elapsedTime * 6);
 
-        if (defectMode === 'BEARING_FAULT' && deBearingGroupRef.current && currentHoveredPartKey !== 'BEARING_DE') {
+        if (effectiveDefectMode === 'BEARING_FAULT' && deBearingGroupRef.current && currentHoveredPartKey !== 'BEARING_DE') {
           deBearingGroupRef.current.material.emissive.setHex(0xE11D48); // Rose red
           deBearingGroupRef.current.material.emissiveIntensity = 0.4 + pulse * 1.2;
         } else if (deBearingGroupRef.current && currentHoveredPartKey !== 'BEARING_DE') {
@@ -1749,11 +1774,11 @@ export default function Motor3DTab({
           deBearingGroupRef.current.material.emissiveIntensity = 0;
         }
 
-        if (defectMode === 'BROKEN_ROTOR_BAR' && brokenBarMeshRef.current && currentHoveredPartKey !== 'ROTOR_BARS') {
+        if (effectiveDefectMode === 'BROKEN_ROTOR_BAR' && brokenBarMeshRef.current && currentHoveredPartKey !== 'ROTOR_BARS') {
           brokenBarMeshRef.current.material.emissiveIntensity = 0.5 + pulse * 1.5;
         }
 
-        if (defectMode === 'MISALIGNMENT' && couplingMeshRef.current && currentHoveredPartKey !== 'SHAFT_COUPLING') {
+        if (effectiveDefectMode === 'MISALIGNMENT' && couplingMeshRef.current && currentHoveredPartKey !== 'SHAFT_COUPLING') {
           flexInsertMat.emissive = new THREE.Color(0x7C3AED);
           flexInsertMat.emissiveIntensity = 0.4 + pulse * 1.0;
         } else if (currentHoveredPartKey !== 'SHAFT_COUPLING') {
@@ -1780,7 +1805,7 @@ export default function Motor3DTab({
       canvas.removeEventListener('touchend', onTouchEnd);
       renderer.dispose();
     };
-  }, [activeMotor, defectMode, isPlaying, speedMultiplier, explodedView, highlightPulse, activeCameraAngle]);
+  }, [activeMotor, defectMode, effectiveDefectMode, isPlaying, speedMultiplier, explodedView, highlightPulse, activeCameraAngle]);
 
   // Update Opacity when slider changes
   useEffect(() => {
@@ -1791,11 +1816,11 @@ export default function Motor3DTab({
 
   // Quick Action to Focus Camera Directly on Active Defect
   const handleFocusActiveDefect = () => {
-    if (defectMode === 'BEARING_FAULT') {
+    if (effectiveDefectMode === 'BEARING_FAULT') {
       handleCameraPreset('bearing');
-    } else if (defectMode === 'BROKEN_ROTOR_BAR') {
+    } else if (effectiveDefectMode === 'BROKEN_ROTOR_BAR') {
       handleCameraPreset('rotor');
-    } else if (defectMode === 'MISALIGNMENT') {
+    } else if (effectiveDefectMode === 'MISALIGNMENT') {
       handleCameraPreset('drive');
     } else {
       handleCameraPreset('iso');
@@ -1929,7 +1954,7 @@ export default function Motor3DTab({
 
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                 {DEFECT_MODES.map((dm) => {
-                  const isSelected = defectMode === dm.id;
+                  const isSelected = effectiveDefectMode === dm.id;
                   return (
                     <button
                       key={dm.id}
@@ -2309,7 +2334,7 @@ export default function Motor3DTab({
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', justifyContent: 'center' }}>
                     <span style={{ fontSize: '0.85rem' }}>⚠️</span>
-                    <span style={{ fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: activeDefect.color }}>
+                    <span style={{ fontSize: '0.74rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', color: activeDefect.color }}>
                       {activeDefect.label}
                     </span>
                   </div>
@@ -2319,7 +2344,23 @@ export default function Motor3DTab({
                     </span>
                     <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#E2E8F0' }}>DEFECT</span>
                   </div>
-                  <div style={{ fontSize: '0.67rem', color: '#CBD5E1', maxWidth: '190px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <div style={{
+                    background: 'rgba(255, 255, 255, 0.12)',
+                    padding: '0.22rem 0.5rem',
+                    borderRadius: '6px',
+                    margin: '0.25rem 0',
+                    fontSize: '0.7rem',
+                    color: '#F8FAFC',
+                    border: `1px solid ${activeDefect.color}60`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.25rem',
+                  }}>
+                    <span>📍 Defect Area:</span>
+                    <strong style={{ color: '#FDE047' }}>{activeDefect.componentName}</strong>
+                  </div>
+                  <div style={{ fontSize: '0.67rem', color: '#CBD5E1', maxWidth: '210px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     Source: <strong>{activeDefectMetrics.sourceName}</strong>
                   </div>
                   <div style={{
@@ -2364,7 +2405,9 @@ export default function Motor3DTab({
                   borderRadius: '12px',
                   boxShadow: hoveredPartInfo.isDefective
                     ? '0 12px 36px rgba(225, 29, 72, 0.35), 0 0 0 2px #E11D48'
-                    : '0 12px 32px rgba(8, 122, 203, 0.25), 0 0 0 2px #087ACB',
+                    : (hoveredPartInfo.activeDefectId !== 'HEALTHY'
+                      ? '0 12px 32px rgba(245, 158, 11, 0.25), 0 0 0 2px #F59E0B'
+                      : '0 12px 32px rgba(8, 122, 203, 0.25), 0 0 0 2px #087ACB'),
                   padding: '0.85rem 0.95rem',
                   transition: 'box-shadow 0.2s ease, transform 0.15s ease',
                   animation: 'fadeIn 0.15s ease',
@@ -2383,9 +2426,15 @@ export default function Motor3DTab({
                       fontWeight: 800,
                       textTransform: 'uppercase',
                       letterSpacing: '0.04em',
-                      background: hoveredPartInfo.isDefective ? '#FFE4E6' : '#DCFCE7',
-                      color: hoveredPartInfo.isDefective ? '#BE123C' : '#15803D',
-                      border: hoveredPartInfo.isDefective ? '1px solid #FDA4AF' : '1px solid #86EFAC',
+                      background: hoveredPartInfo.isDefective
+                        ? '#FFE4E6'
+                        : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? '#FEF3C7' : '#DCFCE7'),
+                      color: hoveredPartInfo.isDefective
+                        ? '#BE123C'
+                        : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? '#92400E' : '#15803D'),
+                      border: hoveredPartInfo.isDefective
+                        ? '1px solid #FDA4AF'
+                        : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? '1px solid #FCD34D' : '1px solid #86EFAC'),
                     }}
                   >
                     <span
@@ -2393,11 +2442,19 @@ export default function Motor3DTab({
                         width: '7px',
                         height: '7px',
                         borderRadius: '50%',
-                        background: hoveredPartInfo.isDefective ? '#E11D48' : '#22C55E',
-                        boxShadow: hoveredPartInfo.isDefective ? '0 0 8px #E11D48' : '0 0 6px #22C55E',
+                        background: hoveredPartInfo.isDefective
+                          ? '#E11D48'
+                          : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? '#F59E0B' : '#22C55E'),
+                        boxShadow: hoveredPartInfo.isDefective
+                          ? '0 0 8px #E11D48'
+                          : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? '0 0 6px #F59E0B' : '0 0 6px #22C55E'),
                       }}
                     />
-                    {hoveredPartInfo.isDefective ? '⚠️ DEFECT IDENTIFIED HERE' : '✅ NOMINAL (HEALTHY)'}
+                    {hoveredPartInfo.isDefective
+                      ? `🚨 CRITICAL DEFECT SITE: ${hoveredPartInfo.activeDefectLabel.toUpperCase()}`
+                      : (hoveredPartInfo.activeDefectId !== 'HEALTHY'
+                        ? 'ℹ️ SUB-ASSEMBLY OK — MOTOR HAS ACTIVE FAULT'
+                        : '✅ NOMINAL (HEALTHY MOTOR)')}
                   </span>
 
                   <span style={{ fontSize: '0.68rem', color: 'var(--text-dim)', fontWeight: 600 }}>
@@ -2406,8 +2463,13 @@ export default function Motor3DTab({
                 </div>
 
                 {/* Component Name */}
-                <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--navy-primary)', margin: '0 0 0.35rem 0' }}>
-                  {hoveredPartInfo.name}
+                <h4 style={{
+                  fontSize: '0.95rem',
+                  fontWeight: 800,
+                  color: hoveredPartInfo.isDefective ? '#BE123C' : 'var(--navy-primary)',
+                  margin: '0 0 0.35rem 0',
+                }}>
+                  {hoveredPartInfo.isDefective ? `🚨 ${hoveredPartInfo.name}` : hoveredPartInfo.name}
                 </h4>
 
                 {/* Defect Diagnostics vs Nominal Readout */}
@@ -2424,10 +2486,10 @@ export default function Motor3DTab({
                       justifyContent: 'space-between',
                     }}>
                       <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#BE123C' }}>
-                        Defect Severity (CSV / Excel):
+                        Fault Severity ({activeDefectMetrics.sourceName}):
                       </span>
                       <span className="mono" style={{ fontSize: '0.95rem', fontWeight: 900, color: '#E11D48' }}>
-                        {activeDefectMetrics.defectPercentage}%
+                        {activeDefectMetrics.defectPercentage}% DEFECT
                       </span>
                     </div>
 
@@ -2436,7 +2498,7 @@ export default function Motor3DTab({
                         {hoveredPartInfo.defectCondition?.defectTitle}
                       </div>
                       <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '0.15rem' }}>
-                        📍 <strong>Location:</strong> {hoveredPartInfo.defectCondition?.defectLocation}
+                        📍 <strong>Exact Defect Area:</strong> {hoveredPartInfo.defectCondition?.defectLocation}
                       </div>
                       <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '0.15rem' }}>
                         ⚙️ <strong>Mechanism:</strong> {hoveredPartInfo.defectCondition?.defectMechanism}
@@ -2458,40 +2520,111 @@ export default function Motor3DTab({
                   </div>
                 ) : (
                   <div style={{ fontSize: '0.76rem', color: 'var(--text-main)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                    {/* Nominal Component Subsystem Risk */}
-                    <div style={{
-                      padding: '0.35rem 0.55rem',
-                      background: '#F0FDF4',
-                      borderRadius: '6px',
-                      border: '1px solid #BBF7D0',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#15803D' }}>
-                        Component Subsystem Risk:
-                      </span>
-                      <span className="mono" style={{ fontSize: '0.85rem', fontWeight: 800, color: '#16A34A' }}>
-                        {activeDefectMetrics.subsystemBreakdown?.[hoveredPartInfo.partKey] ?? 0.2}% (Nominal)
-                      </span>
-                    </div>
+                    {hoveredPartInfo.activeDefectId !== 'HEALTHY' ? (
+                      <>
+                        {/* Clear active defect banner showing where the defect is located */}
+                        <div style={{
+                          background: '#FFFBEB',
+                          padding: '0.55rem 0.65rem',
+                          borderRadius: '8px',
+                          border: '1px solid #FCD34D',
+                          borderLeft: '4px solid #F59E0B',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.25rem',
+                        }}>
+                          <div style={{ fontSize: '0.74rem', fontWeight: 800, color: '#92400E', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                            <span>⚠️</span>
+                            <span>MOTOR HAS ACTIVE {hoveredPartInfo.activeDefectPercentage}% FAULT</span>
+                          </div>
+                          <div style={{ fontSize: '0.72rem', color: '#78350F', lineHeight: 1.35 }}>
+                            This part is nominal, but the active fault is localized at:
+                          </div>
+                          <div style={{
+                            background: '#FEF3C7',
+                            padding: '0.3rem 0.5rem',
+                            borderRadius: '6px',
+                            fontSize: '0.75rem',
+                            fontWeight: 800,
+                            color: '#B45309',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                          }}>
+                            <span>📍 {hoveredPartInfo.activeDefectPartName}</span>
+                            <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#DC2626' }}>
+                              {hoveredPartInfo.activeDefectPercentage}% DEFECT
+                            </span>
+                          </div>
+                        </div>
 
-                    <p style={{ margin: 0, color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                      {hoveredPartInfo.nominalCondition?.details || hoveredPartInfo.description}
-                    </p>
+                        <div style={{
+                          padding: '0.35rem 0.55rem',
+                          background: '#F8FAFC',
+                          borderRadius: '6px',
+                          border: '1px solid var(--border-subtle)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-dim)' }}>
+                            This Component Subsystem Status:
+                          </span>
+                          <span className="mono" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#16A34A' }}>
+                            {activeDefectMetrics.subsystemBreakdown?.[hoveredPartInfo.partKey] ?? 0.0}% (OK)
+                          </span>
+                        </div>
 
-                    {hoveredPartInfo.activeDefectId !== 'HEALTHY' && (
-                      <div style={{ background: '#EFF6FF', padding: '0.45rem', borderRadius: '6px', borderLeft: '3px solid #087ACB', marginTop: '0.2rem' }}>
-                        <div style={{ fontSize: '0.7rem', color: 'var(--text-dim)', fontWeight: 700, textTransform: 'uppercase' }}>
-                          Active Motor Defect Locator:
+                        <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '0.72rem', lineHeight: 1.4 }}>
+                          {hoveredPartInfo.nominalCondition?.details || hoveredPartInfo.description}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={handleFocusActiveDefect}
+                          style={{
+                            background: 'var(--navy-primary)',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '0.42rem 0.65rem',
+                            fontSize: '0.72rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.35rem',
+                            marginTop: '0.2rem',
+                            pointerEvents: 'auto',
+                          }}
+                        >
+                          🎯 Focus Camera on Defected Area →
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div style={{
+                          padding: '0.35rem 0.55rem',
+                          background: '#F0FDF4',
+                          borderRadius: '6px',
+                          border: '1px solid #BBF7D0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                        }}>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#15803D' }}>
+                            System Baseline Health:
+                          </span>
+                          <span className="mono" style={{ fontSize: '0.85rem', fontWeight: 800, color: '#16A34A' }}>
+                            0.0% Defect (Nominal Baseline)
+                          </span>
                         </div>
-                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369A1', marginTop: '0.1rem' }}>
-                          👉 Active Defect: <u>{hoveredPartInfo.activeDefectPartName}</u>
-                        </div>
-                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
-                          Condition: {hoveredPartInfo.activeDefectLabel}
-                        </div>
-                      </div>
+
+                        <p style={{ margin: 0, color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                          {hoveredPartInfo.nominalCondition?.details || hoveredPartInfo.description}
+                        </p>
+                      </>
                     )}
                   </div>
                 )}
@@ -2527,7 +2660,7 @@ export default function Motor3DTab({
                     Active Defect Location:
                   </span>
                 </div>
-                {defectMode !== 'HEALTHY' && (
+                {effectiveDefectMode !== 'HEALTHY' && (
                   <button
                     type="button"
                     onClick={handleFocusActiveDefect}
@@ -2550,7 +2683,7 @@ export default function Motor3DTab({
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '0.2rem 0 0', lineHeight: 1.4 }}>
                 {hoveredPartInfo
-                  ? `👉 Inspecting: ${hoveredPartInfo.name} (${hoveredPartInfo.isDefective ? '⚠️ DEFECT IDENTIFIED' : '✅ Nominal'})`
+                  ? `👉 Inspecting: ${hoveredPartInfo.name} (${hoveredPartInfo.isDefective ? '⚠️ DEFECT IDENTIFIED' : (hoveredPartInfo.activeDefectId !== 'HEALTHY' ? `ℹ️ Sub-assembly OK — Active fault at ${activeDefect.componentName}` : '✅ Nominal')})`
                   : activeDefect.description}
               </p>
             </div>
@@ -2832,8 +2965,8 @@ export default function Motor3DTab({
                 handleCameraPreset('rotor');
               }}
               style={{
-                background: defectMode === 'BROKEN_ROTOR_BAR' ? '#FFFBEB' : 'var(--bg-surface-elevated)',
-                border: defectMode === 'BROKEN_ROTOR_BAR' ? '2px solid #F59E0B' : '1px solid var(--border-subtle)',
+                background: effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? '#FFFBEB' : 'var(--bg-surface-elevated)',
+                border: effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? '2px solid #F59E0B' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '1rem',
                 cursor: 'pointer',
@@ -2842,8 +2975,8 @@ export default function Motor3DTab({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                 <span style={{ fontWeight: 700, color: 'var(--navy-primary)', fontSize: '0.85rem' }}>1. Rotor Cage & Bars</span>
-                <span className={`badge badge-${defectMode === 'BROKEN_ROTOR_BAR' ? 'amber' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
-                  {defectMode === 'BROKEN_ROTOR_BAR' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
+                <span className={`badge badge-${effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? 'amber' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
+                  {effectiveDefectMode === 'BROKEN_ROTOR_BAR' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
                 </span>
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.45, marginBottom: '0.6rem' }}>
@@ -2861,8 +2994,8 @@ export default function Motor3DTab({
                 handleCameraPreset('bearing');
               }}
               style={{
-                background: defectMode === 'BEARING_FAULT' ? '#FDF1F3' : 'var(--bg-surface-elevated)',
-                border: defectMode === 'BEARING_FAULT' ? '2px solid #F43F5E' : '1px solid var(--border-subtle)',
+                background: effectiveDefectMode === 'BEARING_FAULT' ? '#FDF1F3' : 'var(--bg-surface-elevated)',
+                border: effectiveDefectMode === 'BEARING_FAULT' ? '2px solid #F43F5E' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '1rem',
                 cursor: 'pointer',
@@ -2871,8 +3004,8 @@ export default function Motor3DTab({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                 <span style={{ fontWeight: 700, color: 'var(--navy-primary)', fontSize: '0.85rem' }}>2. Drive-End Bearing</span>
-                <span className={`badge badge-${defectMode === 'BEARING_FAULT' ? 'rose' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
-                  {defectMode === 'BEARING_FAULT' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
+                <span className={`badge badge-${effectiveDefectMode === 'BEARING_FAULT' ? 'rose' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
+                  {effectiveDefectMode === 'BEARING_FAULT' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
                 </span>
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.45, marginBottom: '0.6rem' }}>
@@ -2890,8 +3023,8 @@ export default function Motor3DTab({
                 handleCameraPreset('drive');
               }}
               style={{
-                background: defectMode === 'MISALIGNMENT' ? '#F5EEFD' : 'var(--bg-surface-elevated)',
-                border: defectMode === 'MISALIGNMENT' ? '2px solid #8B5CF6' : '1px solid var(--border-subtle)',
+                background: effectiveDefectMode === 'MISALIGNMENT' ? '#F5EEFD' : 'var(--bg-surface-elevated)',
+                border: effectiveDefectMode === 'MISALIGNMENT' ? '2px solid #8B5CF6' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '1rem',
                 cursor: 'pointer',
@@ -2900,8 +3033,8 @@ export default function Motor3DTab({
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
                 <span style={{ fontWeight: 700, color: 'var(--navy-primary)', fontSize: '0.85rem' }}>3. Shaft & Coupling</span>
-                <span className={`badge badge-${defectMode === 'MISALIGNMENT' ? 'purple' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
-                  {defectMode === 'MISALIGNMENT' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
+                <span className={`badge badge-${effectiveDefectMode === 'MISALIGNMENT' ? 'purple' : 'emerald'}`} style={{ fontSize: '0.68rem', fontWeight: 700 }}>
+                  {effectiveDefectMode === 'MISALIGNMENT' ? `${activeDefectMetrics.defectPercentage}% DEFECT` : '0.0% OK'}
                 </span>
               </div>
               <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.45, marginBottom: '0.6rem' }}>
@@ -2919,8 +3052,8 @@ export default function Motor3DTab({
                 handleCameraPreset('iso');
               }}
               style={{
-                background: defectMode === 'HEALTHY' ? '#E6F8F2' : 'var(--bg-surface-elevated)',
-                border: defectMode === 'HEALTHY' ? '2px solid #10B981' : '1px solid var(--border-subtle)',
+                background: effectiveDefectMode === 'HEALTHY' ? '#E6F8F2' : 'var(--bg-surface-elevated)',
+                border: effectiveDefectMode === 'HEALTHY' ? '2px solid #10B981' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '1rem',
                 cursor: 'pointer',

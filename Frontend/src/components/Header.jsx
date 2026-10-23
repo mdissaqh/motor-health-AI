@@ -22,8 +22,7 @@ export default function Header({
         return { title: 'Vibration Sensor & Mechanical Lab', subtitle: 'ISO 10816 vibration severity, accelerometer spectrum, and bearing impact fault analysis' };
       case 'motor3d':
         return { title: '3D Motor Digital Twin & Defect Animation', subtitle: 'Interactive 3D induction motor visualization with real-time component defect localization' };
-      case 'maintenance':
-        return { title: 'Maintenance Center & Work Orders', subtitle: 'Evidence-linked corrective actions with Task 5 human physical verification safety gates' };
+
       case 'performance':
         return { title: 'Model Performance & Benchmark Evaluation', subtitle: 'Reproducible multi-class metrics, confusion matrix, and probability calibration audit' };
       case 'samples':

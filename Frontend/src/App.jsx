@@ -7,7 +7,6 @@ import DiagnoseTab from './components/DiagnoseTab';
 import DiagnosticLabTab from './components/DiagnosticLabTab';
 import VibrationTab from './components/VibrationTab';
 import Motor3DTab from './components/Motor3DTab';
-import MaintenanceTab from './components/MaintenanceTab';
 import ModelPerformanceTab from './components/ModelPerformanceTab';
 import SampleFilesTab from './components/SampleFilesTab';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -16,7 +15,7 @@ import { api } from './api';
 export default function App() {
   const getInitialTab = () => {
     const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'maintenance', 'performance', 'samples'];
+    const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'performance', 'samples'];
     if (validDashboardTabs.includes(raw)) return raw;
     return 'landing'; // Default initial view is the new landing page
   };
@@ -53,7 +52,7 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const raw = window.location.hash.replace(/^#\/?/, '').toLowerCase();
-      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'maintenance', 'performance', 'samples'];
+      const validDashboardTabs = ['overview', 'diagnose', 'lab', 'vibration', 'motor3d', 'performance', 'samples'];
       if (validDashboardTabs.includes(raw)) {
         setActiveTab(raw);
       } else if (!raw || raw === 'landing') {
@@ -136,7 +135,7 @@ export default function App() {
 
   const handleOpenWorkOrder = (wo) => {
     setSelectedWorkOrder(wo);
-    setActiveTab('maintenance');
+    showToast(`Work Order #${typeof wo === 'object' ? wo.id : wo} registered in system`, 'info');
   };
 
   const handleWorkOrderUpdated = (updatedWo) => {
@@ -227,7 +226,6 @@ export default function App() {
                   motors={motors}
                   onSelectRun={handleSelectRun}
                   onNavigateToDiagnose={() => setActiveTab('diagnose')}
-                  onNavigateToMaintenance={() => setActiveTab('maintenance')}
                 />
               )}
 
@@ -256,17 +254,6 @@ export default function App() {
                 <Motor3DTab
                   selectedRun={selectedRun}
                   motors={motors}
-                  onNavigateToDiagnose={() => setActiveTab('diagnose')}
-                  onNavigateToMaintenance={() => setActiveTab('maintenance')}
-                />
-              )}
-
-              {activeTab === 'maintenance' && (
-                <MaintenanceTab
-                  workOrders={workOrders}
-                  onWorkOrderUpdated={handleWorkOrderUpdated}
-                  selectedWorkOrder={selectedWorkOrder}
-                  setSelectedWorkOrder={setSelectedWorkOrder}
                   onNavigateToDiagnose={() => setActiveTab('diagnose')}
                 />
               )}
