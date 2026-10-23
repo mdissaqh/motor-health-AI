@@ -254,6 +254,8 @@ export default function App() {
 
               {activeTab === 'motor3d' && (
                 <Motor3DTab
+                  selectedRun={selectedRun}
+                  motors={motors}
                   onNavigateToDiagnose={() => setActiveTab('diagnose')}
                   onNavigateToMaintenance={() => setActiveTab('maintenance')}
                 />
