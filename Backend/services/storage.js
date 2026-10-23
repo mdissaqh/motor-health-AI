@@ -41,9 +41,20 @@ function readJsonFile(filePath, defaultVal = []) {
 
 function writeJsonAtomic(filePath, data) {
   ensureFiles();
-  const tempPath = `${filePath}.${Date.now()}.tmp`;
+  const tempPath = `${filePath}.${Date.now()}-${Math.random().toString(36).substring(2, 6)}.tmp`;
   fs.writeFileSync(tempPath, JSON.stringify(data, null, 2), 'utf-8');
-  fs.renameSync(tempPath, filePath);
+  try {
+    fs.renameSync(tempPath, filePath);
+  } catch (err) {
+    if (err.code === 'EPERM' || err.code === 'EBUSY') {
+      try {
+        fs.copyFileSync(tempPath, filePath);
+        fs.unlinkSync(tempPath);
+      } catch (_) {}
+    } else {
+      throw err;
+    }
+  }
 }
 
 // ----------------- Motors -----------------
