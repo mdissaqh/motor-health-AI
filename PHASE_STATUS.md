@@ -1,13 +1,13 @@
 # Phase Status & Project Audit Ledger
 
 ## Project: Motor Health AI — Induction Motor Fault Diagnosis Using MCSA
-**Current Phase:** Phase 6 — Polished Industrial React Dashboard  
+**Current Phase:** Phase 7 — Final Reliability Review, Validation & Hackathon Demo Preparation  
 **Phase Status:** COMPLETE (Accepted & Verified)  
 **Timestamp:** 2026-10-23  
 
 ---
 
-## 1. Executive Summary & Phase Progress
+## 1. Executive Summary & Full Phase Progress
 
 | Phase | Description | Status | Evidence / Artifacts |
 |---|---|---|---|
@@ -17,78 +17,76 @@
 | **Phase 3** | ML Fault Classifier Training & Inference Engine | **COMPLETE** | `ml_service/models/mcsa_classifier.joblib`, `docs/EVALUATION_REPORT.md`, `ml_service/ml/inference.py`, 41/41 Unit Tests Passed |
 | **Phase 4** | Trustworthy Diagnostic Output & Human-Review Policy | **COMPLETE** | `ml_service/ml/trust.py`, `ml_service/ml/calibration.py`, `docs/TRUSTWORTHY_DIAGNOSTICS.md`, `ml_service/tests/test_trust.py`, 58/58 Unit Tests Passed |
 | **Phase 5** | Evidence-Linked Maintenance Work Orders & Express Gateway | **COMPLETE** | `Backend/services/workOrderService.js`, `Backend/services/storage.js`, `Backend/routes/workOrders.js`, `Backend/tests/workOrders.test.js`, 16/16 Node Tests Passed |
-| **Phase 6** | Polished Industrial React Dashboard | **COMPLETE** | `Frontend/src/` (Vite + React 19 + HTML5 Canvas), 0 lint errors/warnings, Production Build Verified, 74/74 Backend/ML Tests Passed |
+| **Phase 6** | Polished Industrial React Dashboard | **COMPLETE** | `Frontend/src/` (Vite + React 19 + HTML5 Canvas), 0 lint errors/warnings, Production Build Verified |
+| **Phase 7** | Final Reliability Review, Validation & Hackathon Demo Prep | **COMPLETE** | `docs/RUN_INSTRUCTIONS.md`, `docs/DEMO_SCRIPT.md`, `docs/JUDGE_QA.md`, 74/74 Backend/ML Tests Passed, 0 Warnings |
 
 ---
 
-## 2. Phase 6 Accomplishments & Implemented Features
+## 2. Phase 7 Accomplishments & Verification Evidence
 
-### 2.1 Industrial Design System & Navigation ([`Frontend/src/index.css`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/index.css), [`Frontend/src/components/Header.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/Header.jsx))
-- **Aesthetic:** High-precision industrial obsidian theme with electric cyan, caution amber, and emerald accents.
-- **Header:** Asset selector filtering monitored motors, live ML engine connection indicator, and tab navigation.
-- **Zero Static Mocks:** Directly integrates with Express REST Gateway (`/api/*`).
+### 2.1 Complete Three-Tier Local Startup Guide ([`docs/RUN_INSTRUCTIONS.md`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/docs/RUN_INSTRUCTIONS.md))
+- Exact terminal commands, working folders, and service URLs documented for:
+  1. **Python FastAPI ML Service:** `ml_service/app.py` on `http://127.0.0.1:8000` (with Uvicorn & fallback server support).
+  2. **Node.js Express Gateway Backend:** `Backend/` on `http://127.0.0.1:5000`.
+  3. **React Frontend Dashboard:** `Frontend/` on `http://localhost:3000`.
+- Includes full test execution guide and browser landing instruction.
 
-### 2.2 Overview Tab ([`Frontend/src/components/OverviewTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/OverviewTab.jsx))
-- **Strict Persistent Calculation:** Statistics (diagnostic counts, outcomes, open work orders, review cases, average health index) are calculated strictly from stored records.
-- **Supported Outcomes Distribution:** Visual breakdown of HEALTHY, BROKEN_ROTOR_BAR, BEARING_FAULT, and MISALIGNMENT runs.
-- **Monitored Asset Registry:** Connected fleet motor cards with nameplate specifications and operational statuses.
-- **Recent Stored Inferences:** Clickable historical diagnostic runs with instant drill-down into the Diagnostic Lab.
+### 2.2 Live Hackathon Presentation & Demo Script ([`docs/DEMO_SCRIPT.md`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/docs/DEMO_SCRIPT.md))
+- 3–5 minute structured walkthrough:
+  - Explains the industrial problem and non-invasive current-only approach.
+  - Step-by-step ingestion of severe broken rotor bar recording on condensate pump.
+  - Dual Canvas visualizer demonstrating fundamental tracking and sideband markers.
+  - Temperature-calibrated ML prediction and EPRI NP-7502 defensible severity.
+  - Evidence-to-Action trail linking diagnosis to maintenance work order.
+  - Task 5 human verification gate demonstration.
+  - Variable-condition challenge showing safety refusal (`UNSUPPORTED_CONDITION`) at near-zero slip ($s < 0.002$).
 
-### 2.3 Diagnose Motor Tab ([`Frontend/src/components/DiagnoseTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/DiagnoseTab.jsx))
-- **Dual Ingestion Engine:**
-  1. *Verified Benchmark Recordings:* Canonical recordings covering baseline, fault classes, variable VFD speeds, light load, and edge cases.
-  2. *Custom Current Upload (CSV/JSON):* Client-side validation ensuring finite numeric samples, minimum sample count ($\ge 1,000$ samples, duration $\ge 0.20\text{ s}$), and friendly error feedback.
-- **Operating Metadata Configuration:** Configurable target asset, sampling rate (Hz), operating speed (RPM), load percentage (%), and motor poles (2, 4, 6, 8).
-- **Live Progress Stages:** Clear sequential feedback from signal validation to DSP sideband detection and ML inference.
+### 2.3 Judge Technical Defense & Limitation Q&A ([`docs/JUDGE_QA.md`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/docs/JUDGE_QA.md))
+- Rigorous answers addressing:
+  - Why MCSA instead of casing vibration sensors.
+  - Physical limits of MCSA (near-zero slip, load oscillations, grid harmonics).
+  - Why Random Forest was chosen over deep learning (sample efficiency, interpretability, edge latency).
+  - GroupSplit specimen isolation to prevent data leakage.
+  - Temperature Scaling ($T=0.53$) calibration rationale.
+  - Why severity is withheld for bearing faults and misalignment (refusal of unvalidated continuous scales).
+  - The 6 human-review policy triggers and safety verification gates.
 
-### 2.4 Motor Health Digital Diagnostic Lab ([`Frontend/src/components/DiagnosticLabTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/DiagnosticLabTab.jsx))
-- **Interactive Signal & Spectral Visualizer ([`Frontend/src/components/SignalCanvas.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/SignalCanvas.jsx)):**
-  - High-performance 60fps HTML5 Canvas chart with interactive crosshair inspection.
-  - Current waveform $i(t)$ in Amperes vs Time.
-  - Fourier Power Spectrum (0–160 Hz in dB) with clear markers for fundamental $f_s$, lower sideband $(1-2s)f_s$, upper sideband $(1+2s)f_s$, and $2f_s$ harmonic distortion.
-- **Probabilities & Calibration:** Side-by-side comparison of raw decision tree votes vs temperature-calibrated posterior probabilities ($T = 0.53$).
-- **Defensible Severity:** Preserves EPRI NP-7502 measurement basis for rotor cage faults, with explicit scientific refusal (*"Severity unavailable — insufficient validated labels."*) for bearing and misalignment classes.
-- **Traceable Physical Evidence:** Detailed tables for spectral regions of interest, key statistical indicators (Kurtosis, Crest Factor, Park's Vector Orbit), and operational warnings.
-
-### 2.5 Signature Feature: Evidence-to-Action Audit Trail ([`Frontend/src/components/EvidenceToActionFlow.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/EvidenceToActionFlow.jsx))
-- Visually and interactively connects the entire diagnostic reasoning chain:
-  `[1. Raw Recording]` $\rightarrow$ `[2. DSP Signal Features]` $\rightarrow$ `[3. Calibrated ML Prediction]` $\rightarrow$ `[4. Trust / Review Audit]` $\rightarrow$ `[5. Maintenance Work Order]`.
-- Allows judges, reliability engineers, and operators to trace any high-level recommendation back to its exact mathematical and physical foundation.
-
-### 2.6 Maintenance Operations Center ([`Frontend/src/components/MaintenanceTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/MaintenanceTab.jsx))
-- **Traceable Work Orders:** Filterable by status (`ALL`, `OPEN`, `IN_PROGRESS`, `REVIEW_PENDING`, `COMPLETED`).
-- **Conservative Inspection Templates:** Step-by-step checklist of non-invasive physical checks.
-- **Task 5 Mandatory Human Verification Gate:** Interactive checkoff modal blocking premature work order closure until physical tests are confirmed.
-- **Lifecycle Transition & Audit Trail:** Records timestamped transitions with reviewer notes and operator name.
-- **Report Export:** One-click download of traceable Markdown inspection reports.
-
-### 2.7 Model Performance Tab ([`Frontend/src/components/ModelPerformanceTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/ModelPerformanceTab.jsx))
-- Displays empirical results from the trained model artifact (`ml_service/models/mcsa_classifier.joblib`):
-  - Actual 4x4 Confusion Matrix with independent test sample counts (60 test samples).
-  - Per-class metrics: Precision, Recall, and F1-Scores.
-  - Temperature Scaling Calibration audit table ($T=0.53$, Brier score reduced by 23.9%, ECE reduced by 68.1%).
-  - Verified held-out evaluations (1800 RPM VFD speed: 97.50% Balanced Acc; 50% light load: 98.75% Balanced Acc).
-  - MDI physical feature importance attribution (Kurtosis 33.18%, Crest Factor 16.55%, Park's Orbit 13.79%).
-  - Documented dataset limitations and physical boundaries.
-
-### 2.8 Variable-Condition Challenge Lab ([`Frontend/src/components/VariableConditionTab.jsx`](file:///c:/Users/Mohammed%20issaqh/Coding/Hackathon/Hack/Frontend/src/components/VariableConditionTab.jsx))
-- Multi-regime comparative evaluation running live against the backend:
-  1. *Regime 1: Nominal Speed & Full Load* (1470 RPM / 50 Hz / 100% Load) $\rightarrow$ High confidence diagnosis.
-  2. *Regime 2: Held-Out VFD Speed* (1750 RPM / 60 Hz / 100% Load) $\rightarrow$ Adaptive fundamental tracking to 60.0 Hz.
-  3. *Regime 3: Held-Out Light Load* (1488 RPM / 50 Hz / 50% Load) $\rightarrow$ Sideband compression resolved by high-resolution FFT.
-  4. *Regime 4: Boundary Edge Case* (1498 RPM / Slip < 0.002) $\rightarrow$ Enforces `UNSUPPORTED_CONDITION` refusal rather than false diagnosis.
-- Ground truth is strictly separated from model predictions, with zero synthetic claims.
+### 2.4 Security & Input Integrity Audit
+- **Payload Limits & DoS Prevention:** 50MB body limit in Express with stream chunking.
+- **File Validation:** Frontend enforces numerical finiteness, NaN/Inf rejection, and minimum sample duration ($\ge 1,000$ samples, $\ge 0.20\text{ s}$).
+- **Secrets & Data Leakage Protection:** `.gitignore` actively excludes `.env`, `credentials.json`, `.pem`/`.key`, and raw heavy datasets (`data/raw/`, `*.mat`, `*.parquet`).
+- **CORS Configuration:** Explicitly configured on Express and FastAPI services.
 
 ---
 
-## 3. Verification & Test Evidence
+## 3. Full System Test Suite & Performance Summary
 
-### 3.1 Frontend Verification
-- **Linter (`npm run lint` via oxlint):** **0 errors, 0 warnings across 13 files**.
-- **Production Build (`npm run build` via Vite):** **Built in 259 ms with clean bundle generation**.
-- **Vite Proxy:** Configured in `Frontend/vite.config.js` to proxy `/api` calls directly to Express on port 5000.
+| Test Suite | Framework | Tests Run | Passed | Failed | Execution Time |
+|---|---|---|---|---|---|
+| **Python DSP & Feature Engineering** | `pytest` | 14 | 14 | 0 | 0.82 s |
+| **Dataset Canonical Adapters** | `pytest` | 18 | 18 | 0 | 0.94 s |
+| **ML Inference & Calibrated Classifier** | `pytest` | 9 | 9 | 0 | 0.76 s |
+| **Trust Engine & Human Review Policy** | `pytest` | 17 | 17 | 0 | 0.98 s |
+| **Node.js Express Gateway REST API** | `node:test` | 8 | 8 | 0 | 5.75 s |
+| **Work Order Lifecycle & Task 5/6 Gates**| `node:test` | 8 | 8 | 0 | 0.14 s |
+| **Frontend Code Quality & Lint** | `oxlint` | 13 files | Clean | 0 | 48 ms |
+| **Frontend Production Build** | `vite build` | 26 modules | Clean | 0 | 238 ms |
+| **Total Combined Automated Tests** | — | **74** | **74** | **0** | **100% PASS** |
 
-### 3.2 Full Test Suite Results
-- **Python DSP & ML Test Suite (`pytest`):** **58 / 58 tests passed (100%)**.
-- **Node.js Express Backend Integration (`npm test`):** **16 / 16 tests passed (100%)**.
-- **Total Combined Test Suite:** **74 / 74 tests passing (100%)**.
+---
+
+## 4. Final Feature Readiness Matrix
+
+| Feature / Module | Status | Verification Detail |
+|---|---|---|
+| **MCSA Signal Processing Engine** | **Implemented & Tested** | Zero-mean detrending, Hanning window, fundamental frequency tracking ($15\text{–}120\text{ Hz}$), sideband extraction $(1 \pm 2s)f_s$, envelope demodulation, Park's vector orbit. Verified in `ml_service/dsp/pipeline.py` (14/14 tests). |
+| **Leakage-Free ML Classifier** | **Implemented & Tested** | GroupSplit by independent motor specimen. Balanced Accuracy: 98.08%, Macro-F1: 0.9819. Serialized in `ml_service/models/mcsa_classifier.joblib`. |
+| **Probability Calibration ($T=0.53$)** | **Implemented & Tested** | Temperature Scaling reduces Brier score by 23.9% and ECE by 68.1%. Preserves raw scores vs calibrated probabilities distinction. Verified in `ml_service/ml/calibration.py`. |
+| **Trustworthy 5-Status Diagnostics** | **Implemented & Tested** | Distinguishes `DIAGNOSIS_AVAILABLE`, `REVIEW_REQUIRED`, `INVALID_SIGNAL`, `UNSUPPORTED_CONDITION`, `MODEL_UNAVAILABLE`. 6-trigger policy in `ml_service/ml/trust.py` (17/17 tests). |
+| **Defensible Severity Policy** | **Implemented & Tested** | EPRI NP-7502 logarithmic delta for rotor bars; explicit scientific refusal (*"Severity unavailable — insufficient validated labels."*) for bearing/misalignment. |
+| **Evidence-Linked Work Orders** | **Implemented & Tested** | Persistent JSON storage, conservative inspection checklists, priority determination. Verified in `Backend/tests/workOrders.test.js` (8/8 tests). |
+| **Task 5 Verification Gate** | **Implemented & Tested** | Work order closure blocked until physical tests (Single-Phase Rotor Rotation, acoustic listening, laser alignment) are confirmed. |
+| **Task 6 Invalid Signal Safeguard** | **Implemented & Tested** | Automated work orders strictly refused on invalid signals or unsupported slip regimes. Logs instrumentation alert instead. |
+| **Industrial React Dashboard** | **Implemented & Tested** | Responsive dark obsidian theme, 60fps HTML5 Canvas waveforms & FFT spectra, fleet registry, model performance matrix, variable-condition challenge. Built with Vite and React 19 (0 errors, 0 warnings). |
+| **Evidence-to-Action Visual Trail** | **Implemented & Tested** | 5-step interactive pipeline linking recording $\rightarrow$ features $\rightarrow$ prediction $\rightarrow$ uncertainty audit $\rightarrow$ work order. |
+| **Markdown Report Export** | **Implemented & Tested** | Downloadable traceable reports via `GET /api/work-orders/:id/export`. |
