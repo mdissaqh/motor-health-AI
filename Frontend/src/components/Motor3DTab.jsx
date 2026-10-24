@@ -375,6 +375,7 @@ export default function Motor3DTab({
   const [explodedView, setExplodedView] = useState(false);
   const [explodeFactor, setExplodeFactor] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [autoRotate, setAutoRotate] = useState(true);
   const [speedMultiplier, setSpeedMultiplier] = useState(1.0);
   const [highlightPulse, setHighlightPulse] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -438,6 +439,7 @@ export default function Motor3DTab({
   const explodedPartsRef = useRef({});
   const defectBeaconRef = useRef(null);
   const interactiveObjectsRef = useRef([]);
+  const orbitControlsRef = useRef(null);
 
   const audioCtxRef = useRef(null);
   const audioOscRef = useRef(null);
@@ -1453,6 +1455,53 @@ export default function Motor3DTab({
     };
     updateCameraPos();
 
+    orbitControlsRef.current = {
+      zoomBy: (deltaRadius) => {
+        spherical.radius = Math.max(2.5, Math.min(24, spherical.radius + deltaRadius));
+        updateCameraPos();
+      },
+      resetZoom: () => {
+        cameraTarget.set(0, 0, 0);
+        spherical.radius = 11.5;
+        spherical.theta = Math.PI / 4;
+        spherical.phi = Math.PI / 3;
+        updateCameraPos();
+      },
+      setPreset: (preset) => {
+        if (preset === 'bearing') {
+          cameraTarget.set(1.8, 0, 0);
+          spherical.radius = 4.8;
+          spherical.theta = 0.60;
+          spherical.phi = 1.13;
+        } else if (preset === 'rotor') {
+          cameraTarget.set(0, 0, 0);
+          spherical.radius = 5.6;
+          spherical.theta = 0.04;
+          spherical.phi = 1.11;
+        } else if (preset === 'drive') {
+          cameraTarget.set(2.5, 0, 0);
+          spherical.radius = 5.2;
+          spherical.theta = 1.10;
+          spherical.phi = 1.33;
+        } else if (preset === 'rear') {
+          cameraTarget.set(-1.5, 0, 0);
+          spherical.radius = 7.8;
+          spherical.theta = -1.0;
+          spherical.phi = 1.2;
+        } else {
+          cameraTarget.set(0, 0, 0);
+          spherical.radius = 11.5;
+          spherical.theta = Math.PI / 4;
+          spherical.phi = Math.PI / 3;
+        }
+        updateCameraPos();
+      },
+      rotateBy: (deltaTheta) => {
+        spherical.theta += deltaTheta;
+        updateCameraPos();
+      },
+    };
+
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     let currentHoveredPartKey = null;
@@ -1644,14 +1693,20 @@ export default function Motor3DTab({
       updateCameraPos();
     };
 
-    // Touch support for tablets / touch screens
+    // Touch support for tablets / touch screens with pinch-to-zoom
     let touchStartX = 0;
     let touchStartY = 0;
+    let touchStartDist = 0;
     const onTouchStart = (e) => {
       if (e.touches.length === 1) {
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
         isDragging = true;
+      } else if (e.touches.length === 2) {
+        isDragging = false;
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        touchStartDist = Math.hypot(dx, dy);
       }
     };
     const onTouchMove = (e) => {
@@ -1664,10 +1719,21 @@ export default function Motor3DTab({
         spherical.theta -= deltaX * 0.008;
         spherical.phi -= deltaY * 0.008;
         updateCameraPos();
+      } else if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx, dy);
+        if (touchStartDist > 0) {
+          const deltaDist = touchStartDist - dist;
+          spherical.radius = Math.max(2.5, Math.min(24, spherical.radius + deltaDist * 0.025));
+          updateCameraPos();
+        }
+        touchStartDist = dist;
       }
     };
     const onTouchEnd = () => {
       isDragging = false;
+      touchStartDist = 0;
     };
 
     canvas.addEventListener('mousedown', onMouseDown);
@@ -1714,6 +1780,12 @@ export default function Motor3DTab({
           couplingMeshRef.current.rotation.y = 0;
           couplingMeshRef.current.position.y = 0;
         }
+      }
+
+      // Smooth 360° Continuous Orbit Rotation of the motor in 3D
+      if (autoRotate && isPlaying && !isDragging) {
+        spherical.theta += delta * 0.35 * speedMultiplier;
+        updateCameraPos();
       }
 
       // Smooth Exploded View Interpolation
@@ -1805,7 +1877,7 @@ export default function Motor3DTab({
       canvas.removeEventListener('touchend', onTouchEnd);
       renderer.dispose();
     };
-  }, [activeMotor, defectMode, effectiveDefectMode, isPlaying, speedMultiplier, explodedView, highlightPulse, activeCameraAngle]);
+  }, [activeMotor, defectMode, effectiveDefectMode, isPlaying, autoRotate, speedMultiplier, explodedView, highlightPulse, activeCameraAngle]);
 
   // Update Opacity when slider changes
   useEffect(() => {
@@ -1830,6 +1902,10 @@ export default function Motor3DTab({
   // Handle Preset Camera Angles
   const handleCameraPreset = (preset) => {
     setActiveCameraAngle(preset);
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.setPreset(preset);
+      return;
+    }
     if (!cameraRef.current) return;
     const cam = cameraRef.current;
 
@@ -1856,6 +1932,25 @@ export default function Motor3DTab({
         break;
       default:
         break;
+    }
+  };
+
+  // Dedicated Zoom Handlers (Zoom In, Zoom Out, Reset View)
+  const handleZoomIn = () => {
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.zoomBy(-1.8);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.zoomBy(1.8);
+    }
+  };
+
+  const handleResetZoom = () => {
+    if (orbitControlsRef.current) {
+      orbitControlsRef.current.resetZoom();
     }
   };
 
@@ -2208,7 +2303,7 @@ export default function Motor3DTab({
                   </button>
                 ))}
 
-                {defectMode !== 'HEALTHY' && (
+                {effectiveDefectMode !== 'HEALTHY' && (
                   <button
                     type="button"
                     onClick={handleFocusActiveDefect}
@@ -2234,8 +2329,8 @@ export default function Motor3DTab({
                 )}
               </div>
 
-              {/* View Toggles & X-Ray Slider */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', background: 'rgba(255, 255, 255, 0.92)', backdropFilter: 'blur(8px)', padding: '0.35rem 0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', pointerEvents: 'auto', boxShadow: 'var(--shadow-sm)' }}>
+              {/* View Toggles, Zoom & X-Ray Slider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255, 255, 255, 0.94)', backdropFilter: 'blur(8px)', padding: '0.35rem 0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', pointerEvents: 'auto', boxShadow: 'var(--shadow-sm)', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   className={`btn btn-sm ${explodedView ? 'btn-primary' : 'btn-secondary'}`}
@@ -2254,9 +2349,43 @@ export default function Motor3DTab({
                     step="0.05"
                     value={xrayOpacity}
                     onChange={(e) => setXrayOpacity(parseFloat(e.target.value))}
-                    style={{ width: '70px', accentColor: 'var(--blue-accent)' }}
+                    style={{ width: '65px', accentColor: 'var(--blue-accent)' }}
                   />
                   <span className="mono">{Math.round(xrayOpacity * 100)}%</span>
+                </div>
+
+                {/* 360 Turntable Auto-Rotation Toggle */}
+                <button
+                  type="button"
+                  className={`btn btn-sm ${autoRotate ? 'btn-primary' : 'btn-secondary'}`}
+                  onClick={() => setAutoRotate(!autoRotate)}
+                  style={{ fontSize: '0.72rem', padding: '0.25rem 0.6rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+                  title="Toggle continuous 360° orbit rotation of the motor model"
+                >
+                  <span>🔄</span>
+                  <span>{autoRotate ? '360° Rotate: ON' : '360° Rotate: OFF'}</span>
+                </button>
+
+                {/* Zoom In & Zoom Out Quick Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', borderLeft: '1px solid var(--border-subtle)', paddingLeft: '0.45rem' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={handleZoomIn}
+                    style={{ fontSize: '0.72rem', padding: '0.25rem 0.5rem', fontWeight: 800 }}
+                    title="Zoom In Closer (+)"
+                  >
+                    🔍+ In
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={handleZoomOut}
+                    style={{ fontSize: '0.72rem', padding: '0.25rem 0.5rem', fontWeight: 800 }}
+                    title="Zoom Out Farther (−)"
+                  >
+                    🔍− Out
+                  </button>
                 </div>
 
                 <button
@@ -2292,6 +2421,122 @@ export default function Motor3DTab({
                 background: 'radial-gradient(circle at center, #FFFFFF 0%, #F1F5F9 100%)',
               }}
             />
+
+            {/* Floating CAD-Style Zoom & Camera Orbit Controller Dock */}
+            <div style={{
+              position: 'absolute',
+              top: '4.5rem',
+              right: '1rem',
+              zIndex: 15,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.3rem',
+              background: 'rgba(255, 255, 255, 0.94)',
+              backdropFilter: 'blur(10px)',
+              padding: '0.4rem',
+              borderRadius: '10px',
+              border: '1px solid var(--border-subtle)',
+              boxShadow: 'var(--shadow-md)',
+              pointerEvents: 'auto',
+            }}>
+              <button
+                type="button"
+                onClick={handleZoomIn}
+                title="Zoom In Closer (+)"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border-subtle)',
+                  background: '#FFFFFF',
+                  color: 'var(--navy-primary)',
+                  fontSize: '1.2rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                +
+              </button>
+
+              <button
+                type="button"
+                onClick={handleZoomOut}
+                title="Zoom Out Farther (−)"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border-subtle)',
+                  background: '#FFFFFF',
+                  color: 'var(--navy-primary)',
+                  fontSize: '1.2rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                −
+              </button>
+
+              <div style={{
+                height: '1px',
+                background: 'var(--border-subtle)',
+                margin: '0.1rem 0',
+              }} />
+
+              <button
+                type="button"
+                onClick={handleResetZoom}
+                title="Reset View & Zoom (Default 100%)"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border-subtle)',
+                  background: '#FFFFFF',
+                  color: 'var(--navy-primary)',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                ↺
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setAutoRotate(!autoRotate)}
+                title={autoRotate ? 'Pause 360° Continuous Orbit Rotation' : 'Start 360° Continuous Orbit Rotation'}
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '6px',
+                  border: autoRotate ? '1px solid var(--blue-accent)' : '1px solid var(--border-subtle)',
+                  background: autoRotate ? 'var(--blue-accent)' : '#FFFFFF',
+                  color: autoRotate ? '#FFFFFF' : 'var(--navy-primary)',
+                  fontSize: '0.85rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                🔄
+              </button>
+            </div>
 
             {/* Floating 3D Holographic Defect Percentage Locator Tag (Attached to 3D Defect Coordinates) */}
             <div
@@ -2695,14 +2940,14 @@ export default function Motor3DTab({
               right: '1rem',
               fontSize: '0.72rem',
               color: 'var(--text-dim)',
-              background: 'rgba(255, 255, 255, 0.88)',
+              background: 'rgba(255, 255, 255, 0.92)',
               padding: '0.35rem 0.65rem',
               borderRadius: '6px',
               border: '1px solid var(--border-subtle)',
               pointerEvents: 'none',
               boxShadow: 'var(--shadow-sm)',
             }}>
-              🖱 Hover over motor parts to inspect defects • Drag to orbit
+              🖱 Drag to Orbit 360° • Scroll / + − to Zoom In & Out • Click to Inspect
             </div>
           </div>
 
